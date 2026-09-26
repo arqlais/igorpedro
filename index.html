@@ -971,6 +971,17 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 @media (max-width:900px){.exshow{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:640px){.exgrid{grid-template-columns:repeat(2,1fr)}.exshow{gap:10px}.exshow figure{padding:10px}.seg.tv button{font-size:13px;padding:8px 4px}.rx-f{grid-template-columns:1fr}}
 
+.ex-cap{text-align:center;font-weight:700;color:var(--navy);margin:8px 0 0;min-height:2.6em;font-size:15px}
+.ex-ctl{display:flex;justify-content:center;gap:8px;margin-top:6px}
+.ex-ctl button[aria-pressed="true"]{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.ex-steps li{padding:4px 8px;border-radius:8px;transition:background .3s}
+.ex-steps li.on{background:var(--gold-soft);font-weight:600}
+.soon{display:flex;gap:14px;border:1.5px dashed var(--line);border-radius:20px;padding:18px;background:var(--surface)}
+.soon > svg{color:var(--gold);flex:none;width:26px;height:26px}
+.soon b{font-size:17px;display:block;margin-bottom:4px}
+.soon p{color:var(--muted);font-size:15px}
+.soon-steps{margin:12px 0 0;padding-left:20px;display:grid;gap:4px;font-size:14.5px}
+
 @media (min-width:901px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -1157,12 +1168,6 @@ function site(){
 <section class="sec" id="como" style="border-top:0"><div class="wrap">
   <div class="sec-h"><span class="kicker">Como funciona</span><h2>Quatro níveis. Você só sobe quando se sentir pronto.</h2><p>O mesmo personal acompanha você do começo ao fim. Nada de pular etapas.</p></div>
   <div class="steps">${LEVELS.map(l=>`<div class="stp"><div class="bar"></div><span class="n">Nível ${l.n}</span><h3><i data-lucide="${l.icon}"></i>${l.t}</h3><p class="om">${l.short}</p><p class="dm">${l.desc}</p><p class="when dm"><i data-lucide="arrow-up-right"></i>Avança quando: ${l.when.toLowerCase()}</p></div>`).join("")}</div>
-</div></section>
-
-<section class="sec" id="exercicios"><div class="wrap">
-  <div class="sec-h"><span class="kicker">Exercícios</span><h2>Cada exercício mostra como fazer.</h2><p class="dm">Sua personal escolhe os exercícios pelo que você contou: dores, medos e objetivos. Cada um tem demonstração animada, passo a passo e cuidados.</p></div>
-  <div class="exshow">${["resp","sentar","parede","equil"].map(id=>{const e=exById(id);return`<figure>${fig(e,"sm")}<figcaption><b>${e.n}</b><span>${e.cat}${e.seat?" · dá sentado":""}</span></figcaption></figure>`}).join("")}</div>
-  <p class="note"><i data-lucide="dumbbell"></i>São ${EXS.length} exercícios na biblioteca, de respiração a academia, com versões sentadas.</p>
 </div></section>
 
 <section class="sec" id="combinados"><div class="wrap">
@@ -1451,16 +1456,24 @@ let TV="indicados",XF="";
 function vTreinos(){
   const list=WORKOUTS.filter(TFILTERS[TF]),rx=rxOf("me");
   const tabs=`<div class="seg tv" role="tablist" aria-label="Treinos">${[["indicados",`Indicados${rx.length?` (${rx.length})`:""}`],["treinos","Treinos em vídeo"],["biblioteca","Biblioteca"]].map(([k,t])=>`<button role="tab" aria-selected="${TV===k}" aria-pressed="${TV===k}" data-tv="${k}">${t}</button>`).join("")}</div>`;
+  const exOn=S.level>=2||lv1Paid();
+  if(TV!=="treinos"&&!exOn){
+    $("#view").innerHTML=`<div class="hello"><small>Treinos</small><h2>Seus exercícios chegam na hora certa.</h2></div>${tabs}
+    <div class="soon"><i data-lucide="sparkles"></i><div><b>Primeiro a gente se conhece</b><p>Depois da conversa gratuita e do seu plano, a ${esc(PERSONAL.name.split(" ")[0])} escolhe os exercícios para você. Cada um vem com demonstração passo a passo e cuidados.</p>
+      <ol class="soon-steps">${criteria().filter(x=>!x.d).map(x=>`<li>${x.t}</li>`).join("")}</ol></div></div>
+    <button class="task" id="brt" style="margin-top:14px"><span class="ti"><i data-lucide="wind"></i></span><span><b>Enquanto isso: pausa para respirar</b><small>2 min · liberado desde já</small></span><i class="go" data-lucide="chevron-right"></i></button>`;
+    document.querySelectorAll("[data-tv]").forEach(b=>b.onclick=()=>{TV=b.dataset.tv;vTreinos();icons()});$("#brt").onclick=()=>breathe();return}
   if(TV!=="treinos"){
-    const L=TV==="indicados"?rx.map(r=>({e:exById(r.id),r})).filter(x=>x.e):EXS.filter(e=>!XF||e.cat===XF||(XF==="Sentado"&&e.seat)).map(e=>({e,r:rx.find(x=>x.id===e.id)}));
+    const L=TV==="indicados"?rx.map(r=>({e:exById(r.id),r})).filter(x=>x.e):EXS.filter(e=>(e.lv<=S.level||rx.some(x=>x.id===e.id))&&(!XF||e.cat===XF||(XF==="Sentado"&&e.seat))).map(e=>({e,r:rx.find(x=>x.id===e.id)}));
     $("#view").innerHTML=`<div class="hello"><small>Treinos</small><h2>${TV==="indicados"?"Escolhidos para você.":"Biblioteca de exercícios."}</h2></div>${tabs}
     ${TV==="indicados"?(rx.length?`<p class="week-note" style="margin:0 0 12px">A ${esc(PERSONAL.name.split(" ")[0])} escolheu estes exercícios pelo que você contou. Toque para ver a demonstração.</p>`:`<div class="empty">Sua personal indica os exercícios depois da conversa gratuita. Enquanto isso, dê uma olhada na biblioteca.</div>`)
       :`<div class="filters" role="group" aria-label="Categoria">${["","Sentado",...EXCATS].map(c=>`<button aria-pressed="${XF===c}" data-xf="${c}">${c||"Todos"}</button>`).join("")}</div>`}
-    <div class="exgrid">${L.map(({e,r})=>exCard(e,r,!r&&e.lv>S.level)).join("")}</div>
+    <div class="exgrid">${L.map(({e,r})=>exCard(e,r,false)).join("")}</div>
+    ${TV==="biblioteca"?`<p class="week-note">Mostramos os exercícios do seu nível. Novos exercícios aparecem quando você sobe de nível.</p>`:""}
     <p class="note"><i data-lucide="heart-pulse"></i>Se sentir dor, tontura ou falta de ar, pare e avise sua personal.</p>`;
     document.querySelectorAll("[data-tv]").forEach(b=>b.onclick=()=>{TV=b.dataset.tv;vTreinos();icons()});
     document.querySelectorAll("[data-xf]").forEach(b=>b.onclick=()=>{XF=b.dataset.xf;vTreinos();icons()});
-    document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{const r=rx.find(x=>x.id===b.dataset.ex),e=exById(b.dataset.ex);exDetail(b.dataset.ex,{role:r||e.lv<=S.level?"cliente":"ver",rx:r})});
+    document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>exDetail(b.dataset.ex,{role:"cliente",rx:rx.find(x=>x.id===b.dataset.ex)}));
     return}
   $("#view").innerHTML=`<div class="hello"><small>Treinos em casa</small><h2>No seu espaço, no seu ritmo.</h2></div>${tabs}
   ${S.level<2?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="lock"></i><span>Os treinos em vídeo liberam no nível 2, depois da primeira conversa com a sua personal. Você já pode dar uma olhada.</span></div>`:""}
@@ -2509,11 +2522,11 @@ const EXS=[
 const EXCATS=["Força","Mobilidade","Cardio leve","Equilíbrio","Respiração"];
 const exById=id=>EXS.find(e=>e.id===id);
 /* desenha o boneco; com movimento reduzido fica parado na pose final */
-function fig(ex,cls=""){
+function fig(ex,cls="",speed=1){
   const segs=[["n","p"],["n","el"],["el","hl"],["n","er"],["er","hr"],["p","kl"],["kl","fl"],["p","kr"],["kr","fr"]];
   const still=matchMedia("(prefers-reduced-motion: reduce)").matches,ps=ex.poses,seq=ps.length>2?[...ps,ps[0]]:[ps[0],ps[1],ps[0]];
   const kt=seq.map((_,i)=>(i/(seq.length-1)).toFixed(3)).join(";"),ks=seq.slice(1).map(()=>".45 0 .55 1").join(";");
-  const an=(attr,vals)=>still?"":`<animate attributeName="${attr}" values="${vals.join(";")}" keyTimes="${kt}" calcMode="spline" keySplines="${ks}" dur="${ex.dur}s" repeatCount="indefinite"/>`;
+  const an=(attr,vals)=>still?"":`<animate attributeName="${attr}" values="${vals.join(";")}" keyTimes="${kt}" calcMode="spline" keySplines="${ks}" dur="${ex.dur*speed}s" repeatCount="indefinite"/>`;
   const P=ps[still?ps.length-1:0];
   const props={chair:`<path class="prop" d="M30 92H60M32 92V127M58 92V127M30 92V58"/>`,wall:`<path class="prop" d="M106 20V127"/>`,wallL:`<path class="prop" d="M16 20V127"/>`,mat:`<path class="prop" d="M6 129H112" stroke-width="4"/>`,band:""}[ex.prop]||"";
   const band=ex.prop==="band"?`<line class="band" x1="${P.hl[0]}" y1="${P.hl[1]}" x2="${P.hr[0]}" y2="${P.hr[1]}">${an("x1",seq.map(q=>q.hl[0]))}${an("y1",seq.map(q=>q.hl[1]))}${an("x2",seq.map(q=>q.hr[0]))}${an("y2",seq.map(q=>q.hr[1]))}</line>`:"";
@@ -2527,18 +2540,26 @@ function setRx(cid,list){if(cid==="me"){S.rx=list;save()}else{DB.clients.find(c=
 function exCard(ex,rx,locked){return`<button class="exc ${locked?"locked":""}" data-ex="${ex.id}">${fig(ex,"sm")}<span class="exc-t"><b>${ex.n}</b><small>${rx?esc(rx.dose):ex.cat}${ex.seat?" · dá sentado":""}</small>${rx&&rx.note?`<small class="rxn">“${esc(rx.note)}”</small>`:""}</span>${locked?`<i data-lucide="lock"></i>`:""}</button>`}
 function exDetail(id,opts={}){
   const ex=exById(id),rx=opts.rx;const md=document.createElement("div");md.className="modal";document.body.appendChild(md);document.body.style.overflow="hidden";
-  const close=()=>{removeEventListener("keydown",k);md.remove();document.body.style.overflow="";route(true)};const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);md.onclick=e=>{if(e.target===md)close()};
+  let speed=1,paused=false,tick=null;
+  const close=()=>{clearInterval(tick);removeEventListener("keydown",k);md.remove();document.body.style.overflow="";route(true)};const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);md.onclick=e=>{if(e.target===md)close()};
   const cs=opts.role==="personal"?myClients(curP()).filter(c=>c.status==="ativo"):[];
   md.innerHTML=`<div class="sheet pay" role="dialog" aria-modal="true" aria-labelledby="exh">
     <div class="pay-h"><div><small>${ex.cat}${ex.seat?" · dá para fazer sentado":""}</small><h3 id="exh">${ex.n}</h3></div><button class="rbtn" id="exx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
-    <div class="ex-stage">${fig(ex,"lg")}</div>
+    <div class="ex-stage"><div id="exfig">${fig(ex,"lg")}</div>
+      <p class="ex-cap" id="excap" aria-live="polite">1 · ${esc(ex.steps[0])}</p>
+      <div class="ex-ctl"><button class="btn btn-ghost btn-sm" id="expp"><i data-lucide="pause"></i>Pausar</button><button class="btn btn-ghost btn-sm" id="exsl" aria-pressed="false"><i data-lucide="turtle"></i>Mais devagar</button></div></div>
     ${rx?`<div class="alert ok" style="margin:0"><i data-lucide="user-round-check"></i><span><b>${esc(rx.dose)}</b>${rx.note?` · ${esc(rx.note)}`:""}<br><small>Indicado por ${esc(PERSONAL.name.split(" ")[0])}</small></span></div>`:`<p class="exhint" style="margin:0;text-align:left">Sugestão: ${esc(ex.dose)}</p>`}
-    <ol class="ex-steps">${ex.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+    <ol class="ex-steps" id="exst">${ex.steps.map((s,i)=>`<li class="${i===0?"on":""}">${esc(s)}</li>`).join("")}</ol>
     <div class="alert warn" style="margin:0"><i data-lucide="heart-pulse"></i><span>${esc(ex.tip)} Sentiu dor, tontura ou falta de ar? Pare.</span></div>
     ${opts.role==="cliente"?`<button class="btn btn-primary" id="exdo"><i data-lucide="check"></i>Fiz este exercício</button>`:""}
     ${opts.role==="personal"&&cs.length?`<div class="toolbar" style="margin:0"><select id="exto" aria-label="Aluno">${cs.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select><button class="btn btn-primary btn-sm" id="exrx"><i data-lucide="send"></i>Indicar</button></div>`:""}
   </div>`;icons();
   $("#exx").onclick=close;
+  /* legenda acompanha o boneco: posição inicial → movimento → volta */
+  const phases=[0,1,ex.steps.length>2?2:1],show=i=>{const n=phases[i%phases.length];$("#excap").textContent=`${n+1} · ${ex.steps[n]}`;md.querySelectorAll("#exst li").forEach((li,j)=>li.classList.toggle("on",j===n))};
+  let ph=0;const run=()=>{clearInterval(tick);if(paused||matchMedia("(prefers-reduced-motion: reduce)").matches)return;tick=setInterval(()=>{ph++;show(ph)},ex.dur*speed*1000/2)};run();
+  $("#expp").onclick=()=>{const sv=md.querySelector("#exfig svg");paused=!paused;if(paused)sv.pauseAnimations();else sv.unpauseAnimations();$("#expp").innerHTML=paused?'<i data-lucide="play"></i>Continuar':'<i data-lucide="pause"></i>Pausar';icons();run()};
+  $("#exsl").onclick=()=>{speed=speed===1?1.8:1;$("#exsl").setAttribute("aria-pressed",speed>1);$("#exfig").innerHTML=fig(ex,"lg",speed);paused=false;$("#expp").innerHTML='<i data-lucide="pause"></i>Pausar';ph=0;show(0);icons();run()};
   const d=$("#exdo");if(d)d.onclick=()=>{S.exlog=S.exlog||[];S.exlog.push({id,at:Date.now()});save();close();toast("Registrado! Cada movimento conta.")};
   const r=$("#exrx");if(r)r.onclick=()=>{const cid=$("#exto").value,l=rxOf(cid).filter(x=>x.id!==id);l.push({id,dose:ex.dose,note:"",at:Date.now()});setRx(cid,l);pushMsg(cid,`Indiquei um exercício novo para você: ${ex.n}. Tem demonstração em Treinos → Indicados. 💪`);close();toast("Exercício indicado")};
 }
