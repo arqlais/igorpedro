@@ -1053,6 +1053,10 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 @media (max-width:1180px){.topnav{display:none}.menu-btn{display:grid}.acc{margin-left:auto}.topbar .tb-cta{margin-left:0}}
 @media (max-width:560px){.tb-cta{display:none}.acc-btn{padding:8px 12px}.acc{position:static}.acc-menu{left:12px;right:12px;top:calc(100% + 6px);min-width:0}}
 
+.uf-row{display:grid;grid-template-columns:120px 1fr;gap:10px}
+.uf-row select{border:1.5px solid var(--line);border-radius:14px;padding:14px 12px;background:var(--surface);font-size:16px;width:100%;color:var(--ink)}
+.form .uf-row select{padding:12px}
+
 @media (min-width:1181px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -1145,6 +1149,8 @@ const $=s=>document.querySelector(s);
    Para clientes reais, troque para false e as travas voltam a valer. */
 const TEST_MODE=true;
 const testTag=(t="Obrigatório")=>`<span class="tmode"><i data-lucide="flask-conical"></i>${t} · liberado no modo de teste</span>`;
+const UFS=["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
+const ufSelect=(id,val,req)=>`<select id="${id}" ${req?"required":""}><option value="">Estado</option>${UFS.map(u=>`<option ${u===val?"selected":""}>${u}</option>`).join("")}</select>`;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function clipLists(){document.querySelectorAll(".rows.clip").forEach(r=>{if(r.nextElementSibling&&r.nextElementSibling.matches("[data-more]"))return;const n=r.children.length;if(n<=4)return;
   const b=document.createElement("button");b.className="btn btn-ghost btn-sm more";b.dataset.more="";b.textContent=`Ver mais ${n-4}`;b.onclick=()=>{r.classList.remove("clip");b.remove()};r.after(b)})}
@@ -1228,7 +1234,7 @@ function site(){
       <a class="btn btn-primary" href="${has?"#/app":"#/comecar"}"><i data-lucide="arrow-right"></i>${has?"Continuar minha jornada":"Começar sem compromisso"}</a>
       <a class="btn btn-ghost" href="#como" data-scroll>Ver como funciona</a>
     </div>
-    <div class="assure"><span><i data-lucide="check"></i>Sem câmera, se preferir</span><span><i data-lucide="check"></i>Personal com CREF</span><span><i data-lucide="check"></i>Primeira conversa gratuita</span></div>
+    <div class="assure"><span><i data-lucide="check"></i>Sem câmera, se preferir</span><span><i data-lucide="check"></i>Personal com CREF</span><span><i data-lucide="check"></i>Primeira conversa gratuita</span><span><i data-lucide="check"></i>Em todo o Brasil</span></div>
   </div>
   <div class="phone" aria-hidden="true"><div class="scr">
     <div class="ph"><small>Olá, Ana</small><b>Nível 2 · Em casa</b><div class="pbar"><i></i></div></div>
@@ -1249,7 +1255,7 @@ function site(){
 </div></div>
 
 <section class="sec" id="como" style="border-top:0"><div class="wrap">
-  <div class="sec-h"><span class="kicker">Como funciona</span><h2>Quatro níveis. Você só sobe quando se sentir pronto.</h2><p>O mesmo personal acompanha você do começo ao fim. Nada de pular etapas.</p></div>
+  <div class="sec-h"><span class="kicker">Como funciona</span><h2>Quatro níveis. Você só sobe quando se sentir pronto.</h2><p>O mesmo personal acompanha você do começo ao fim. Nada de pular etapas. Os níveis 1 e 2 são online, de qualquer lugar do Brasil. Os presenciais acontecem onde já temos personais parceiras, e a rede cresce a cada mês.</p></div>
   <div class="steps">${LEVELS.map(l=>`<div class="stp"><div class="bar"></div><span class="n">Nível ${l.n}</span><h3><i data-lucide="${l.icon}"></i>${l.t}</h3><p class="om">${l.short}</p><p class="dm">${l.desc}</p><p class="when dm"><i data-lucide="arrow-up-right"></i>Avança quando: ${l.when.toLowerCase()}</p></div>`).join("")}</div>
 </div></section>
 
@@ -1297,7 +1303,7 @@ function site(){
       <h3>${PERSONAL.name}</h3>
       <p class="cref">${PERSONAL.cref} · Educação Física</p>
       <blockquote>“Meu trabalho no começo é tirar o peso da palavra treino. Se hoje só der para respirar fundo por dois minutos, isso já é um treino.”</blockquote>
-      <div class="chips dm"><span class="chip"><i data-lucide="accessibility"></i>Atividade física adaptada</span><span class="chip"><i data-lucide="heart-handshake"></i>Comunicação sem julgamento</span><span class="chip"><i data-lucide="map-pin"></i>ABC paulista</span></div>
+      <div class="chips dm"><span class="chip"><i data-lucide="accessibility"></i>Atividade física adaptada</span><span class="chip"><i data-lucide="heart-handshake"></i>Comunicação sem julgamento</span><span class="chip"><i data-lucide="globe"></i>Online para todo o Brasil</span></div>
     </div>
   </div>
 </div></section>
@@ -1315,7 +1321,7 @@ function site(){
   <form class="form m-hide" id="fp"><h3>Quero ser parceiro</h3>
     <div class="field"><label for="fpn">Nome</label><input id="fpn" required autocomplete="name"></div>
     <div class="field"><label for="fpr">Número do CREF</label><input id="fpr" required placeholder="000000-G/SP"></div>
-    <div class="field"><label for="fpa">Região onde atende</label><input id="fpa" required placeholder="Ex.: Santo André"></div>
+    <div class="uf-row"><div class="field"><label for="fpu">Estado</label>${ufSelect("fpu","",true)}</div><div class="field"><label for="fpa">Cidade onde atende</label><input id="fpa" required placeholder="Ex.: Salvador"></div></div>
     <div class="field"><label for="fpc">WhatsApp ou e-mail</label><input id="fpc" required></div>
     <button class="btn btn-primary"><i data-lucide="send"></i>Enviar cadastro</button>
     <p class="fine">Demonstração: o cadastro fica salvo neste navegador e aparece no painel da empresa, em Contatos.</p></form>
@@ -1386,10 +1392,14 @@ function onboarding(){
     <div class="alert ok"><i data-lucide="lock"></i><span>Suas respostas ficam só entre você e o seu personal.</span></div>`;canNext=OB.name.trim().length>1}
   if(st==="objetivo"){body=`<h2>O que você gostaria de conquistar?</h2><p class="sub">Escolha quantas quiser.</p><div class="opts two">${optBtns(GOALS,OB.goals,"goals",1)}</div>`;canNext=OB.goals.length>0}
   if(st==="barreiras"){body=`<h2>O que mais te impede de começar?</h2><p class="sub">Não existe resposta errada. Isso ajuda o personal a entender você.</p><div class="opts two">${optBtns(BARRIERS,OB.barriers,"barriers",1)}</div>`;canNext=OB.barriers.length>0}
-  if(st==="rotina"){const D=["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];body=`<h2>Como é sua rotina?</h2><p class="sub">Quais dias você teria uns minutinhos livres?</p>
+  if(st==="rotina"){const D=["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];body=`<h2>Como é sua rotina?</h2>
+    <p style="font-weight:700;margin:0 0 10px">Onde você mora?</p>
+    <div class="uf-row"><div class="field" style="margin:0"><label for="obu" class="sr-only">Estado</label>${ufSelect("obu",OB.uf||"")}</div><div class="field" style="margin:0"><label for="obc" class="sr-only">Cidade</label><input id="obc" placeholder="Sua cidade" autocomplete="address-level2" value="${esc(OB.city||"")}"></div></div>
+    <p class="week-note" style="margin:6px 0 20px">Os níveis online funcionam em qualquer lugar do Brasil. Usamos sua cidade para os encontros presenciais, mais para a frente.</p>
+    <p class="sub" style="margin-top:0">Quais dias você teria uns minutinhos livres?</p>
     <div class="days" role="group" aria-label="Dias">${D.map(d=>`<button class="day" aria-pressed="${OB.days.includes(d)}" data-day="${d}"><small>dia</small><b>${d}</b></button>`).join("")}</div>
     <p style="font-weight:700;margin:22px 0 10px">Melhor período</p>
-    <div class="opts">${optBtns([["Manhã","sunrise"],["Tarde","sun"],["Noite","moon"]],[OB.period],"period",0)}</div>`;canNext=OB.days.length>0&&!!OB.period}
+    <div class="opts">${optBtns([["Manhã","sunrise"],["Tarde","sun"],["Noite","moon"]],[OB.period],"period",0)}</div>`;canNext=OB.days.length>0&&!!OB.period&&!!OB.uf&&(OB.city||"").trim().length>1}
   if(st==="contato"){body=`<h2>Como você prefere conversar com o personal?</h2><p class="sub">Você pode mudar isso quando quiser.</p><div class="opts">${optBtns(CONTACT,[OB.contact],"contact",0)}</div>`;canNext=!!OB.contact}
   if(st==="saude"){const any=OB.parq.some(x=>x===true);body=`<h2>Algumas perguntas sobre sua saúde</h2><p class="sub">É o questionário PAR-Q, usado por profissionais de educação física antes de qualquer treino.</p>
     <div class="parq">${PARQ.map((q,i)=>`<div class="pq"><p>${i+1}. ${q}</p><div class="yn"><button data-pq="${i}" data-a="1" aria-pressed="${OB.parq[i]===true}">Sim</button><button data-pq="${i}" data-a="0" aria-pressed="${OB.parq[i]===false}">Não</button></div></div>`).join("")}</div>
@@ -1398,6 +1408,7 @@ function onboarding(){
   if(st==="resultado"){const any=OB.parq.some(x=>x===true);body=`<h2>Pronto, ${esc(OB.name.split(" ")[0])}! Seu caminho começa aqui.</h2><p class="sub">Com base nas suas respostas, preparamos seu começo.</p>
     <div class="result"><div class="rh"><small>Você começa no</small><b>Nível 1 · Conhecer</b></div><div class="rb">
       <div class="rr"><i data-lucide="user-round-check"></i><span>Personal sugerida: <b>${PERSONAL.name}</b>, ${PERSONAL.bio.toLowerCase()}</span></div>
+      <div class="rr"><i data-lucide="map-pin"></i><span>Você está em <b>${esc(OB.city||"")} / ${OB.uf||""}</b>. Os níveis 1 e 2 são online. Quando chegar aos encontros presenciais, indicamos uma personal parceira perto de você.</span></div>
       <div class="rr"><i data-lucide="${OB.contact==="Só mensagem"?"message-square":OB.contact==="Áudio"?"mic":"video"}"></i><span>Primeira conversa por <b>${OB.contact.toLowerCase()}</b>, de 15 minutos e gratuita.</span></div>
       ${OB.plan?`<div class="rr"><i data-lucide="tag"></i><span>Plano escolhido: <b>${planLabel(OB.plan)}</b>. Você só paga depois da primeira conversa.</span></div>`:""}
       <div class="rr"><i data-lucide="calendar"></i><span>Disponível: <b>${OB.days.join(", ")}</b>, de ${OB.period.toLowerCase()}.</span></div>
@@ -1411,12 +1422,13 @@ function onboarding(){
   OB._last=OB.step;
   const nm=$("#nm");if(nm){nm.focus();nm.oninput=()=>{OB.name=nm.value;$("#next").disabled=OB.name.trim().length<2};nm.onkeydown=e=>{if(e.key==="Enter"&&OB.name.trim().length>1)next()}}
   document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const k=b.dataset.k,v=b.dataset.v;if(b.dataset.m==="1"){OB[k]=OB[k].includes(v)?OB[k].filter(x=>x!==v):[...OB[k],v]}else OB[k]=v;onboarding()});
+  const obu=$("#obu"),obc=$("#obc");if(obu){const upd=()=>{$("#next").disabled=!(OB.days.length>0&&!!OB.period&&!!OB.uf&&(OB.city||"").trim().length>1)};obu.onchange=()=>{OB.uf=obu.value;upd()};obc.oninput=()=>{OB.city=obc.value;upd()}}
   document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{const d=b.dataset.day;OB.days=OB.days.includes(d)?OB.days.filter(x=>x!==d):[...OB.days,d];onboarding()});
   document.querySelectorAll("[data-pq]").forEach(b=>b.onclick=()=>{OB.parq[+b.dataset.pq]=b.dataset.a==="1";const y=scrollY;onboarding();scrollTo(0,y)});
   const bk=$("#back");if(bk)bk.onclick=()=>{OB.step--;onboarding();scrollTo(0,0)};
   $("#next").onclick=next;icons();
   function next(){if(OB.step<OB_STEPS.length-1){OB.step++;onboarding();scrollTo(0,0);return}
-    S=fresh();S.plan=OB.plan||null;S.profile={name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
+    S=fresh();S.plan=OB.plan||null;S.profile={uf:OB.uf,city:(OB.city||"").trim(),name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
     S.messages=[{from:"them",text:`Oi, ${OB.name.trim().split(" ")[0]}! Eu sou a ${PERSONAL.name.split(" ")[0]}, sua personal. Li suas respostas e fico feliz que você esteja aqui. 💛`,t:nowT()},{from:"them",text:"Quando quiser, agende nossa primeira conversa na aba Agenda. Pode ser só por mensagem, sem pressa nenhuma.",t:nowT()}];
     S.unread=2;save();OB.step=0;location.hash=TEST_MODE?"#/app":"#/app/verificacao";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
 }
@@ -1782,9 +1794,9 @@ function seedDB(){
   let r=11;const rnd=()=>(r=(r*9301+49297)%233280)/233280,pick=a=>a[Math.floor(rnd()*a.length)];
   const now=Date.now();
   const personals=[
-    {id:"p1",name:"Camila Rocha",cref:"CREF 000000-G/SP",area:"Santo André e São Bernardo",bio:"Especialista em atividade física adaptada e em iniciantes. Atende no ABC paulista.",spec:["Atividade física adaptada","Iniciantes"],status:"ativo",cap:20,rating:4.9,since:now-420*D1},
-    {id:"p2",name:"Rafael Nunes",cref:"CREF 000001-G/SP",area:"São Caetano e Mauá",bio:"Trabalha com saúde mental e emagrecimento sem dietas radicais.",spec:["Saúde mental","Emagrecimento"],status:"ativo",cap:15,rating:4.8,since:now-230*D1},
-    {id:"p3",name:"Júlia Martins",cref:"CREF 000002-G/SP",area:"Diadema",bio:"Pós-graduada em envelhecimento ativo. Foco em mobilidade e equilíbrio.",spec:["Idosos","Mobilidade"],status:"pendente",cap:12,rating:null,since:now-3*D1}];
+    {id:"p1",name:"Camila Rocha",cref:"CREF 000000-G/SP",uf:"SP",area:"São Paulo / SP",bio:"Especialista em atividade física adaptada e em iniciantes. Atende online em todo o Brasil e presencial em São Paulo.",spec:["Atividade física adaptada","Iniciantes"],status:"ativo",cap:20,rating:4.9,since:now-420*D1},
+    {id:"p2",name:"Rafael Nunes",cref:"CREF 000001-G/RJ",uf:"RJ",area:"Rio de Janeiro / RJ",bio:"Trabalha com saúde mental e emagrecimento sem dietas radicais.",spec:["Saúde mental","Emagrecimento"],status:"ativo",cap:15,rating:4.8,since:now-230*D1},
+    {id:"p3",name:"Júlia Martins",cref:"CREF 000002-G/MG",uf:"MG",area:"Belo Horizonte / MG",bio:"Pós-graduada em envelhecimento ativo. Foco em mobilidade e equilíbrio.",spec:["Idosos","Mobilidade"],status:"pendente",cap:12,rating:null,since:now-3*D1}];
   // nome, nível, personal, cliente há (dias), última atividade (dias), treinos, saúde (0 ok, 1 aguardando liberação, 2 liberado), última sensação, situação
   const CL=[["Marina Alves",2,"p1",40,1,6,0,"Bom"],["João Pedro Lima",1,"p1",5,2,0,1,""],["Beatriz Souza",3,"p1",130,0,24,0,"Leve"],["Carlos Eduardo Santos",2,"p2",33,9,3,1,"Difícil"],
     ["Fernanda Reis",4,"p2",210,1,41,0,"Bom"],["Luana Costa",2,"p1",26,3,4,0,"Cansativo"],["Roberto Dias",1,"p2",2,1,0,0,""],["Patrícia Gomes",3,"p2",96,12,18,2,"Bom"],
@@ -1798,7 +1810,8 @@ function seedDB(){
     else if(name.startsWith("Luana"))msgs.push({from:"me",text:"Posso trocar o horário de quinta para a noite?",t:"12:03",at:now-2*3600e3});
     else if(name.startsWith("João"))msgs.push({from:"me",text:"Oi! Pode ser só por mensagem mesmo? Fico nervoso com vídeo.",t:"18:20",at:now-20*3600e3});
     else msgs.push({from:"me",text:pick(["Foi bem! Fiz os treinos certinho.","Consegui treinar 3 vezes 🙌","Um pouco cansada, mas fiz."]),t:"19:30",at:l0},{from:"them",text:"Que orgulho! Segue no seu ritmo. 💛",t:"19:45",at:l0+900e3});
-    return {id:"c"+(i+1),name,level,pid,since:s0,goals:[pick(GOALS)[0],pick(GOALS)[0]].filter((x,j,a)=>a.indexOf(x)===j),barriers:[pick(BARRIERS)[0],pick(BARRIERS)[0]].filter((x,j,a)=>a.indexOf(x)===j),
+    const CUF=[["SP","São Paulo"],["RJ","Rio de Janeiro"],["PE","Recife"],["PR","Curitiba"],["RS","Porto Alegre"],["MG","Belo Horizonte"],["BA","Salvador"],["CE","Fortaleza"],["DF","Brasília"],["GO","Goiânia"],["AM","Manaus"],["SC","Florianópolis"]][i%12];
+    return {id:"c"+(i+1),uf:CUF[0],city:CUF[1],name,level,pid,since:s0,goals:[pick(GOALS)[0],pick(GOALS)[0]].filter((x,j,a)=>a.indexOf(x)===j),barriers:[pick(BARRIERS)[0],pick(BARRIERS)[0]].filter((x,j,a)=>a.indexOf(x)===j),
       contact:pick(["Só mensagem","Áudio","Vídeo-chamada"]),period:pick(["Manhã","Tarde","Noite"]),days:["Seg","Qua","Sex"],medical:med>0,medOk:med===2,
       workouts:ws,talked:level>1,outdoor:level===3?2:level>3?4:0,gym:level===4?(name.startsWith("André")?4:1):0,status:st||"ativo",msgs,phone:"(11) 9"+String(1000+i*731).slice(0,4)+"-"+String(2000+i*377).slice(0,4)}});
   const at=(d,h,m=0)=>sod(d)+(h*60+m)*6e4;
@@ -1807,7 +1820,7 @@ function seedDB(){
     ["c3","p1",at(-4,8),"Ao ar livre","feito"],["c5","p2",at(-2,7),"Academia","feito"],["c6","p1",at(-3,14),"Check-in online","feito"]];
   const bookings=B.map(([cid,pid,ts,type,status],i)=>({id:"b"+i,cid,pid,ts,type,mode:type==="Ao ar livre"?"presencial":type==="Academia"?"na academia":"online",status}));
   const leads=[{id:"l1",type:"cliente",name:"Cláudia M.",contact:"(11) 90000-1234",msg:"Tenho 58 anos e nunca treinei. Dá para começar sentada?",at:now-5*3600e3,status:"novo"},
-    {id:"l2",type:"personal",name:"Diego Santana",contact:"diego@exemplo.com",cref:"CREF 000003-G/SP",area:"Santo André",msg:"Trabalho com reabilitação e queria ser parceiro.",at:now-D1-3*3600e3,status:"novo"},
+    {id:"l2",type:"personal",name:"Diego Santana",contact:"diego@exemplo.com",cref:"CREF 000003-G/BA",area:"Salvador / BA",uf:"BA",msg:"Trabalho com reabilitação e queria ser parceiro.",at:now-D1-3*3600e3,status:"novo"},
     {id:"l3",type:"cliente",name:"Marcos T.",contact:"(11) 90000-5678",msg:"Tenho ansiedade social. Preciso ir em academia em algum momento?",at:now-3*D1,status:"contatado"},
     {id:"l4",type:"cliente",name:"Rita L.",contact:"rita@exemplo.com",msg:"Quero para minha mãe, de 70 anos.",at:now-9*D1,status:"convertido"}];
   const db={v:1,personals,clients,bookings,leads,prices:[100,180,480,560],split:70,paid:{}};
@@ -1823,7 +1836,7 @@ syncPrices();
 
 /* o cliente deste aparelho visto pelos painéis */
 function meC(){if(!S.profile)return null;const p=S.profile;
-  return{id:"me",you:true,name:p.name,level:S.level,pid:S.pid||"p1",since:p.since,goals:p.goals,barriers:p.barriers,contact:p.contact,period:p.period,days:p.days,
+  return{id:"me",you:true,uf:p.uf||"SP",city:p.city||"",name:p.name,level:S.level,pid:S.pid||"p1",since:p.since,goals:p.goals,barriers:p.barriers,contact:p.contact,period:p.period,days:p.days,
     medical:p.medical,medOk:!!p.medOk,workouts:S.workouts,talked:S.talked,outdoor:S.outdoor,gym:S.gymsessions,status:S.status||"ativo",msgs:S.messages,phone:"este aparelho"}}
 const allClients=()=>DB.clients.concat(S.profile?[meC()]:[]);
 const findC=id=>allClients().find(c=>c.id===id);
@@ -2057,7 +2070,7 @@ function clientTable(list,role){
   if(!list.length)return`<div class="empty">Nenhum aluno encontrado com esses filtros.</div>`;
   const bl=bills(),cur=mkey(Date.now());
   return`<div class="tbl"><table class="fit"><thead><tr><th>Aluno</th><th>Nível</th><th class="hm hx">Progresso</th><th class="hm">Última atividade</th><th class="hm hx">Último treino</th>${role==="admin"?`<th class="hm hx">Personal</th><th class="hm">Mensalidade</th>`:""}<th>Situação</th></tr></thead><tbody>${list.map(c=>{const lw=c.workouts[c.workouts.length-1],al=alertsFor(c),b=bl.find(x=>x.cid===c.id&&x.m===cur);
-    return`<tr data-open="${c.id}"><td><span class="nm">${avatar(c)}<span><b>${esc(c.name)}</b><small class="om">Ativo ${rel(lastAct(c))}${c.you?" · este aparelho":""}</small>${c.you?`<small class="dm" style="color:var(--muted)">neste aparelho</small>`:""}</span></span></td><td>${lvb(c.level)}</td><td class="hm hx"><div class="prog" title="${pctFor(c)}%"><i style="width:${pctFor(c)}%"></i></div></td><td class="hm">${rel(lastAct(c))}</td><td class="hm hx">${lw?`${pill("mute",FEEL_IC[lw.feel],lw.feel)}`:"—"}</td>${role==="admin"?`<td class="hm hx">${esc((findP(c.pid)||{}).name||"—")}</td><td class="hm">${b?pill(...BILL_PILL[b.status]):"—"}</td>`:""}<td>${c.status==="pausado"?pill("mute","pause","Pausado"):al.length?pill(al[0][2],al[0][0],al[0][1]):pill("ok","check","Em dia")}</td></tr>`}).join("")}</tbody></table></div>`}
+    return`<tr data-open="${c.id}"><td><span class="nm">${avatar(c)}<span><b>${esc(c.name)}</b><small class="om">${c.uf?c.uf+" · ":""}Ativo ${rel(lastAct(c))}${c.you?" · este aparelho":""}</small>${c.uf&&role==="admin"?`<small class="dm" style="color:var(--muted)">${esc(c.city||"")} / ${c.uf}</small>`:""}${c.you?`<small class="dm" style="color:var(--muted)">neste aparelho</small>`:""}</span></span></td><td>${lvb(c.level)}</td><td class="hm hx"><div class="prog" title="${pctFor(c)}%"><i style="width:${pctFor(c)}%"></i></div></td><td class="hm">${rel(lastAct(c))}</td><td class="hm hx">${lw?`${pill("mute",FEEL_IC[lw.feel],lw.feel)}`:"—"}</td>${role==="admin"?`<td class="hm hx">${esc((findP(c.pid)||{}).name||"—")}</td><td class="hm">${b?pill(...BILL_PILL[b.status]):"—"}</td>`:""}<td>${c.status==="pausado"?pill("mute","pause","Pausado"):al.length?pill(al[0][2],al[0][0],al[0][1]):pill("ok","check","Em dia")}</td></tr>`}).join("")}</tbody></table></div>`}
 function filterClients(list){const q=PF.q.trim().toLowerCase();return list.filter(c=>(PF.lv==="0"||c.level===+PF.lv)&&(PF.st==="todos"||c.status===PF.st)&&(!q||c.name.toLowerCase().includes(q))).sort((a,b)=>(b.you?1:0)-(a.you?1:0)||alertsFor(b).length-alertsFor(a).length)}
 function clientFilters(extra=""){return`<div class="toolbar"><input id="fq" type="search" placeholder="Buscar pelo nome" value="${esc(PF.q)}" aria-label="Buscar aluno">
   <select id="flv" aria-label="Nível"><option value="0">Todos os níveis</option>${LEVELS.map(l=>`<option value="${l.n}" ${PF.lv==l.n?"selected":""}>Nível ${l.n} · ${l.t}</option>`).join("")}</select>
@@ -2150,7 +2163,9 @@ function aGeral(bl){
   $("#pv").innerHTML=`<div class="kpis">${kpi("users","Clientes ativos",act.length,`${novos} novos em ${mlabel(cur,1)}`)}${kpi("banknote","Faturamento do mês",money(fat),`${money(rec)} já recebidos`)}${kpi("receipt","Ticket médio",money(mb.length?fat/mb.length:0),"por cliente no mês")}${kpi("building-2","Fica com a empresa",money(fin(mb).emp),"depois de repasses e taxas")}${kpi("circle-alert","Inadimplência",late.length,money(late.reduce((s,b)=>s+b.amount,0))+" em atraso")}${kpi("trending-up","Passaram do nível 1",act.length?Math.round(up/act.length*100)+"%":"—","dos clientes ativos")}</div>
   <div class="grid2">
     <section class="card"><div class="card-h"><h3>Recebido por mês</h3><a href="#/admin/financeiro">Financeiro</a></div>${sbars(ms.map(m=>{const f=fin(bl.filter(b=>b.m===m));return{label:mlabel(m,1),short:mlabel(m),a:Math.round(f.emp),b:Math.round(f.rep)}}),["Empresa (líquido)","Personais"])}</section>
-    <section class="card"><div class="card-h"><h3>Clientes ativos por nível</h3><a href="#/admin/clientes">Ver todos</a></div>${hbars(LEVELS.map(l=>({label:`${l.n} · ${l.t}`,v:act.filter(c=>c.level===l.n).length})))}<p class="week-note">Cada nível é uma etapa da jornada: o funil mostra quantos clientes estão em cada uma.</p></section>
+    <section class="card"><div class="card-h"><h3>Clientes ativos por nível</h3><a href="#/admin/clientes">Ver todos</a></div>${hbars(LEVELS.map(l=>({label:`${l.n} · ${l.t}`,v:act.filter(c=>c.level===l.n).length})))}<p class="week-note">Cada nível é uma etapa da jornada: o funil mostra quantos clientes estão em cada uma.</p>
+      <div class="card-h" style="margin:18px 0 10px"><h3>Clientes por estado</h3></div>${(()=>{const m={};act.forEach(c=>{const u=c.uf||"—";m[u]=(m[u]||0)+1});const L=Object.entries(m).sort((a,b)=>b[1]-a[1]);return hbars(L.slice(0,6).map(([u,v])=>({label:u,v})).concat(L.length>6?[{label:"Outros",v:L.slice(6).reduce((s,x)=>s+x[1],0)}]:[]))})()}
+      <p class="week-note">Personais parceiras em ${[...new Set(DB.personals.filter(p=>p.status==="ativo").map(p=>p.uf).filter(Boolean))].join(", ")||"—"}. Onde ainda não há personal, o atendimento presencial fica em espera e o online segue normal.</p></section>
   </div>
   <div class="grid2">
     <section class="card"><div class="card-h"><h3>Pendências</h3><span class="pill mute">${pend.length}</span></div><div class="rows clip">${pend.length?pend.slice(0,8).map(([ic,t,href,k,btn,cid])=>`<div class="rw"><span class="pill ${k}" style="padding:7px"><i data-lucide="${ic}"></i></span><span><b style="font-weight:600">${esc(t)}</b></span><span class="end">${href?`<a class="btn btn-ghost btn-sm" href="${href}">${btn}</a>`:`<button class="btn btn-ghost btn-sm" data-open="${cid}">${btn}</button>`}</span></div>`).join(""):`<p class="empty-s">Nenhuma pendência.</p>`}</div></section>
@@ -2158,10 +2173,11 @@ function aGeral(bl){
   </div>`;
 }
 function aClientes(){
-  const pf=`<select id="fpp" aria-label="Personal"><option value="">Todas as personais</option>${DB.personals.filter(p=>p.status==="ativo").map(p=>`<option value="${p.id}" ${PF.pid===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select>`;
+  const uf=`<select id="fuf" aria-label="Estado"><option value="">Todos os estados</option>${[...new Set(allClients().map(c=>c.uf).filter(Boolean))].sort().map(u=>`<option ${PF.uf===u?"selected":""}>${u}</option>`).join("")}</select>`;
+  const pf=uf+`<select id="fpp" aria-label="Personal"><option value="">Todas as personais</option>${DB.personals.filter(p=>p.status==="ativo").map(p=>`<option value="${p.id}" ${PF.pid===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select>`;
   $("#pv").innerHTML=`${clientFilters(pf)}<div id="tb"></div>`;
-  const draw=()=>{$("#tb").innerHTML=clientTable(filterClients(allClients()).filter(c=>!PF.pid||c.pid===PF.pid),"admin");bindOpen("admin");icons()};
-  bindFilters(draw);$("#fpp").onchange=e=>{PF.pid=e.target.value;draw()};draw();
+  const draw=()=>{$("#tb").innerHTML=clientTable(filterClients(allClients()).filter(c=>(!PF.pid||c.pid===PF.pid)&&(!PF.uf||c.uf===PF.uf)),"admin");bindOpen("admin");icons()};
+  bindFilters(draw);$("#fpp").onchange=e=>{PF.pid=e.target.value;draw()};$("#fuf").onchange=e=>{PF.uf=e.target.value;draw()};draw();
 }
 function aPersonais(bl){
   const cur=mkey(Date.now()),act=allClients().filter(c=>c.status==="ativo");
@@ -2177,7 +2193,8 @@ function aPersonais(bl){
   <form class="form mt" id="np" style="max-width:720px"><h3>Cadastrar personal</h3><div class="set">
     <div class="field"><label for="npn">Nome</label><input id="npn" required placeholder="Nome completo"></div>
     <div class="field"><label for="npc">CREF</label><input id="npc" required placeholder="000000-G/SP"></div>
-    <div class="field"><label for="npa">Região</label><input id="npa" required placeholder="Ex.: Santo André"></div>
+    <div class="field"><label for="npu">Estado</label>${ufSelect("npu","",true)}</div>
+    <div class="field"><label for="npa">Cidade</label><input id="npa" required placeholder="Ex.: Fortaleza"></div>
     <div class="field"><label for="nps">Especialidade</label><input id="nps" placeholder="Ex.: Iniciantes"></div></div>
     <button class="btn btn-primary" style="justify-self:start"><i data-lucide="user-plus"></i>Cadastrar</button></form>${ratingsBlock()}`;
   $("#rf").onchange=e=>{RF=e.target.value;route(true)};
@@ -2187,7 +2204,7 @@ function aPersonais(bl){
   document.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>{DB.personals=DB.personals.filter(p=>p.id!==b.dataset.pdel);saveDB();toast("Cadastro recusado");route(true)});
   document.querySelectorAll("[data-pfi]").forEach(b=>b.onclick=()=>openPFicha(b.dataset.pfi));
   document.querySelectorAll("[data-asp]").forEach(b=>b.onclick=()=>{setSess({role:"personal",pid:b.dataset.asp,back:"admin"});location.hash="#/personal"});
-  $("#np").onsubmit=e=>{e.preventDefault();const name=$("#npn").value.trim();DB.personals.push({id:"p"+Date.now(),name,email:mailOf(name),cref:"CREF "+$("#npc").value.trim(),area:$("#npa").value.trim(),bio:"",spec:[$("#nps").value.trim()||"Iniciantes"],status:"ativo",cap:15,rating:null,since:Date.now()});saveDB();toast(`${name.split(" ")[0]} cadastrada`);route(true)};
+  $("#np").onsubmit=e=>{e.preventDefault();const name=$("#npn").value.trim();DB.personals.push({id:"p"+Date.now(),name,email:mailOf(name),cref:"CREF "+$("#npc").value.trim(),uf:$("#npu").value,area:$("#npa").value.trim()+" / "+$("#npu").value,bio:"",spec:[$("#nps").value.trim()||"Iniciantes"],status:"ativo",cap:15,rating:null,since:Date.now()});saveDB();toast(`${name.split(" ")[0]} cadastrada`);route(true)};
 }
 let LF="novo";
 function aLeads(){
@@ -2431,7 +2448,7 @@ const fmtCpf=v=>{const c=String(v).replace(/\D/g,"").slice(0,11);return c.replac
 const meetCode=b=>String(1000+(Math.floor(b.ts/6e4)*7919+(b.cid||"").length*131)%9000).slice(0,4);
 function seedSafety(db){
   db.kyc={};db.incidents=[];db.checkins={};
-  db.clients.forEach((c,i)=>{db.kyc[c.id]=c.level>=3||i%3===0?{status:"verificado",at:c.since+2*D1,cpf:"***.4"+i+"5.6"+i+"8-**",city:"Santo André",emerg:"Contato cadastrado"}:c.level===1&&i%2?{status:"analise",at:Date.now()-5*3600e3,cpf:"***.3"+i+"1.2"+i+"0-**",city:"São Bernardo",emerg:"Contato cadastrado"}:{status:"pendente"}});
+  db.clients.forEach((c,i)=>{db.kyc[c.id]=c.level>=3||i%3===0?{status:"verificado",at:c.since+2*D1,cpf:"***.4"+i+"5.6"+i+"8-**",city:["São Paulo","Rio de Janeiro","Recife","Curitiba","Porto Alegre","Belo Horizonte"][i%6],emerg:"Contato cadastrado"}:c.level===1&&i%2?{status:"analise",at:Date.now()-5*3600e3,cpf:"***.3"+i+"1.2"+i+"0-**",city:"São Bernardo",emerg:"Contato cadastrado"}:{status:"pendente"}});
   db.personals.forEach(p=>{p.safety=p.status==="ativo"?{doc:true,selfie:true,cref:true,crim:true,at:p.since+5*D1}:{doc:true,selfie:true,cref:false,crim:false,at:null}});
   db.incidents=[{id:"i1",from:"cliente",who:"Carlos Eduardo Santos",about:"Rafael Nunes",type:"Desconforto no treino",sev:"baixa",text:"Achei o treino pesado demais e fiquei constrangido de falar na hora.",at:Date.now()-2*D1,status:"aberto"},
     {id:"i2",from:"personal",who:"Camila Rocha",about:"Praça do Carmo",type:"Local inseguro",sev:"media",text:"A praça estava sem iluminação no fim da tarde. Sugiro trocar o horário ou o local.",at:Date.now()-6*D1,status:"resolvido"}];
@@ -2864,14 +2881,19 @@ function openPFicha(id){const p=findP(id),inf=p.info||{},s=p.safety||{},po=p.pay
     <div class="sec2"><h3>Documentos</h3><div class="chk">${[["doc","Documento com foto"],["selfie","Selfie"],["cref","CREF"],["crim","Antecedentes criminais"]].map(([k2,t])=>`<div class="${s[k2]?"y":""}"><i data-lucide="${s[k2]?"circle-check":"circle-dashed"}"></i>${t}</div>`).join("")}</div></div>
     <div class="sec2"><button class="btn btn-ghost btn-sm" id="pft"><i data-lucide="file-text"></i>Ver termo de parceria</button></div></div>`;
   icons();$("#pfx").onclick=close;$("#pft").onclick=()=>openTerms("personal",{onClose:()=>{}});}
-function seedInfo(db){const I={p1:{tel:"(11) 90000-0101",cpf:"***.321.654-**",birth:"1989-03-14",addr:"Rua das Flores, 120",city:"Santo André"},p2:{tel:"(11) 90000-0202",cpf:"***.987.123-**",birth:"1992-08-02",addr:"Av. Goiás, 850",city:"São Caetano do Sul"},p3:{tel:"(11) 90000-0303",cpf:"***.555.222-**",birth:"1985-11-20",addr:"Rua Principal, 45",city:"Diadema"}};
+function seedInfo(db){const I={p1:{tel:"(11) 90000-0101",cpf:"***.321.654-**",birth:"1989-03-14",addr:"Rua das Flores, 120",city:"São Paulo"},p2:{tel:"(11) 90000-0202",cpf:"***.987.123-**",birth:"1992-08-02",addr:"Rua Voluntários da Pátria, 850",city:"Rio de Janeiro"},p3:{tel:"(11) 90000-0303",cpf:"***.555.222-**",birth:"1985-11-20",addr:"Av. Afonso Pena, 45",city:"Belo Horizonte"}};
   db.personals.forEach(p=>{if(!p.info)p.info=Object.assign({name:p.name,email:p.email||mailOf(p.name)},I[p.id]||{})});return db}
 if(!DB.personals.some(p=>p.info)){seedInfo(DB);saveDB()}
+/* dados de exemplo antigos (só São Paulo) passam a ser nacionais */
+(()=>{let ch=false;const NP={p1:{uf:"SP",area:"São Paulo / SP",bio:"Especialista em atividade física adaptada e em iniciantes. Atende online em todo o Brasil e presencial em São Paulo."},p2:{uf:"RJ",area:"Rio de Janeiro / RJ",cref:"CREF 000001-G/RJ"},p3:{uf:"MG",area:"Belo Horizonte / MG",cref:"CREF 000002-G/MG"}};
+  DB.personals.forEach(p=>{if(!p.uf&&NP[p.id]){Object.assign(p,NP[p.id]);ch=true}});
+  const CUF=[["SP","São Paulo"],["RJ","Rio de Janeiro"],["PE","Recife"],["PR","Curitiba"],["RS","Porto Alegre"],["MG","Belo Horizonte"],["BA","Salvador"],["CE","Fortaleza"],["DF","Brasília"],["GO","Goiânia"],["AM","Manaus"],["SC","Florianópolis"]];
+  DB.clients.forEach((c,i)=>{if(!c.uf){c.uf=CUF[i%12][0];c.city=CUF[i%12][1];ch=true}});if(ch)saveDB()})();
 
 /* formulários do site → contatos da empresa */
 function bindSiteForms(){
   const f1=$("#fc");if(f1)f1.onsubmit=e=>{e.preventDefault();DB.leads.push({id:"l"+Date.now(),type:"cliente",name:$("#fcn").value.trim(),contact:$("#fcc").value.trim(),msg:$("#fcm").value.trim()||"Quero saber mais.",at:Date.now(),status:"novo"});saveDB();f1.reset();toast("Mensagem enviada! Vamos responder em até 1 dia útil.")};
-  const f2=$("#fp");if(f2)f2.onsubmit=e=>{e.preventDefault();DB.leads.push({id:"l"+Date.now(),type:"personal",name:$("#fpn").value.trim(),contact:$("#fpc").value.trim(),cref:"CREF "+$("#fpr").value.trim(),area:$("#fpa").value.trim(),msg:"Quero ser personal parceiro.",at:Date.now(),status:"novo"});saveDB();f2.reset();toast("Cadastro recebido! Vamos analisar seu CREF e entrar em contato.")};
+  const f2=$("#fp");if(f2)f2.onsubmit=e=>{e.preventDefault();DB.leads.push({id:"l"+Date.now(),type:"personal",name:$("#fpn").value.trim(),contact:$("#fpc").value.trim(),cref:"CREF "+$("#fpr").value.trim(),area:$("#fpa").value.trim()+" / "+$("#fpu").value,uf:$("#fpu").value,msg:"Quero ser personal parceiro.",at:Date.now(),status:"novo"});saveDB();f2.reset();toast("Cadastro recebido! Vamos analisar seu CREF e entrar em contato.")};
 }
 
 (()=>{const mq=matchMedia("(min-width:901px)"),f=()=>{if(/^#\/(personal|admin)/.test(location.hash)&&!document.querySelector(".drawer,.modal"))route(true)};mq.addEventListener?mq.addEventListener("change",f):mq.addListener(f)})();
