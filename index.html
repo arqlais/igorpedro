@@ -1009,6 +1009,29 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .lg-test{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:#7A4E00;background:#FFF1CC;border:1px dashed #D9A441;border-radius:99px;padding:5px 11px}
 .lg-test svg{width:14px;height:14px}
 
+.lg-center{text-align:center;display:flex;flex-direction:column;align-items:center}
+.lg-center .kicker{margin-bottom:6px}
+.lg-center h1{max-width:18ch}
+.lg-lead{color:var(--muted);font-size:18px;margin-top:10px;max-width:46ch}
+.lg-center .roles{width:100%;text-align:center}
+.lg-center .role{align-items:center}
+.lg-center .role .ri{margin-bottom:4px}
+.lg-center .role .btn{margin-top:auto}
+.lg-note{display:flex;gap:8px;align-items:center;justify-content:center;color:var(--muted);font-size:14px;margin-top:22px}
+.lg-note svg{width:16px;height:16px}
+.lg-card{width:100%;max-width:440px;border:1.5px solid var(--line);border-radius:26px;padding:30px 26px;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.lg-card .ri{width:56px;height:56px;border-radius:18px;background:var(--gold-soft);color:var(--navy);display:grid;place-items:center}
+.lg-card h1{font-size:clamp(26px,5vw,32px)}
+.lg-card .lg-lead{font-size:16px;margin:0 0 6px}
+.lg-card .lg-f{width:100%;text-align:left}
+.lg-card .btn-primary{width:100%}
+.lg-card .err{min-height:0}
+.lg-forgot{color:var(--blue);font-weight:600;text-decoration:none;font-size:14.5px}
+.lg-testbox{display:grid;justify-items:center;gap:6px;border-top:1px dashed var(--line);padding-top:12px;margin-top:4px;width:100%}
+.lg-testbox small{color:var(--muted);font-size:12.5px;max-width:34ch}
+.lg-back{display:inline-flex;align-items:center;gap:6px;margin-top:18px;color:var(--muted);font-weight:600;text-decoration:none}
+.lg-back svg{width:16px;height:16px}
+
 @media (min-width:901px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -1839,42 +1862,45 @@ const mailOf=n=>n.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().
 DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
 function login(){
   DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
-  const has=!!S.profile;
-  $("#root").innerHTML=`<header class="topbar"><div class="wrap"><a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
-    <a class="btn btn-ghost" href="#/" style="margin-left:auto"><i data-lucide="arrow-left"></i>Voltar ao site</a><button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button></div></header>
-  <main class="login-main"><h1>Entrar</h1><p>Escolha o seu lado da jornada.</p>
-  <div class="roles">
-    <div class="role"><span class="ri"><i data-lucide="footprints"></i></span><h2>Sou cliente</h2><p>Seus treinos, sua agenda, conversa com a personal e suas conquistas.</p><a class="btn btn-primary" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Criar meu plano"}<i data-lucide="arrow-right"></i></a></div>
-    <form class="role" id="fpl" novalidate><span class="ri"><i data-lucide="dumbbell"></i></span><h2>Sou personal</h2><p>Alunos, alertas do dia, agenda, mensagens e seus ganhos.</p>
-      <div class="field lg-f"><label for="lpu">E-mail ou CREF</label><input id="lpu" autocomplete="username" inputmode="email"></div>
-      <div class="field lg-f"><label for="lpw">Senha</label><input id="lpw" type="password" autocomplete="current-password"></div>
-      <small class="err" id="lpe" role="alert"></small>
-      <button class="btn btn-primary">Entrar no painel<i data-lucide="arrow-right"></i></button>
-      <div class="lg-links"><a href="#" data-forgot>Esqueci minha senha</a>${TEST_MODE?`<button type="button" class="lg-test" data-test="personal"><i data-lucide="flask-conical"></i>Usar conta de teste</button>`:""}</div></form>
-    <form class="role" id="fal" novalidate><span class="ri"><i data-lucide="building-2"></i></span><h2>Sou da empresa</h2><p>Visão geral do negócio, clientes, personais, financeiro, segurança e preços.</p>
-      <div class="field lg-f"><label for="lau">E-mail</label><input id="lau" autocomplete="username" inputmode="email"></div>
-      <div class="field lg-f"><label for="law">Senha</label><input id="law" type="password" autocomplete="current-password"></div>
-      <small class="err" id="lae" role="alert"></small>
-      <button class="btn btn-primary">Entrar no painel<i data-lucide="arrow-right"></i></button>
-      <div class="lg-links"><a href="#" data-forgot>Esqueci minha senha</a>${TEST_MODE?`<button type="button" class="lg-test" data-test="admin"><i data-lucide="flask-conical"></i>Usar conta de teste</button>`:""}</div></form>
-  </div>
-  <div class="info" style="margin-top:22px"><i data-lucide="info"></i><span><b style="color:var(--ink)">Versão de demonstração.</b> O login de verdade (com senha protegida e recuperação por e-mail) entra junto com o servidor. Aqui, use “Usar conta de teste”. Os três lados usam os mesmos dados, salvos só neste navegador. O que a personal faz no painel aparece no app do cliente, e os preços definidos pela empresa aparecem no site.</span></div>
+  const has=!!S.profile,who=(location.hash.split("/")[2]||"");
+  const R={personal:{ic:"dumbbell",t:"Entrar como personal",d:"Seus alunos, alertas do dia, agenda, mensagens e ganhos.",u:"E-mail ou CREF",um:"email"},
+           empresa:{ic:"building-2",t:"Entrar como empresa",d:"Visão geral, clientes, personais, financeiro, segurança e preços.",u:"E-mail",um:"email"}}[who];
+  const top=`<header class="topbar"><div class="wrap"><a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
+    <a class="btn btn-ghost" href="#/" style="margin-left:auto" aria-label="Voltar ao site"><i data-lucide="arrow-left"></i><span class="dm">Voltar ao site</span></a><button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button></div></header>`;
+  if(!R){
+    $("#root").innerHTML=`${top}<main class="login-main lg-center">
+      <span class="kicker">Área de acesso</span><h1>Que bom ter você aqui.</h1><p class="lg-lead">Escolha como você faz parte do Primeiro Passo.</p>
+      <div class="roles">
+        <div class="role"><span class="ri"><i data-lucide="footprints"></i></span><h2>Sou aluno</h2><p>Seu caminho passo a passo, treinos, agenda e conversa com a sua personal.</p><a class="btn btn-primary" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Criar meu plano"}<i data-lucide="arrow-right"></i></a></div>
+        <div class="role"><span class="ri"><i data-lucide="dumbbell"></i></span><h2>Sou personal</h2><p>Seus alunos, alertas do dia, agenda, mensagens e seus ganhos.</p><a class="btn btn-primary" href="#/entrar/personal">Entrar no painel<i data-lucide="arrow-right"></i></a></div>
+        <div class="role"><span class="ri"><i data-lucide="building-2"></i></span><h2>Sou da empresa</h2><p>Gestão completa: clientes, personais, financeiro e segurança.</p><a class="btn btn-primary" href="#/entrar/empresa">Entrar no painel<i data-lucide="arrow-right"></i></a></div>
+      </div>
+      <p class="lg-note"><i data-lucide="info"></i>Versão de demonstração: os dados ficam salvos só neste navegador.</p>
+    </main>`;
+    $("#theme").onclick=toggleTheme;icons();return}
+  $("#root").innerHTML=`${top}<main class="login-main lg-center">
+    <form class="lg-card" id="lgf" novalidate>
+      <span class="ri"><i data-lucide="${R.ic}"></i></span><h1>${R.t}</h1><p class="lg-lead">${R.d}</p>
+      <div class="field lg-f"><label for="lgu">${R.u}</label><input id="lgu" autocomplete="username" inputmode="${R.um}" autofocus></div>
+      <div class="field lg-f"><label for="lgw">Senha</label><input id="lgw" type="password" autocomplete="current-password"></div>
+      <small class="err" id="lge" role="alert"></small>
+      <button class="btn btn-primary">Entrar<i data-lucide="arrow-right"></i></button>
+      <a href="#" data-forgot class="lg-forgot">Esqueci minha senha</a>
+      ${TEST_MODE?`<div class="lg-testbox"><button type="button" class="lg-test" id="lgt"><i data-lucide="flask-conical"></i>Usar conta de teste</button><small>O login de verdade, com senha protegida e recuperação por e-mail, entra junto com o servidor.</small></div>`:""}
+    </form>
+    <a class="lg-back" href="#/entrar"><i data-lucide="arrow-left"></i>Escolher outro acesso</a>
   </main>`;
-  $("#theme").onclick=toggleTheme;
-  const norm=v=>String(v).trim().toLowerCase(),dig=v=>String(v).replace(/\D/g,"");
-  $("#fpl").onsubmit=e=>{e.preventDefault();const u=norm($("#lpu").value),w=$("#lpw").value;
+  $("#theme").onclick=toggleTheme;icons();
+  const norm=v=>String(v).trim().toLowerCase(),dig=v=>String(v).replace(/\D/g,""),err=t=>{$("#lge").textContent=t};
+  $("#lgf").onsubmit=e=>{e.preventDefault();const u=norm($("#lgu").value),w=$("#lgw").value;
+    if(!u||!w)return err(`Preencha ${R.u.toLowerCase()} e senha.`);
+    if(who==="empresa"){if(u!==ADMIN_EMAIL||w!==TEST_PASS)return err("E-mail ou senha incorretos.");setSess({role:"admin"});location.hash="#/admin";return}
     const p=DB.personals.find(x=>norm(x.email)===u||(dig(u).length>=6&&dig(x.cref)===dig(u)));
-    if(!u||!w){$("#lpe").textContent="Preencha e-mail (ou CREF) e senha.";return}
-    if(!p||w!==TEST_PASS){$("#lpe").textContent="E-mail, CREF ou senha incorretos.";return}
-    if(p.status!=="ativo"){$("#lpe").textContent=p.status==="pendente"?"Seu cadastro ainda está em análise. Avisamos por e-mail quando for aprovado.":"Este acesso está desativado. Fale com a empresa.";return}
+    if(!p||w!==TEST_PASS)return err("E-mail, CREF ou senha incorretos.");
+    if(p.status!=="ativo")return err(p.status==="pendente"?"Seu cadastro ainda está em análise. Avisamos por e-mail quando for aprovado.":"Este acesso está desativado. Fale com a empresa.");
     setSess({role:"personal",pid:p.id});location.hash="#/personal"};
-  $("#fal").onsubmit=e=>{e.preventDefault();const u=norm($("#lau").value),w=$("#law").value;
-    if(!u||!w){$("#lae").textContent="Preencha e-mail e senha.";return}
-    if(u!==ADMIN_EMAIL||w!==TEST_PASS){$("#lae").textContent="E-mail ou senha incorretos.";return}
-    setSess({role:"admin"});location.hash="#/admin"};
-  document.querySelectorAll("[data-test]").forEach(b=>b.onclick=()=>{if(b.dataset.test==="personal"){$("#lpu").value=DB.personals.find(x=>x.status==="ativo").email;$("#lpw").value=TEST_PASS;$("#fpl").requestSubmit()}else{$("#lau").value=ADMIN_EMAIL;$("#law").value=TEST_PASS;$("#fal").requestSubmit()}});
+  const t=$("#lgt");if(t)t.onclick=()=>{$("#lgu").value=who==="empresa"?ADMIN_EMAIL:DB.personals.find(x=>x.status==="ativo").email;$("#lgw").value=TEST_PASS;$("#lgf").requestSubmit()};
   document.querySelectorAll("[data-forgot]").forEach(a=>a.onclick=e=>{e.preventDefault();toast("Na versão final, enviamos um link de recuperação para o seu e-mail.")});
-  icons();
 }
 function logout(){setSess({});location.hash="#/entrar"}
 
