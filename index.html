@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1B3A5C">
+<title>Primeiro Passo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<style>
+:root{
+  --navy:#1B3A5C;--blue:#2F5D8A;--sky:#DCE7F3;--mist:#F3F6FA;--gold:#E0A93B;--gold-soft:#FBF1DC;
+  --ink:#1E2733;--muted:#5F6B7A;--line:#DCE3EC;--bg:#FFFFFF;--surface:#FFFFFF;--on-navy:#FFFFFF;
+  --green:#3E8E5E;--green-soft:#E3F2E8;--red:#C44536;--red-soft:#FBE6E3;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;--body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --navy:#9CC0E6;--blue:#7FA6CF;--sky:#1F3450;--mist:#16212E;--gold:#F0BE5A;--gold-soft:#3A2F17;
+  --ink:#E8EDF3;--muted:#9AA7B6;--line:#2A3746;--bg:#0F1720;--surface:#141E2A;--on-navy:#0F1720;
+  --green-soft:#1B3325;--red-soft:#3A1F1C;color-scheme:dark}}
+:root[data-theme="dark"]{--navy:#9CC0E6;--blue:#7FA6CF;--sky:#1F3450;--mist:#16212E;--gold:#F0BE5A;--gold-soft:#3A2F17;
+  --ink:#E8EDF3;--muted:#9AA7B6;--line:#2A3746;--bg:#0F1720;--surface:#141E2A;--on-navy:#0F1720;--green-soft:#1B3325;--red-soft:#3A1F1C;color-scheme:dark}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);color:var(--navy);margin:0;line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,select,textarea{font:inherit;color:var(--ink)}
+img,svg{max-width:100%}
+i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:8px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px}
+[hidden]{display:none!important}
+
+.btn{text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 22px;font-weight:700;font-size:16px;min-height:48px;transition:transform .15s,background .2s}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--navy);color:var(--on-navy)}
+.btn-gold{background:var(--gold);color:#1B3A5C}
+.btn-ghost{border:1.5px solid var(--line);background:var(--surface)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn svg{width:18px;height:18px}
+
+/* ---------- SITE ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:800;font-size:19px;color:var(--navy);text-decoration:none}
+.brand .mk{width:32px;height:32px;border-radius:10px;background:#1B3A5C;display:grid;place-items:center}
+.brand .mk svg{width:18px;height:18px;color:#E0A93B}
+.topnav{display:flex;gap:4px;margin-left:auto}
+.topnav a{color:var(--muted);text-decoration:none;font-weight:600;font-size:15px;padding:8px 12px;border-radius:999px}
+.topnav a:hover{background:var(--mist);color:var(--navy)}
+.topbar .btn{min-height:42px;padding:9px 18px;font-size:15px}
+
+.hero{padding:64px 0 56px}
+.hero .wrap{display:grid;grid-template-columns:1.3fr .9fr;gap:48px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:8px;background:var(--gold-soft);padding:6px 13px;border-radius:999px;font-weight:600;font-size:14px}
+.tag svg{width:16px;height:16px;color:var(--gold)}
+.hero h1{font-size:clamp(44px,6.6vw,78px);font-weight:800;line-height:.98;letter-spacing:-.03em;margin:20px 0}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .lead{font-size:19px;color:var(--muted);max-width:34ch}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.hero .assure{display:flex;flex-wrap:wrap;gap:16px;margin-top:22px;color:var(--muted);font-size:14px}
+.hero .assure span{display:flex;gap:6px;align-items:center}
+.hero .assure svg{width:16px;height:16px;color:var(--green)}
+
+.phone{justify-self:center;width:300px;border-radius:40px;background:#0F1720;padding:12px;box-shadow:0 30px 60px -20px rgba(27,58,92,.45)}
+.phone .scr{border-radius:30px;background:#fff;overflow:hidden;color:#1E2733}
+.phone .ph{background:#1B3A5C;color:#fff;padding:22px 18px 18px}
+.phone .ph small{color:#C9D8EA;font-size:12px}
+.phone .ph b{display:block;font-family:var(--display);font-size:22px;margin-top:2px}
+.phone .pbar{height:7px;background:rgba(255,255,255,.2);border-radius:99px;margin-top:14px;overflow:hidden}
+.phone .pbar i{display:block;height:100%;width:38%;background:#E0A93B;border-radius:99px;animation:grow 1.6s .4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{width:0}}
+.phone .pb{padding:14px;display:grid;gap:10px}
+.phone .pc{border:1px solid #DCE3EC;border-radius:16px;padding:12px;display:flex;gap:10px;align-items:center;font-size:13px}
+.phone .pc .ic{width:36px;height:36px;border-radius:11px;background:#FBF1DC;display:grid;place-items:center;color:#1B3A5C}
+.phone .pc b{display:block;font-size:14px}
+.phone .pc small{color:#5F6B7A}
+.phone .pc.done .ic{background:#E3F2E8;color:#3E8E5E}
+
+.sec{padding:72px 0;border-top:1px solid var(--line)}
+.sec-h{max-width:620px;margin-bottom:36px}
+.sec-h h2{font-size:clamp(30px,4vw,44px);font-weight:800}
+.sec-h p{color:var(--muted);font-size:17px;margin-top:10px}
+.kicker{color:var(--gold);font-weight:700;font-size:15px;margin-bottom:10px;display:block}
+
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.stp{padding:0 18px 0 0}
+.stp .bar{height:10px;border-radius:99px;margin-bottom:20px}
+.stp:nth-child(1) .bar{background:#9DB8D4}.stp:nth-child(2) .bar{background:#6F93BA}.stp:nth-child(3) .bar{background:#2F5D8A}.stp:nth-child(4) .bar{background:#1B3A5C}
+.stp .n{font-family:var(--display);font-weight:800;font-size:15px;color:var(--gold)}
+.stp h3{font-size:22px;margin:4px 0 8px;display:flex;align-items:center;gap:8px}
+.stp h3 svg{color:var(--blue)}
+.stp p{color:var(--muted);font-size:15px}
+.stp .when{margin-top:12px;font-size:14px;font-weight:600;color:var(--navy);display:flex;gap:6px}
+.stp .when svg{width:16px;height:16px;color:var(--gold);margin-top:3px}
+
+.who{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.who > div{padding:24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;gap:14px}
+.who > div:nth-child(3n){border-right:0}.who > div:nth-last-child(-n+3){border-bottom:0}
+.who svg{color:var(--blue);width:24px;height:24px}
+.who b{display:block;font-size:17px;margin-bottom:2px}
+.who p{color:var(--muted);font-size:15px}
+
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.plan{border:1.5px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.plan.hl{border-color:var(--navy);box-shadow:0 12px 30px -18px rgba(27,58,92,.5)}
+.plan .lv{font-weight:700;font-size:14px;color:var(--gold)}
+.plan h3{font-size:22px}
+.plan .pr{font-family:var(--display);font-weight:800;font-size:32px;color:var(--navy);line-height:1;margin-top:6px}
+.plan .pr small{font-family:var(--body);font-size:14px;font-weight:600;color:var(--muted)}
+.plan ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px;font-size:15px}
+.plan li{display:flex;gap:8px}
+.plan li svg{width:17px;height:17px;color:var(--green);margin-top:3px}
+.note{display:flex;gap:10px;align-items:flex-start;color:var(--muted);font-size:15px;margin-top:18px}
+.note svg{color:var(--gold);margin-top:2px}
+
+.faq{display:grid;gap:10px;max-width:820px}
+.faq details{border:1px solid var(--line);border-radius:16px;padding:0 20px;background:var(--surface)}
+.faq summary{list-style:none;cursor:pointer;padding:18px 0;font-weight:700;font-size:17px;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary svg{transition:transform .2s;color:var(--blue)}
+.faq details[open] summary svg{transform:rotate(45deg)}
+.faq details p{padding:0 0 18px;color:var(--muted)}
+
+.cta{background:#1B3A5C;color:#fff;border-radius:28px;padding:48px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}
+.cta h2{color:#fff;font-size:clamp(28px,3.6vw,40px)}
+.cta p{color:#C9D8EA;margin-top:10px}
+.foot{padding:40px 0 56px;color:var(--muted);font-size:14px}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+.care{display:flex;gap:10px;align-items:flex-start;max-width:520px}
+.care svg{color:var(--red);margin-top:2px}
+
+/* ---------- ONBOARDING ---------- */
+.ob{min-height:100vh;display:flex;flex-direction:column}
+.ob-top{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line)}
+.ob-top .x{color:var(--ink);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--mist)}
+.ob-prog{flex:1;height:8px;border-radius:99px;background:var(--mist);overflow:hidden}
+.ob-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--gold));border-radius:99px;transition:width .4s}
+.ob-count{font-size:14px;color:var(--muted);font-weight:600;min-width:42px;text-align:right}
+.ob-body{flex:1;width:100%;max-width:620px;margin:0 auto;padding:36px 22px 120px}
+.ob-body.anim{animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ob-body h2{font-size:clamp(28px,5vw,38px);font-weight:800}
+.ob-body .sub{color:var(--muted);font-size:17px;margin:10px 0 26px}
+.field{display:grid;gap:8px;margin-bottom:18px}
+.field label{font-weight:700}
+.field input,.field select,.field textarea{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--surface);font-size:17px;width:100%}
+.field input:focus,.field textarea:focus{border-color:var(--navy);outline:none}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opt{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;text-align:left;background:var(--surface);min-height:58px;transition:border-color .15s,background .15s}
+.opt .oi{width:38px;height:38px;border-radius:12px;background:var(--mist);display:grid;place-items:center;color:var(--blue);flex:none}
+.opt b{display:block;font-size:16px}
+.opt small{color:var(--muted);font-size:14px}
+.opt .ck{margin-left:auto;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:none}
+.opt .ck svg{width:14px;height:14px;opacity:0}
+.opt[aria-pressed="true"]{border-color:var(--navy);background:var(--mist)}
+.opt[aria-pressed="true"] .ck{background:var(--navy);border-color:var(--navy);color:var(--on-navy)}
+.opt[aria-pressed="true"] .ck svg{opacity:1}
+.parq{display:grid;gap:10px}
+.pq{border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;display:grid;gap:10px}
+.pq p{font-weight:600}
+.yn{display:flex;gap:8px}
+.yn button{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:10px;font-weight:700;min-height:44px}
+.yn button[aria-pressed="true"]{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.alert{display:flex;gap:12px;border-radius:16px;padding:14px 16px;margin-top:16px;font-size:15px}
+.alert svg{margin-top:2px}
+.alert.warn{background:var(--gold-soft)} .alert.warn svg{color:var(--gold)}
+.alert.ok{background:var(--green-soft)} .alert.ok svg{color:var(--green)}
+.ob-foot{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px))}
+.ob-foot .in{max-width:620px;margin:0 auto;display:flex;gap:10px}
+.ob-foot .btn-primary{flex:1}
+.result{border:1.5px solid var(--navy);border-radius:22px;overflow:hidden;margin-top:8px}
+.result .rh{background:#1B3A5C;color:#fff;padding:22px}
+.result .rh small{color:#C9D8EA}
+.result .rh b{display:block;font-family:var(--display);font-size:26px;margin-top:4px}
+.result .rb{padding:18px 22px;display:grid;gap:12px}
+.result .rr{display:flex;gap:12px}
+.result .rr svg{color:var(--gold);margin-top:2px}
+
+/* ---------- APP ---------- */
+.app{min-height:100vh;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+.app-top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.app-top .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 20px;height:62px}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--gold);color:#1B3A5C;display:grid;place-items:center;font-weight:800;font-family:var(--display)}
+.app-top .icon-btn{margin-left:auto;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--mist);position:relative}
+.dotb{position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--red);border:2px solid var(--mist)}
+.view{max-width:760px;margin:0 auto;padding:22px 20px;animation:fade .3s ease}
+.hello{margin-bottom:18px}
+.hello small{color:var(--muted);font-weight:600}
+.hello h2{font-size:30px;font-weight:800;margin-top:2px}
+.lvcard{background:#1B3A5C;color:#fff;border-radius:24px;padding:22px;position:relative;overflow:hidden}
+.lvcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.lvcard small{color:#C9D8EA;font-weight:600}
+.lvcard h3{color:#fff;font-size:26px;margin-top:2px}
+.lvcard .badge{background:#E0A93B;color:#1B3A5C;border-radius:14px;width:52px;height:52px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:24px;flex:none}
+.lvsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:18px 0 8px}
+.lvsteps i{height:8px;border-radius:99px;background:rgba(255,255,255,.18)}
+.lvsteps i.on{background:#E0A93B}
+.lvsteps i.cur{background:linear-gradient(90deg,#E0A93B var(--p,0%),rgba(255,255,255,.18) var(--p,0%))}
+.lvcard .meta{display:flex;justify-content:space-between;font-size:13px;color:#C9D8EA}
+.block{margin-top:24px}
+.block-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.block-h h3{font-size:20px}
+.block-h a,.link{color:var(--blue);font-weight:700;font-size:14px;text-decoration:none}
+.tasks{display:grid;gap:10px}
+.task{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:18px;padding:14px;background:var(--surface);text-align:left;width:100%}
+.task .ti{width:42px;height:42px;border-radius:13px;background:var(--gold-soft);display:grid;place-items:center;color:var(--navy);flex:none}
+.task b{display:block}
+.task small{color:var(--muted);font-size:14px}
+.task .go{margin-left:auto;color:var(--muted)}
+.task.done{background:var(--mist)}
+.task.done .ti{background:var(--green-soft);color:var(--green)}
+.task.done b{text-decoration:line-through;text-decoration-color:var(--muted)}
+.next{margin-top:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{border:1.5px solid var(--line);border-radius:18px;padding:14px}
+.stat b{font-family:var(--display);font-size:28px;color:var(--navy);display:block;line-height:1.1}
+.stat small{color:var(--muted);font-size:13px}
+.wk{display:grid;gap:10px}
+.wcard{border:1.5px solid var(--line);border-radius:20px;padding:16px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:var(--surface);text-align:left;width:100%}
+.wcard .th{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#2F5D8A,#1B3A5C);display:grid;place-items:center;color:#E0A93B}
+.wcard .th svg{width:26px;height:26px}
+.wcard b{display:block;font-size:17px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;background:var(--mist);border-radius:99px;padding:3px 9px;color:var(--muted)}
+.chip svg{width:13px;height:13px}
+.chip.ok{background:var(--green-soft);color:var(--green)}
+.locked{opacity:.55}
+.player{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.player .ph{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line)}
+.player .pbody{flex:1;overflow:auto;max-width:620px;width:100%;margin:0 auto;padding:22px 20px}
+.video{aspect-ratio:16/9;border-radius:20px;background:linear-gradient(135deg,#2F5D8A,#1B3A5C);display:grid;place-items:center;color:#fff;text-align:center;padding:20px}
+.video svg{width:44px;height:44px;color:#E0A93B}
+.video small{display:block;color:#C9D8EA;margin-top:6px}
+.timer{font-family:var(--display);font-weight:800;font-size:64px;color:var(--navy);text-align:center;margin:18px 0 4px;font-variant-numeric:tabular-nums}
+.exname{text-align:center;font-weight:700;font-size:19px}
+.exhint{text-align:center;color:var(--muted);font-size:15px;margin-top:4px}
+.exlist{margin-top:20px;display:grid;gap:8px}
+.ex{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid var(--line);font-size:15px}
+.ex.cur{border-color:var(--navy);background:var(--mist);font-weight:700}
+.ex.ok{color:var(--muted);text-decoration:line-through}
+.ex .t{margin-left:auto;color:var(--muted);font-size:13px;font-weight:600}
+.player .pfoot{border-top:1px solid var(--line);padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px))}
+.player .pfoot .in{max-width:620px;margin:0 auto;display:flex;gap:10px}
+.player .pfoot .btn{flex:1}
+.feel{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.feel button{border:1.5px solid var(--line);border-radius:14px;padding:12px 6px;display:grid;gap:4px;justify-items:center;font-size:13px;font-weight:600}
+.feel button[aria-pressed="true"]{border-color:var(--navy);background:var(--mist)}
+
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.day{flex:none;width:64px;border:1.5px solid var(--line);border-radius:16px;padding:10px 0;display:grid;justify-items:center;gap:2px}
+.day small{font-size:12px;color:var(--muted);font-weight:600}
+.day b{font-family:var(--display);font-size:22px}
+.day[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--on-navy)}
+.day[aria-pressed="true"] small{color:inherit;opacity:.8}
+.slot{border:1.5px solid var(--line);border-radius:12px;padding:11px 0;font-weight:700;min-height:44px}
+.slot[aria-pressed="true"]{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--mist);padding:5px;border-radius:16px}
+.seg button{border-radius:12px;padding:10px 6px;font-weight:600;font-size:14px;display:grid;justify-items:center;gap:3px;min-height:56px}
+.seg button[aria-pressed="true"]{background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.08);color:var(--navy)}
+.booking{border:1.5px solid var(--line);border-radius:18px;padding:14px;display:flex;gap:12px;align-items:center}
+.booking .d{width:52px;height:56px;border-radius:14px;background:var(--gold-soft);display:grid;place-items:center;text-align:center;line-height:1.1;flex:none}
+.booking .d b{font-family:var(--display);font-size:20px;color:var(--navy)}
+.booking .d small{font-size:11px;font-weight:700;color:var(--muted);text-transform:lowercase}
+.booking .x{margin-left:auto;color:var(--muted);width:40px;height:40px;border-radius:50%;display:grid;place-items:center}
+
+.chat{display:flex;flex-direction:column;height:calc(100vh - 62px - 84px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+.chat-h{display:flex;align-items:center;gap:12px;padding:12px 0 14px;border-bottom:1px solid var(--line)}
+.chat-h .avatar{background:var(--navy);color:var(--on-navy)}
+.chat-h small{color:var(--green);font-weight:600;font-size:13px}
+.msgs{flex:1;overflow-y:auto;padding:16px 0;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:82%;padding:10px 14px;border-radius:18px;font-size:15.5px}
+.msg.them{background:var(--mist);border-bottom-left-radius:6px}
+.msg.me{background:var(--navy);color:var(--on-navy);margin-left:auto;border-bottom-right-radius:6px}
+.msg time{display:block;font-size:11px;opacity:.65;margin-top:3px}
+.quick{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.quick::-webkit-scrollbar{display:none}
+.quick button{flex:none;border:1.5px solid var(--line);border-radius:99px;padding:7px 12px;font-size:14px;font-weight:600}
+.composer{display:flex;gap:8px;padding-top:8px;border-top:1px solid var(--line)}
+.composer input{flex:1;border:1.5px solid var(--line);border-radius:999px;padding:12px 16px;background:var(--surface)}
+.composer button{width:48px;height:48px;border-radius:50%;background:var(--navy);color:var(--on-navy);display:grid;place-items:center}
+
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.bdg{border:1.5px solid var(--line);border-radius:18px;padding:14px 8px;display:grid;justify-items:center;gap:6px;text-align:center;font-size:13px;font-weight:600}
+.bdg .bi{width:48px;height:48px;border-radius:50%;background:var(--mist);display:grid;place-items:center;color:var(--muted)}
+.bdg.on .bi{background:#E0A93B;color:#1B3A5C}
+.bdg:not(.on){opacity:.55}
+.plist{border:1.5px solid var(--line);border-radius:18px;overflow:hidden}
+.plist div{display:flex;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);font-size:15px}
+.plist div:last-child{border-bottom:0}
+.plist span{color:var(--muted)}
+.plist b{text-align:right}
+
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.tabbar a{display:grid;justify-items:center;gap:3px;padding:10px 0 12px;color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;position:relative}
+.tabbar a.on{color:var(--navy)}
+.tabbar a.on::before{content:"";position:absolute;top:0;width:28px;height:3px;border-radius:0 0 3px 3px;background:var(--gold)}
+.tabbar svg{width:23px;height:23px}
+
+.toast{pointer-events:none;position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:#1E2733;color:#fff;padding:12px 18px;border-radius:14px;font-weight:600;font-size:15px;opacity:0;transition:.3s;z-index:90;display:flex;gap:8px;align-items:center;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.toast svg{color:#E0A93B}
+.modal{position:fixed;inset:0;z-index:80;background:rgba(15,23,32,.55);display:grid;place-items:end center;padding:0}
+.sheet{background:var(--bg);width:100%;max-width:560px;border-radius:26px 26px 0 0;padding:26px 22px calc(22px + env(safe-area-inset-bottom,0px));animation:up .3s ease;text-align:center}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sheet .big{width:84px;height:84px;border-radius:24px;background:#E0A93B;color:#1B3A5C;display:grid;place-items:center;margin:0 auto 14px}
+.sheet .big svg{width:42px;height:42px}
+.sheet h3{font-size:26px}
+.sheet p{color:var(--muted);margin:8px 0 18px}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:85;overflow:hidden}
+.confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}
+.demo{margin-top:26px;border:1.5px dashed var(--line);border-radius:18px;padding:14px 16px;font-size:14px;color:var(--muted);display:grid;gap:10px}
+.demo b{color:var(--ink)}
+.demo .row{display:flex;flex-wrap:wrap;gap:8px}
+.demo button{border:1.5px solid var(--line);border-radius:99px;padding:7px 12px;font-weight:600;font-size:13px}
+
+/* ---------- NOVO: tema, menu, seções ---------- */
+.rbtn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--mist);color:var(--navy);flex:none}
+.rbtn svg{width:19px;height:19px}
+.menu-btn{display:none}
+.mnav{border-top:1px solid var(--line);padding:8px 0 14px}
+.mnav a{display:block;padding:12px 4px;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+.mnav a:last-child{border-bottom:0}
+.promises{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 32px}
+.promises > div{display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+.promises .pi{grid-row:span 2;width:44px;height:44px;border-radius:14px;background:var(--gold-soft);display:grid;place-items:center;color:var(--navy)}
+.promises b{font-size:17px;align-self:end}
+.promises p{color:var(--muted);font-size:15px}
+.coach{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--mist);border-radius:28px;padding:32px}
+.coach .ph{width:120px;height:120px;border-radius:32px;background:#1B3A5C;color:#E0A93B;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:44px}
+.coach h3{font-size:28px}
+.coach .cref{color:var(--muted);font-weight:600;font-size:14px;margin-top:4px}
+.coach blockquote{margin:14px 0 0;font-size:18px;line-height:1.5;max-width:58ch}
+.coach .chips{margin-top:14px}
+
+/* check-in de humor */
+.mood{border:1.5px solid var(--line);border-radius:22px;padding:18px;background:var(--surface)}
+.mood h3{font-size:19px}
+.mood .row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.mood .row button{border:1.5px solid var(--line);border-radius:14px;padding:12px 4px;display:grid;justify-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--muted)}
+.mood .row button svg{width:24px;height:24px;color:var(--blue)}
+.mood .row button[aria-pressed="true"]{border-color:var(--navy);background:var(--mist);color:var(--navy)}
+.mood .ans{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:12px}
+.mood .ans p{font-size:15.5px}
+.mood .ans .btn{justify-self:start;min-height:44px;padding:10px 18px;font-size:15px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.week div{display:grid;justify-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted)}
+.week i{width:100%;max-width:40px;aspect-ratio:1;border-radius:12px;border:1.5px dashed var(--line);display:grid;place-items:center}
+.week i.on{background:var(--green-soft);border:1.5px solid transparent;color:var(--green)}
+.week i.today{border-color:var(--navy);border-style:solid}
+.week i svg{width:16px;height:16px}
+.week-note{color:var(--muted);font-size:14px;margin-top:10px}
+
+/* respiração guiada */
+.breath-stage{display:grid;place-items:center;padding:30px 0 10px}
+.bcircle{width:220px;height:220px;border-radius:50%;display:grid;place-items:center;position:relative}
+.bcircle::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,var(--gold-soft) 0%,var(--sky) 70%);transform:scale(var(--s,.55));transition:transform var(--d,4s) ease-in-out}
+.bcircle span{position:relative;font-family:var(--display);font-weight:800;font-size:26px;color:var(--navy)}
+.bcount{text-align:center;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+.bpick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:22px}
+.bpick button{border:1.5px solid var(--line);border-radius:14px;padding:10px;font-weight:700;min-height:48px}
+.bpick button[aria-pressed="true"]{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+
+/* player: anel e descanso */
+.ring{position:relative;width:200px;height:200px;margin:18px auto 6px}
+.ring svg{width:200px;height:200px;max-width:none;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:10}
+.ring .bg{stroke:var(--mist)}
+.ring .fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.ring.rest .fg{stroke:var(--green)}
+.ring .timer{position:absolute;inset:0;display:grid;place-items:center;margin:0;font-size:52px}
+.ptrack{height:4px;background:var(--mist)}
+.ptrack i{display:block;height:100%;background:var(--gold);transition:width .3s}
+.restnote{text-align:center;font-weight:700;color:var(--green);font-size:15px}
+
+.filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filters button{flex:none;border:1.5px solid var(--line);border-radius:99px;padding:8px 14px;font-weight:600;font-size:14px;min-height:40px}
+.filters button[aria-pressed="true"]{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.empty{border:1.5px dashed var(--line);border-radius:18px;padding:20px;color:var(--muted);text-align:center}
+.hist{border:1.5px solid var(--line);border-radius:18px;overflow:hidden}
+.hist div{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);font-size:15px}
+.hist div:last-child{border-bottom:0}
+.hist svg{color:var(--blue)}
+.hist small{margin-left:auto;color:var(--muted);font-size:13px;white-space:nowrap}
+.toggle-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1.5px solid var(--line);border-radius:18px;width:100%;text-align:left;background:var(--surface)}
+.toggle-row .sw{margin-left:auto;width:46px;height:28px;border-radius:99px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.toggle-row .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle-row[aria-checked="true"] .sw{background:var(--green)}
+.toggle-row[aria-checked="true"] .sw::after{transform:translateX(18px)}
+.sheet .acts{display:grid;gap:10px}
+.btn-danger{background:var(--red);color:#fff}
+
+@media (min-width:901px){.mnav{display:none}}
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr;gap:40px}
+  .phone{width:270px}
+  .steps{grid-template-columns:1fr 1fr;row-gap:30px}
+  .who{grid-template-columns:1fr 1fr}
+  .who > div{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
+  .who > div:nth-child(2n){border-right:0!important}
+  .plans{grid-template-columns:1fr 1fr}
+  .cta{grid-template-columns:1fr;padding:32px}
+  .topnav{display:none}
+  .topbar .btn{margin-left:auto}
+  .menu-btn{display:grid}
+  .promises{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .wrap{padding:0 18px}
+  .hero{padding:36px 0 44px}
+  .hero .lead{font-size:17px}
+  .hero .ctas{flex-direction:column}
+  .hero .ctas .btn{width:100%}
+  .sec{padding:52px 0}
+  .steps,.who,.plans{grid-template-columns:1fr}
+  .who > div{border-right:0!important}
+  .who > div:last-child{border-bottom:0!important}
+  .opts.two{grid-template-columns:1fr}
+  .slots{grid-template-columns:repeat(3,1fr)}
+  .badges{grid-template-columns:repeat(2,1fr)}
+  .brand span{display:none}
+  .cta{padding:26px;border-radius:22px}
+  .promises{grid-template-columns:1fr}
+  .coach{grid-template-columns:1fr;padding:24px;gap:18px}
+  .coach .ph{width:84px;height:84px;font-size:32px;border-radius:24px}
+  .topbar .btn{padding:9px 14px}
+  .mood .row button{font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ================== DATA ================== */
+const LEVELS=[
+ {n:1,t:"Conhecer",icon:"message-circle",price:"R$ 100",per:"pagamento único",short:"Conversa online no seu tempo",
+  desc:"Uma conversa por mensagem ou vídeo, sem precisar ligar a câmera se não quiser. O personal entende sua rotina, seus medos e o que você quer, e monta o plano com você.",
+  when:"Plano definido e você à vontade com o personal",
+  inc:["Conversa por mensagem, áudio ou vídeo","Anamnese e questionário de saúde","Plano de treino feito para você"]},
+ {n:2,t:"Em casa",icon:"house",price:"R$ 180",per:"por mês",short:"Treinos em vídeo, sem exposição",
+  desc:"Treinos curtos em vídeo para fazer no seu espaço, com acompanhamento do personal pelo WhatsApp. O objetivo é criar o hábito sem ninguém olhando.",
+  when:"Você treina com regularidade por algumas semanas",
+  inc:["Treinos em vídeo de 8 a 15 minutos","Ajustes semanais pelo WhatsApp","Opções sentadas e adaptadas"]},
+ {n:3,t:"Ao ar livre",icon:"trees",price:"R$ 480",per:"por mês · R$ 60/aula",short:"Encontros presenciais perto de você",
+  desc:"Os primeiros encontros presenciais, na sua casa ou em uma praça tranquila, 2 vezes por semana. É o momento de ganhar confiança fora de casa.",
+  when:"Você treina fora de casa sem desconforto",
+  inc:["2 aulas por semana","Na sua casa ou em uma praça","Material levado pelo personal"]},
+ {n:4,t:"Academia",icon:"dumbbell",price:"R$ 560",per:"por mês · R$ 70/aula",short:"Autonomia com alguém do seu lado",
+  desc:"O personal vai com você até a academia e acompanha os treinos até você se sentir seguro para treinar lá por conta própria.",
+  when:"Você frequenta a academia com segurança",
+  inc:["2 aulas por semana na academia","Apresentação dos aparelhos","Plano para seguir sozinho depois"]}
+];
+const WORKOUTS=[
+ {id:"w1",t:"Despertar suave",min:8,icon:"sunrise",tag:"Iniciante",seat:false,ex:[["Respiração profunda",60,"Inspire pelo nariz, solte pela boca"],["Rotação de ombros",60,"Movimentos lentos, sem forçar"],["Marcha parada",90,"No seu ritmo, pode segurar na parede"],["Alongamento lateral",60,"Um lado de cada vez"],["Respiração final",60,"Perceba como o corpo está"]]},
+ {id:"w2",t:"Força na cadeira",min:12,icon:"armchair",tag:"Sentado",seat:true,ex:[["Levantar e sentar",90,"Use os braços se precisar"],["Elevação de joelhos sentado",90,"Alterne as pernas"],["Braços para cima",90,"Pode usar garrafas de água como peso"],["Extensão de perna",90,"Estique e segure 2 segundos"],["Remada com toalha",90,"Puxe a toalha em direção ao peito"],["Relaxamento",60,"Respire e solte os ombros"]]},
+ {id:"w3",t:"Caminhada em casa",min:12,icon:"footprints",tag:"Cardio leve",seat:false,ex:[["Aquecimento com marcha",120,"Devagar, sem pressa"],["Passo lateral",120,"De um lado para o outro"],["Marcha com braços",180,"Braços acompanham as pernas"],["Passo para frente e para trás",120,"Mantenha o ritmo confortável"],["Desaceleração",120,"Diminua aos poucos"]]},
+ {id:"w4",t:"Mobilidade e alongamento",min:10,icon:"stretch-horizontal",tag:"Relaxante",seat:true,ex:[["Pescoço",60,"Incline devagar para cada lado"],["Ombros e costas",120,"Abrace o próprio corpo"],["Coluna sentado",120,"Gire o tronco com calma"],["Pernas",120,"Estique uma perna de cada vez"],["Respiração 4-4",180,"Inspire 4 tempos, solte 4 tempos"]]},
+ {id:"w5",t:"Circuito leve",min:15,icon:"repeat",tag:"Iniciante +",seat:false,ex:[["Aquecimento",120,"Marcha parada"],["Agachamento na cadeira",120,"Encoste e levante"],["Flexão na parede",120,"Mãos na parede, corpo reto"],["Ponte no chão ou na cama",120,"Eleve o quadril devagar"],["Marcha rápida",120,"Só se estiver bem"],["Alongamento final",180,"Respire fundo"]]},
+ {id:"w6",t:"Equilíbrio e confiança",min:10,icon:"scale",tag:"Equilíbrio",seat:false,ex:[["Apoio em uma perna com parede",120,"Troque de perna na metade"],["Passo de calcanhar e ponta",120,"Como se andasse numa linha"],["Transferência de peso",120,"Balance de um pé para o outro"],["Sentar e levantar lento",120,"Controle a descida"],["Respiração final",120,"Você foi muito bem"]]}
+];
+const BARRIERS=[["Vergonha do corpo","eye-off"],["Medo de ser julgado","users"],["Ansiedade ou depressão","cloud-rain"],["Dor ou limitação física","accessibility"],["Não sei por onde começar","compass"],["Já tentei e desisti","rotate-ccw"],["Falta de tempo","clock"],["Falta de energia","battery-low"]];
+const GOALS=[["Me sentir melhor comigo","smile"],["Ter mais disposição","zap"],["Perder peso com saúde","scale"],["Cuidar da saúde mental","brain"],["Ganhar força e mobilidade","activity"],["Conseguir ir à academia","dumbbell"]];
+const CONTACT=[["Só mensagem","message-square","Sem câmera e sem áudio"],["Áudio","mic","Conversa por voz"],["Vídeo-chamada","video","Com câmera"]];
+const PARQ=["Algum médico já disse que você tem problema no coração e só deve fazer atividade física com orientação?","Você sente dor no peito quando faz atividade física?","No último mês, sentiu dor no peito sem estar fazendo atividade física?","Você perde o equilíbrio por tontura ou já desmaiou?","Tem algum problema nos ossos ou articulações que pode piorar com exercício?","Toma remédio para pressão arterial ou para o coração?","Sabe de algum outro motivo pelo qual não deveria fazer atividade física?"];
+const PERSONAL={name:"Camila Rocha",cref:"CREF 000000-G/SP",bio:"Especialista em atividade física adaptada e em iniciantes. Atende no ABC paulista.",initials:"CR"};
+const BADGES=[["Primeiro passo","footprints","Criou seu plano"],["Primeira conversa","message-circle","Conversou com o personal"],["1º treino","flame","Concluiu o primeiro treino"],["Semana firme","calendar-check","3 treinos em uma semana"],["Nível 2","house","Chegou aos treinos em casa"],["8 treinos","award","Completou 8 treinos"],["Nível 3","trees","Primeiro encontro ao ar livre"],["Nível 4","dumbbell","Chegou à academia"]];
+
+/* ================== STATE ================== */
+const KEY="primeiropasso:v1";
+const fresh=()=>({profile:null,level:1,workouts:[],bookings:[],messages:[],talked:false,outdoor:0,gymsessions:0,feel:[],unread:0,breaths:[],mood:null,sound:true});
+let S=load();
+function load(){try{const r=localStorage.getItem(KEY);return r?Object.assign(fresh(),JSON.parse(r)):fresh()}catch(e){return fresh()}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* ================== HELPERS ================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const icons=()=>{if(window.lucide)lucide.createIcons()};
+function toast(t){const el=$("#toast");el.innerHTML=`<i data-lucide="sparkles"></i>${esc(t)}`;icons();el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),2600)}
+const first=()=>S.profile?S.profile.name.split(" ")[0]:"";
+const nowT=()=>new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+function confetti(){const c=document.createElement("div");c.className="confetti";const cols=["#E0A93B","#2F5D8A","#1B3A5C","#9DB8D4","#3E8E5E"];for(let i=0;i<60;i++){const p=document.createElement("i");p.style.left=Math.random()*100+"%";p.style.background=cols[i%5];p.style.animationDelay=Math.random()*.6+"s";p.style.animationDuration=1.4+Math.random()*1.2+"s";c.appendChild(p)}document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}
+const THEME_KEY="primeiropasso:tema";
+function applyTheme(){let t=null;try{t=localStorage.getItem(THEME_KEY)}catch(e){}if(t)document.documentElement.dataset.theme=t;else delete document.documentElement.dataset.theme}
+const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
+function toggleTheme(){const t=isDark()?"light":"dark";try{localStorage.setItem(THEME_KEY,t)}catch(e){}document.documentElement.dataset.theme=t;route(true)}
+const themeIcon=()=>isDark()?"sun":"moon";
+const dayKey=ts=>{const d=new Date(ts);return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()};
+const today=()=>dayKey(Date.now());
+function activeDays(){const k=new Set();S.workouts.forEach(w=>k.add(dayKey(w.at)));(S.breaths||[]).forEach(b=>k.add(dayKey(b)));return k}
+let AC=null;
+function beep(f=660,ms=160){if(!S.sound)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;g.gain.setValueAtTime(.001,AC.currentTime);g.gain.exponentialRampToValueAtTime(.18,AC.currentTime+.02);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+ms/1000);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+ms/1000+.02)}catch(e){}try{navigator.vibrate&&navigator.vibrate(120)}catch(e){}}
+let WL=null;
+async function wake(on){try{if(on&&navigator.wakeLock&&!WL){WL=await navigator.wakeLock.request("screen")}else if(!on&&WL){await WL.release();WL=null}}catch(e){WL=null}}
+function weekCount(){const w=Date.now()-7*864e5;return S.workouts.filter(x=>x.at>w).length}
+
+/* level criteria */
+function criteria(){
+  const lv=S.level;
+  if(lv===1)return[{t:"Responder o questionário",d:!!S.profile,go:"#/app"},{t:"Agendar a primeira conversa",d:S.bookings.length>0,go:"#/app/agenda"},{t:"Conversar com o personal",d:S.talked,go:"#/app/mensagens"}];
+  if(lv===2){const n=S.workouts.length;return[{t:"Fazer o primeiro treino em casa",d:n>=1,go:"#/app/treinos"},{t:"Treinar 3 vezes em uma semana",d:weekCount()>=3||n>=3,go:"#/app/treinos"},{t:`Completar 8 treinos (${Math.min(n,8)}/8)`,d:n>=8,go:"#/app/treinos"}]}
+  if(lv===3)return[{t:"Agendar o primeiro encontro ao ar livre",d:S.bookings.some(b=>b.type==="Ao ar livre"),go:"#/app/agenda"},{t:`Participar de 4 encontros (${Math.min(S.outdoor,4)}/4)`,d:S.outdoor>=4,go:"#/app/agenda"}];
+  return[{t:"Agendar a primeira aula na academia",d:S.bookings.some(b=>b.type==="Academia"),go:"#/app/agenda"},{t:`Treinar 4 vezes na academia com o personal (${Math.min(S.gymsessions,4)}/4)`,d:S.gymsessions>=4,go:"#/app/agenda"},{t:"Montar seu plano para seguir sozinho",d:S.gymsessions>=4,go:"#/app/mensagens"}];
+}
+const pct=()=>{const c=criteria();return Math.round(c.filter(x=>x.d).length/c.length*100)};
+function earned(){const n=S.workouts.length;return[!!S.profile,S.talked,n>=1,weekCount()>=3||n>=3,S.level>=2,n>=8,S.level>=3,S.level>=4]}
+
+/* ================== ROUTER ================== */
+function route(keep){
+  const h=location.hash||"#/";
+  const y=scrollY;
+  if(keep!==true)window.scrollTo(0,0);
+  setTimeout(()=>{if(keep===true)scrollTo(0,y)},0);
+  if(h.startsWith("#/comecar"))return onboarding();
+  if(h.startsWith("#/app")){if(!S.profile){location.hash="#/comecar";return}return app(h.split("/")[2]||"inicio")}
+  site();
+}
+addEventListener("hashchange",()=>route());
+
+/* ================== SITE ================== */
+function site(){
+  const has=!!S.profile;
+  $("#root").innerHTML=`
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
+  <nav class="topnav" aria-label="Seções"><a href="#como" data-scroll>Como funciona</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#duvidas" data-scroll>Dúvidas</a></nav>
+  <a class="btn btn-primary" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Começar"}</a>
+  <button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button>
+  <button class="rbtn menu-btn" id="menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="mnav"><i data-lucide="menu"></i></button>
+</div><nav class="mnav wrap" id="mnav" aria-label="Seções" hidden><a href="#como" data-scroll>Como funciona</a><a href="#combinados" data-scroll>Nossos combinados</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#duvidas" data-scroll>Dúvidas</a></nav></header>
+
+<section class="hero"><div class="wrap">
+  <div>
+    <span class="tag"><i data-lucide="heart-handshake"></i>Para quem ainda não teve coragem de começar</span>
+    <h1>Seu primeiro passo, <em>no seu tempo.</em></h1>
+    <p class="lead">Um personal que começa com você pela tela, vai até a sua casa e só te leva para a academia quando você estiver pronto.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="${has?"#/app":"#/comecar"}"><i data-lucide="arrow-right"></i>${has?"Continuar minha jornada":"Começar sem compromisso"}</a>
+      <a class="btn btn-ghost" href="#como" data-scroll>Ver como funciona</a>
+    </div>
+    <div class="assure"><span><i data-lucide="check"></i>Sem câmera, se preferir</span><span><i data-lucide="check"></i>Personal com CREF</span><span><i data-lucide="check"></i>Primeira conversa gratuita</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr">
+    <div class="ph"><small>Olá, Ana</small><b>Nível 2 · Em casa</b><div class="pbar"><i></i></div></div>
+    <div class="pb">
+      <div class="pc done"><span class="ic"><i data-lucide="check"></i></span><div><b>Conversa com a Camila</b><small>Plano pronto</small></div></div>
+      <div class="pc done"><span class="ic"><i data-lucide="check"></i></span><div><b>Força na cadeira</b><small>12 min · feito ontem</small></div></div>
+      <div class="pc"><span class="ic"><i data-lucide="play"></i></span><div><b>Despertar suave</b><small>8 min · hoje</small></div></div>
+      <div class="pc"><span class="ic"><i data-lucide="message-circle"></i></span><div><b>“Como você se sentiu?”</b><small>Camila · personal</small></div></div>
+    </div>
+  </div></div>
+</div></section>
+
+<section class="sec" id="como"><div class="wrap">
+  <div class="sec-h"><span class="kicker">Como funciona</span><h2>Quatro níveis. Você só sobe quando se sentir pronto.</h2><p>O mesmo personal acompanha você do começo ao fim. Nada de pular etapas.</p></div>
+  <div class="steps">${LEVELS.map(l=>`<div class="stp"><div class="bar"></div><span class="n">Nível ${l.n}</span><h3><i data-lucide="${l.icon}"></i>${l.t}</h3><p>${l.desc}</p><p class="when"><i data-lucide="arrow-up-right"></i>Avança quando: ${l.when.toLowerCase()}</p></div>`).join("")}</div>
+</div></section>
+
+<section class="sec" id="combinados"><div class="wrap">
+  <div class="sec-h"><span class="kicker">Nossos combinados</span><h2>Algumas coisas que a gente nunca vai fazer com você.</h2></div>
+  <div class="promises">
+    <div><span class="pi"><i data-lucide="camera-off"></i></span><b>Pedir foto de antes e depois</b><p>Seu corpo não é vitrine. Medimos progresso pelo que você consegue fazer.</p></div>
+    <div><span class="pi"><i data-lucide="calendar-x"></i></span><b>Cobrar por dia perdido</b><p>Não tem sequência para quebrar. Faltou? Retoma quando der.</p></div>
+    <div><span class="pi"><i data-lucide="users-round"></i></span><b>Comparar você com alguém</b><p>Sem ranking e sem grupo. Seu ritmo é a única referência.</p></div>
+    <div><span class="pi"><i data-lucide="megaphone-off"></i></span><b>Gritar ou pressionar</b><p>Nada de “sem dor, sem ganho”. Desconforto leve é sinal para ajustar.</p></div>
+    <div><span class="pi"><i data-lucide="arrow-down-up"></i></span><b>Empurrar de nível</b><p>Quem decide subir é você. E voltar um nível também é permitido.</p></div>
+    <div><span class="pi"><i data-lucide="shield-check"></i></span><b>Compartilhar suas respostas</b><p>O que você conta fica entre você e a sua personal.</p></div>
+  </div>
+</div></section>
+
+<section class="sec" id="pra-quem"><div class="wrap">
+  <div class="sec-h"><span class="kicker">Para quem é</span><h2>Feito para quem acha que academia não é para si.</h2></div>
+  <div class="who">
+    <div><i data-lucide="armchair"></i><div><b>Nunca treinou ou parou há anos</b><p>Começamos do zero, com movimentos simples.</p></div></div>
+    <div><i data-lucide="eye-off"></i><div><b>Tem vergonha ou medo de julgamento</b><p>Os primeiros treinos são em casa, sem plateia.</p></div></div>
+    <div><i data-lucide="brain"></i><div><b>Vive com ansiedade ou depressão</b><p>Metas pequenas, sem cobrança e no seu ritmo.</p></div></div>
+    <div><i data-lucide="accessibility"></i><div><b>Tem deficiência ou limitação</b><p>Treinos adaptados, inclusive sentado.</p></div></div>
+    <div><i data-lucide="scale"></i><div><b>Quer emagrecer com saúde</b><p>Sem dietas malucas, sem “antes e depois”.</p></div></div>
+    <div><i data-lucide="users"></i><div><b>Tem fobia social</b><p>Contato só por mensagem, se for melhor para você.</p></div></div>
+  </div>
+</div></section>
+
+<section class="sec" id="personal"><div class="wrap">
+  <div class="sec-h"><span class="kicker">Quem acompanha você</span><h2>A mesma pessoa, do primeiro oi até a academia.</h2></div>
+  <div class="coach">
+    <span class="ph" aria-hidden="true">${PERSONAL.initials}</span>
+    <div>
+      <h3>${PERSONAL.name}</h3>
+      <p class="cref">${PERSONAL.cref} · Educação Física</p>
+      <blockquote>“Meu trabalho no começo é tirar o peso da palavra treino. Se hoje só der para respirar fundo por dois minutos, isso já é um treino.”</blockquote>
+      <div class="chips"><span class="chip"><i data-lucide="accessibility"></i>Atividade física adaptada</span><span class="chip"><i data-lucide="heart-handshake"></i>Comunicação sem julgamento</span><span class="chip"><i data-lucide="map-pin"></i>ABC paulista</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="planos"><div class="wrap">
+  <div class="sec-h"><span class="kicker">Planos</span><h2>Você paga pelo nível em que está.</h2><p>Sem fidelidade. Quando subir de nível, o plano muda junto.</p></div>
+  <div class="plans">${LEVELS.map((l,i)=>`<div class="plan ${i===1?"hl":""}"><span class="lv">Nível ${l.n}</span><h3>${l.t}</h3><div class="pr">${l.price} <small>${l.per}</small></div><ul>${l.inc.map(x=>`<li><i data-lucide="check"></i>${x}</li>`).join("")}</ul></div>`).join("")}</div>
+  <p class="note"><i data-lucide="gift"></i>A primeira conversa de 15 minutos é gratuita e sem compromisso.</p>
+</div></section>
+
+<section class="sec" id="duvidas"><div class="wrap">
+  <div class="sec-h"><span class="kicker">Dúvidas</span><h2>Perguntas que todo mundo faz (e tem vergonha de perguntar).</h2></div>
+  <div class="faq">
+    ${[["Preciso ligar a câmera?","Não. No nível 1 você pode conversar só por mensagem ou áudio. A câmera é opcional em todos os níveis online."],
+       ["E se eu não conseguir fazer os exercícios?","Todos os treinos têm versões mais leves e adaptadas, inclusive sentado. O personal ajusta tudo com você."],
+       ["Preciso de atestado médico?","Você responde um questionário de saúde (PAR-Q) antes de começar. Se alguma resposta indicar risco, pedimos a liberação de um médico antes dos treinos."],
+       ["Os personals são formados?","Sim. Todos os personals parceiros têm registro no CREF e passam por formação em comunicação sem julgamento e atividade física adaptada."],
+       ["Tenho depressão. Isso substitui terapia?","Não. A atividade física ajuda, mas não substitui o acompanhamento psicológico. Se precisar, indicamos profissionais parceiros."],
+       ["Posso parar ou voltar um nível?","Pode. Não existe fidelidade e você pode voltar para um nível anterior sempre que precisar."]
+      ].map(([q,a])=>`<details><summary>${q}<i data-lucide="plus"></i></summary><p>${a}</p></details>`).join("")}
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap"><div class="cta">
+  <div><h2>Que tal dar o primeiro passo hoje?</h2><p>Leva 3 minutos para responder e não tem compromisso nenhum.</p></div>
+  <a class="btn btn-gold" href="${has?"#/app":"#/comecar"}"><i data-lucide="footprints"></i>${has?"Abrir meu app":"Começar agora"}</a>
+</div></div></section>
+
+<footer class="foot"><div class="wrap">
+  <div><b style="color:var(--navy)">Primeiro Passo</b><br>Acompanhamento físico humanizado.</div>
+  <p class="care"><i data-lucide="heart"></i><span>Se você estiver passando por um momento muito difícil, não precisa enfrentar sozinho. O CVV atende 24 horas pelo telefone 188 ou pelo site cvv.org.br.</span></p>
+</div></footer>`;
+  const mn=$("#mnav"),mb=$("#menu");
+  const setMenu=o=>{mn.hidden=!o;mb.setAttribute("aria-expanded",o);mb.innerHTML=`<i data-lucide="${o?"x":"menu"}"></i>`;icons()};
+  mb.onclick=()=>setMenu(mn.hidden);
+  $("#theme").onclick=toggleTheme;
+  document.querySelectorAll("[data-scroll]").forEach(a=>a.onclick=e=>{e.preventDefault();setMenu(false);document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})});
+  icons();
+}
+
+/* ================== ONBOARDING ================== */
+let OB={step:0,name:"",goals:[],barriers:[],days:[],period:"",contact:"",parq:Array(PARQ.length).fill(null),notes:""};
+const OB_STEPS=["nome","objetivo","barreiras","rotina","contato","saude","resultado"];
+function onboarding(){
+  const st=OB_STEPS[OB.step], total=OB_STEPS.length-1;
+  let body="",canNext=true,nextLabel="Continuar";
+  const optBtns=(list,sel,key,multi)=>list.map(([t,ic,sub])=>`<button class="opt" aria-pressed="${sel.includes(t)}" data-k="${key}" data-v="${esc(t)}" data-m="${multi?1:0}"><span class="oi"><i data-lucide="${ic}"></i></span><span><b>${t}</b>${sub?`<small>${sub}</small>`:""}</span><span class="ck"><i data-lucide="check"></i></span></button>`).join("");
+  if(st==="nome"){body=`<h2>Oi! Como você gostaria de ser chamado?</h2><p class="sub">Pode ser seu nome ou apelido. Não precisa de mais nada agora.</p>
+    <div class="field"><label for="nm">Seu nome</label><input id="nm" autocomplete="given-name" value="${esc(OB.name)}" placeholder="Ex.: Ana"></div>
+    <div class="alert ok"><i data-lucide="lock"></i><span>Suas respostas ficam só entre você e o seu personal.</span></div>`;canNext=OB.name.trim().length>1}
+  if(st==="objetivo"){body=`<h2>O que você gostaria de conquistar?</h2><p class="sub">Escolha quantas quiser.</p><div class="opts two">${optBtns(GOALS,OB.goals,"goals",1)}</div>`;canNext=OB.goals.length>0}
+  if(st==="barreiras"){body=`<h2>O que mais te impede de começar?</h2><p class="sub">Não existe resposta errada. Isso ajuda o personal a entender você.</p><div class="opts two">${optBtns(BARRIERS,OB.barriers,"barriers",1)}</div>`;canNext=OB.barriers.length>0}
+  if(st==="rotina"){const D=["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];body=`<h2>Como é sua rotina?</h2><p class="sub">Quais dias você teria uns minutinhos livres?</p>
+    <div class="days" role="group" aria-label="Dias">${D.map(d=>`<button class="day" aria-pressed="${OB.days.includes(d)}" data-day="${d}"><small>dia</small><b>${d}</b></button>`).join("")}</div>
+    <p style="font-weight:700;margin:22px 0 10px">Melhor período</p>
+    <div class="opts">${optBtns([["Manhã","sunrise"],["Tarde","sun"],["Noite","moon"]],[OB.period],"period",0)}</div>`;canNext=OB.days.length>0&&!!OB.period}
+  if(st==="contato"){body=`<h2>Como você prefere conversar com o personal?</h2><p class="sub">Você pode mudar isso quando quiser.</p><div class="opts">${optBtns(CONTACT,[OB.contact],"contact",0)}</div>`;canNext=!!OB.contact}
+  if(st==="saude"){const any=OB.parq.some(x=>x===true);body=`<h2>Algumas perguntas sobre sua saúde</h2><p class="sub">É o questionário PAR-Q, usado por profissionais de educação física antes de qualquer treino.</p>
+    <div class="parq">${PARQ.map((q,i)=>`<div class="pq"><p>${i+1}. ${q}</p><div class="yn"><button data-pq="${i}" data-a="1" aria-pressed="${OB.parq[i]===true}">Sim</button><button data-pq="${i}" data-a="0" aria-pressed="${OB.parq[i]===false}">Não</button></div></div>`).join("")}</div>
+    ${any?`<div class="alert warn"><i data-lucide="stethoscope"></i><span>Tudo bem! Você pode continuar. Antes dos treinos, o personal vai pedir uma liberação do seu médico, para você treinar com segurança.</span></div>`:""}`;
+    canNext=OB.parq.every(x=>x!==null);nextLabel="Ver meu plano"}
+  if(st==="resultado"){const any=OB.parq.some(x=>x===true);body=`<h2>Pronto, ${esc(OB.name.split(" ")[0])}! Seu caminho começa aqui.</h2><p class="sub">Com base nas suas respostas, preparamos seu começo.</p>
+    <div class="result"><div class="rh"><small>Você começa no</small><b>Nível 1 · Conhecer</b></div><div class="rb">
+      <div class="rr"><i data-lucide="user-round-check"></i><span>Personal sugerida: <b>${PERSONAL.name}</b>, ${PERSONAL.bio.toLowerCase()}</span></div>
+      <div class="rr"><i data-lucide="${OB.contact==="Só mensagem"?"message-square":OB.contact==="Áudio"?"mic":"video"}"></i><span>Primeira conversa por <b>${OB.contact.toLowerCase()}</b>, de 15 minutos e gratuita.</span></div>
+      <div class="rr"><i data-lucide="calendar"></i><span>Disponível: <b>${OB.days.join(", ")}</b>, de ${OB.period.toLowerCase()}.</span></div>
+      ${any?`<div class="rr"><i data-lucide="stethoscope"></i><span>Antes dos treinos, vamos pedir a <b>liberação do seu médico</b>.</span></div>`:""}
+    </div></div>`;nextLabel="Entrar no meu app"}
+  $("#root").innerHTML=`<div class="ob">
+    <div class="ob-top"><a class="x" href="#/" aria-label="Sair"><i data-lucide="x"></i></a><div class="ob-prog"><i style="width:${Math.round(OB.step/total*100)}%"></i></div><span class="ob-count">${Math.min(OB.step+1,total)}/${total}</span></div>
+    <div class="ob-body ${OB._last!==OB.step?"anim":""}">${body}</div>
+    <div class="ob-foot"><div class="in">${OB.step>0?`<button class="btn btn-ghost" id="back" aria-label="Voltar"><i data-lucide="arrow-left"></i></button>`:""}<button class="btn btn-primary" id="next" ${canNext?"":"disabled"}>${nextLabel}<i data-lucide="arrow-right"></i></button></div></div>
+  </div>`;
+  OB._last=OB.step;
+  const nm=$("#nm");if(nm){nm.focus();nm.oninput=()=>{OB.name=nm.value;$("#next").disabled=OB.name.trim().length<2};nm.onkeydown=e=>{if(e.key==="Enter"&&OB.name.trim().length>1)next()}}
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const k=b.dataset.k,v=b.dataset.v;if(b.dataset.m==="1"){OB[k]=OB[k].includes(v)?OB[k].filter(x=>x!==v):[...OB[k],v]}else OB[k]=v;onboarding()});
+  document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{const d=b.dataset.day;OB.days=OB.days.includes(d)?OB.days.filter(x=>x!==d):[...OB.days,d];onboarding()});
+  document.querySelectorAll("[data-pq]").forEach(b=>b.onclick=()=>{OB.parq[+b.dataset.pq]=b.dataset.a==="1";const y=scrollY;onboarding();scrollTo(0,y)});
+  const bk=$("#back");if(bk)bk.onclick=()=>{OB.step--;onboarding();scrollTo(0,0)};
+  $("#next").onclick=next;icons();
+  function next(){if(OB.step<OB_STEPS.length-1){OB.step++;onboarding();scrollTo(0,0);return}
+    S=fresh();S.profile={name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
+    S.messages=[{from:"them",text:`Oi, ${OB.name.trim().split(" ")[0]}! Eu sou a ${PERSONAL.name.split(" ")[0]}, sua personal. Li suas respostas e fico feliz que você esteja aqui. 💛`,t:nowT()},{from:"them",text:"Quando quiser, agende nossa primeira conversa na aba Agenda. Pode ser só por mensagem, sem pressa nenhuma.",t:nowT()}];
+    S.unread=2;save();OB.step=0;location.hash="#/app";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
+}
+
+/* ================== APP ================== */
+function app(tab){
+  const tabs=[["inicio","house","Início"],["treinos","circle-play","Treinos"],["agenda","calendar-days","Agenda"],["mensagens","message-circle","Conversa"],["perfil","user-round","Perfil"]];
+  const v={inicio:vHome,treinos:vTreinos,agenda:vAgenda,mensagens:vChat,perfil:vPerfil}[tab]||vHome;
+  if(tab==="mensagens")S.unread=0,save();
+  $("#root").innerHTML=`<div class="app">
+    <header class="app-top"><div class="in"><a class="brand" href="#/" aria-label="Site"><span class="mk"><i data-lucide="footprints"></i></span></a><div><small style="color:var(--muted);font-weight:600;font-size:13px">Nível ${S.level}</small><div style="font-weight:700;line-height:1.1">${LEVELS[S.level-1].t}</div></div>
+    <a class="icon-btn" href="#/app/mensagens" aria-label="Mensagens"><i data-lucide="bell"></i>${S.unread?`<span class="dotb"></span>`:""}</a></div></header>
+    <main class="view" id="view"></main>
+    <nav class="tabbar" aria-label="App"><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||(tab==="inicio"&&k==="inicio")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
+  </div>`;
+  v();icons();
+}
+
+function vHome(){
+  const c=criteria(),p=pct(),L=LEVELS[S.level-1],ready=c.every(x=>x.d);
+  const nxt=c.find(x=>!x.d);
+  $("#view").innerHTML=`
+  <div class="hello"><small>${greet()}</small><h2>${esc(first())}, que bom te ver.</h2></div>
+  <div class="lvcard">
+    <div class="top"><div><small>Você está no</small><h3>Nível ${L.n} · ${L.t}</h3></div><span class="badge">${L.n}</span></div>
+    <div class="lvsteps">${LEVELS.map((x,i)=>`<i class="${i<S.level-1?"on":i===S.level-1?"cur":""}" style="--p:${p}%"></i>`).join("")}</div>
+    <div class="meta"><span>${p}% do nível concluído</span><span>${S.level<4?"Próximo: "+LEVELS[S.level].t:"Última etapa"}</span></div>
+  </div>
+  ${ready?`<button class="btn btn-gold next" id="up" style="width:100%"><i data-lucide="party-popper"></i>${S.level<4?"Me sinto pronto para o nível "+(S.level+1):"Concluir a jornada"}</button>`:nxt?`<a class="btn btn-primary next" style="width:100%" href="${nxt.go}"><i data-lucide="arrow-right"></i>Próximo passo: ${nxt.t.replace(/\s*\(.*\)/,"")}</a>`:""}
+  <div class="block">${moodBox()}</div>
+  <div class="block"><div class="block-h"><h3>Para subir de nível</h3></div>
+    <div class="tasks">${c.map(x=>`<a class="task ${x.d?"done":""}" href="${x.go}" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="${x.d?"check":"circle-dashed"}"></i></span><span><b>${x.t}</b><small>${x.d?"Feito":"Pendente"}</small></span><i class="go" data-lucide="chevron-right"></i></a>`).join("")}</div>
+  </div>
+  <div class="block"><div class="block-h"><h3>Seu progresso</h3></div>
+    <div class="stats"><div class="stat"><b>${S.workouts.length}</b><small>treinos feitos</small></div><div class="stat"><b>${weekCount()}</b><small>nesta semana</small></div><div class="stat"><b>${earned().filter(Boolean).length}</b><small>conquistas</small></div></div>
+  </div>
+  <div class="block"><div class="block-h"><h3>Sua semana</h3><button class="link" id="br2">Respirar 2 min</button></div>${weekStrip()}</div>
+  ${S.level>=2?`<div class="block"><div class="block-h"><h3>Treino sugerido</h3><a href="#/app/treinos">Ver todos</a></div>${wcard(suggest())}</div>`:""}
+  <div class="block"><div class="block-h"><h3>Sua personal</h3></div>
+    <a class="task" href="#/app/mensagens" style="text-decoration:none;color:inherit"><span class="avatar" style="background:var(--navy);color:var(--on-navy)">${PERSONAL.initials}</span><span><b>${PERSONAL.name}</b><small>${PERSONAL.cref}</small></span><i class="go" data-lucide="message-circle"></i></a>
+  </div>
+  ${demoBox()}`;
+  const up=$("#up");if(up)up.onclick=levelUp;
+  document.querySelectorAll("[data-mood]").forEach(b=>b.onclick=()=>{S.mood={d:today(),v:b.dataset.mood};save();vHome();icons()});
+  document.querySelectorAll("[data-act=breathe]").forEach(b=>b.onclick=()=>breathe());
+  $("#br2").onclick=()=>breathe();
+  bindDemo();bindW();
+}
+
+/* check-in: como você está hoje? */
+const MOODS=[["Sem energia","battery-low"],["Ansioso","waves"],["Mais ou menos","meh"],["Bem","smile"]];
+function moodBox(){
+  const m=S.mood&&S.mood.d===today()?S.mood.v:null;
+  let ans="";
+  if(m){const w2=S.level>=2,light=WORKOUTS.find(w=>w.id==="w4"),nx=criteria().find(x=>!x.d);
+    const br=`<button class="btn btn-primary" data-act="breathe"><i data-lucide="wind"></i>Respirar por 2 minutos</button>`;
+    if(m==="Sem energia")ans=`<p>Tudo bem ter dias assim. Hoje pode ser só respirar com calma por 2 minutos. Isso já conta como movimento.</p>${br}`;
+    if(m==="Ansioso")ans=`<p>Vamos desacelerar juntos. Soltar o ar mais devagar do que puxa ajuda o corpo a sair do modo alerta.</p>${br}`;
+    if(m==="Mais ou menos")ans=w2?`<p>Um treino curto e tranquilo pode ajudar a virar o dia. Sugestão: <b>${light.t}</b>, ${light.min} min, dá para fazer sentado.</p><button class="btn btn-primary" data-w="${light.id}"><i data-lucide="play"></i>Começar ${light.t.toLowerCase()}</button>`:`<p>Sem problema. Que tal mandar uma mensagem para a ${PERSONAL.name.split(" ")[0]} contando como está? Ela responde sem pressa.</p><a class="btn btn-primary" href="#/app/mensagens"><i data-lucide="message-circle"></i>Mandar mensagem</a>`;
+    if(m==="Bem"){const w=suggest();ans=w2?`<p>Que bom! Aproveita a disposição: <b>${w.t}</b>, ${w.min} min.</p><button class="btn btn-primary" data-w="${w.id}"><i data-lucide="play"></i>Começar treino</button>`:nx?`<p>Que bom! Um bom dia para dar o próximo passo: ${nx.t.replace(/\s*\(.*\)/,"").toLowerCase()}.</p><a class="btn btn-primary" href="${nx.go}"><i data-lucide="arrow-right"></i>Ir agora</a>`:`<p>Que bom! Você já pode subir de nível quando quiser.</p>`}}
+  return `<div class="mood"><h3>Como você está hoje?</h3><div class="row" role="group" aria-label="Como você está hoje">${MOODS.map(([t,ic])=>`<button aria-pressed="${m===t}" data-mood="${t}"><i data-lucide="${ic}"></i>${t}</button>`).join("")}</div>${ans?`<div class="ans">${ans}</div>`:""}</div>`;
+}
+function weekStrip(){
+  const act=activeDays(),d0=new Date();d0.setHours(0,0,0,0);d0.setDate(d0.getDate()-((d0.getDay()+6)%7));
+  const L=["S","T","Q","Q","S","S","D"],tk=today();let n=0;
+  const cells=L.map((l,i)=>{const d=new Date(d0);d.setDate(d0.getDate()+i);const k=dayKey(d),on=act.has(k);if(on)n++;return `<div><i class="${on?"on":""} ${k===tk?"today":""}" aria-label="${d.toLocaleDateString("pt-BR",{weekday:"long"})}${on?", ativo":""}">${on?`<svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`:""}</i>${l}</div>`}).join("");
+  return `<div class="week">${cells}</div><p class="week-note">${n?`${n} ${n>1?"dias":"dia"} com movimento nesta semana. `:""}Qualquer movimento conta, inclusive respirar. Não existe sequência para perder.</p>`;
+}
+
+/* respiração guiada */
+const BREATH={"4-6":[4,0,6],"4-4-4":[4,4,4],"4-7-8":[4,7,8]};
+let B=null;
+function breathe(){
+  if(B)return;B={pat:"4-6",run:false,left:120,t:null,phase:0,pt:0};
+  const el=document.createElement("div");el.className="player";el.id="breath";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.setAttribute("aria-label","Respiração guiada");document.body.appendChild(el);document.body.style.overflow="hidden";renderB();
+}
+function renderB(){
+  const el=$("#breath");const mm=Math.floor(B.left/60),ss=String(B.left%60).padStart(2,"0");
+  el.innerHTML=`<div class="ph"><button class="rbtn" id="bclose" aria-label="Fechar"><i data-lucide="x"></i></button><div><b>Pausa para respirar</b><div style="font-size:13px;color:var(--muted)">2 minutos · pode ser sentado ou deitado</div></div></div>
+  <div class="pbody"><div class="breath-stage"><div class="bcircle" id="bc"><span id="bl" aria-live="polite">${B.run?"":"Pronto?"}</span></div></div>
+    <p class="bcount" id="bt">${mm}:${ss} restantes</p>
+    ${B.run?"":`<p class="exhint" style="margin-top:14px">Acompanhe o círculo: ele cresce quando você puxa o ar e diminui quando solta. Se ficar desconfortável, volte a respirar normalmente.</p>
+    <div class="bpick" role="group" aria-label="Ritmo">${Object.keys(BREATH).map(k=>`<button aria-pressed="${B.pat===k}" data-bp="${k}">${k}</button>`).join("")}</div>
+    <p class="exhint" style="margin-top:8px">${B.pat==="4-6"?"Puxa em 4, solta em 6. O mais simples para acalmar.":B.pat==="4-4-4"?"Puxa em 4, segura 4, solta em 4.":"Puxa em 4, segura 7, solta em 8. Bom para antes de dormir."}</p>`}</div>
+  <div class="pfoot"><div class="in"><button class="btn btn-primary" id="bgo"><i data-lucide="${B.run?"square":"play"}"></i>${B.run?"Encerrar":"Começar"}</button></div></div>`;
+  icons();
+  $("#bclose").onclick=()=>closeB(false);
+  el.querySelectorAll("[data-bp]").forEach(b=>b.onclick=()=>{B.pat=b.dataset.bp;renderB()});
+  $("#bgo").onclick=()=>{if(B.run){closeB(B.left<=90);return}B.run=true;wake(true);renderB();B.phase=-1;B.pt=0;stepB();B.t=setInterval(tickB,1000)};
+}
+function stepB(){
+  const seq=BREATH[B.pat];do{B.phase=(B.phase+1)%3}while(!seq[B.phase]);B.pt=seq[B.phase];
+  const c=$("#bc"),l=$("#bl");if(!c)return;
+  c.style.setProperty("--d",seq[B.phase]+"s");c.style.setProperty("--s",B.phase===0?"1":B.phase===1?"1":".55");
+  l.textContent=["Puxe o ar","Segure","Solte devagar"][B.phase];
+}
+function tickB(){B.left--;B.pt--;const t=$("#bt");if(t)t.textContent=Math.floor(B.left/60)+":"+String(B.left%60).padStart(2,"0")+" restantes";if(B.left<=0){closeB(true);return}if(B.pt<=0)stepB()}
+function closeB(done){if(!B)return;clearInterval(B.t);wake(false);const el=$("#breath");if(el)el.remove();document.body.style.overflow="";B=null;
+  if(done){S.breaths=S.breaths||[];S.breaths.push(Date.now());save();toast("Respiração registrada. Isso também conta!")}route(true)}
+function greet(){const h=new Date().getHours();return h<12?"Bom dia":h<18?"Boa tarde":"Boa noite"}
+function suggest(){const done=S.workouts.map(w=>w.id);return WORKOUTS.find(w=>!done.includes(w.id))||WORKOUTS[S.workouts.length%WORKOUTS.length]}
+function levelUp(){
+  if(S.level>=4){sheet("trophy","Jornada concluída!","Você chegou à academia com autonomia. Esse primeiro passo virou um caminho inteiro.","Voltar ao início");return}
+  S.level++;S.messages.push({from:"them",text:`Parabéns, ${first()}! Você chegou ao nível ${S.level}: ${LEVELS[S.level-1].t}. Estou muito orgulhosa de você! 🎉`,t:nowT()});S.unread++;save();
+  confetti();sheet(LEVELS[S.level-1].icon,`Nível ${S.level}: ${LEVELS[S.level-1].t}`,LEVELS[S.level-1].desc,"Vamos lá");
+}
+function sheet(ic,t,p,btn,opt={}){const prev=document.activeElement;const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sht"><div class="big" ${opt.danger?'style="background:var(--red-soft);color:var(--red)"':""}><i data-lucide="${ic}"></i></div><h3 id="sht">${t}</h3><p>${p}</p><div class="acts"><button class="btn ${opt.danger?"btn-danger":"btn-primary"}" id="sh-ok">${btn}</button>${opt.cancel?`<button class="btn btn-ghost" id="sh-no">${opt.cancel}</button>`:""}</div></div>`;
+  document.body.appendChild(m);icons();
+  const close=ok=>{removeEventListener("keydown",esc);m.remove();if(ok&&opt.onOk)opt.onOk();else route(true);if(prev&&prev.isConnected)prev.focus()};
+  const esc=e=>{if(e.key==="Escape")close(false)};addEventListener("keydown",esc);
+  $("#sh-ok").onclick=()=>close(true);const no=$("#sh-no");if(no)no.onclick=()=>close(false);
+  m.onclick=e=>{if(e.target===m)close(false)};$("#sh-ok").focus()}
+
+function wcard(w){const done=S.workouts.filter(x=>x.id===w.id).length;const lock=S.level<2;
+  return `<button class="wcard ${lock?"locked":""}" data-w="${w.id}"><span class="th"><i data-lucide="${w.icon}"></i></span><span><b>${w.t}</b><span class="chips"><span class="chip"><i data-lucide="clock"></i>${w.min} min</span><span class="chip">${w.tag}</span>${w.seat?`<span class="chip"><i data-lucide="armchair"></i>Sentado</span>`:""}${done?`<span class="chip ok"><i data-lucide="check"></i>${done}x</span>`:""}</span></span><i data-lucide="${lock?"lock":"play"}" style="color:var(--navy)"></i></button>`}
+function bindW(){document.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{if(S.level<2){toast("Os treinos em casa liberam no nível 2");return}player(WORKOUTS.find(w=>w.id===b.dataset.w))})}
+
+let TF="Todos";
+const TFILTERS={"Todos":()=>true,"Sentado":w=>w.seat,"Até 10 min":w=>w.min<=10,"Ainda não fiz":w=>!S.workouts.some(x=>x.id===w.id)};
+function vTreinos(){
+  const list=WORKOUTS.filter(TFILTERS[TF]);
+  $("#view").innerHTML=`<div class="hello"><small>Treinos em casa</small><h2>No seu espaço, no seu ritmo.</h2></div>
+  ${S.level<2?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="lock"></i><span>Os treinos em vídeo liberam no nível 2, depois da primeira conversa com a sua personal. Você já pode dar uma olhada.</span></div>`:""}
+  ${S.profile.medical?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="stethoscope"></i><span>Lembre de enviar a liberação médica para a sua personal antes de treinar.</span></div>`:""}
+  <div class="filters" role="group" aria-label="Filtrar treinos">${Object.keys(TFILTERS).map(k=>`<button aria-pressed="${TF===k}" data-tf="${k}">${k}</button>`).join("")}</div>
+  <div class="wk">${list.length?list.map(wcard).join(""):`<div class="empty">Você já fez todos os treinos pelo menos uma vez. Pode repetir o que mais gostou!</div>`}</div>
+  <button class="task" id="brt" style="margin-top:10px"><span class="ti"><i data-lucide="wind"></i></span><span><b>Pausa para respirar</b><small>2 min · liberado em todos os níveis</small></span><i class="go" data-lucide="chevron-right"></i></button>
+  <p class="note"><i data-lucide="heart-pulse"></i>Se sentir dor, tontura ou falta de ar, pare o treino e avise sua personal.</p>`;
+  document.querySelectorAll("[data-tf]").forEach(b=>b.onclick=()=>{TF=b.dataset.tf;vTreinos();icons()});
+  $("#brt").onclick=()=>breathe();
+  bindW();
+}
+
+/* workout player */
+let P=null;
+const REST=10,RC=2*Math.PI*90;
+function player(w){
+  P={w,i:0,left:w.ex[0][1],rest:false,run:false,int:null,feel:null,finished:false,started:false};
+  const el=document.createElement("div");el.className="player";el.id="player";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.setAttribute("aria-label",w.t);document.body.appendChild(el);document.body.style.overflow="hidden";renderP();
+}
+const fmt=n=>String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0");
+function ringOff(){const tot=P.rest?REST:P.w.ex[P.i][1];return RC*(1-P.left/tot)}
+function renderP(){
+  const el=$("#player"),w=P.w;
+  if(P.finished){wake(false);el.innerHTML=`<div class="ph"><b>${w.t}</b></div><div class="pbody" style="text-align:center">
+    <div class="sheet" style="animation:none;padding:10px 0;background:none"><div class="big"><i data-lucide="flame"></i></div><h3>Treino concluído!</h3><p>Cada treino conta. Como você se sentiu?</p></div>
+    <div class="feel">${[["Leve","smile"],["Bom","thumbs-up"],["Cansativo","wind"],["Difícil","frown"]].map(([t,ic])=>`<button aria-pressed="${P.feel===t}" data-f="${t}"><i data-lucide="${ic}"></i>${t}</button>`).join("")}</div></div>
+    <div class="pfoot"><div class="in"><button class="btn btn-primary" id="pdone" ${P.feel?"":"disabled"}>Salvar e voltar</button></div></div>`;
+    el.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{P.feel=b.dataset.f;renderP()});
+    $("#pdone").onclick=()=>{S.workouts.push({id:w.id,at:Date.now(),feel:P.feel});const n=S.workouts.length;
+      const resp=P.feel==="Difícil"?"Obrigada por me contar. Vou deixar o próximo treino mais leve para você. 💛":P.feel==="Cansativo"?"Cansar é normal no começo! Descansa bem hoje.":"Que ótimo! Você está indo muito bem.";
+      S.messages.push({from:"me",text:`Terminei o treino "${w.t}" e achei ${P.feel.toLowerCase()}.`,t:nowT()},{from:"them",text:resp,t:nowT()});S.unread++;save();closeP();
+      if(n===1)setTimeout(()=>{confetti();toast("Conquista: 1º treino!")},200);else if(n===8)setTimeout(()=>{confetti();toast("Conquista: 8 treinos!")},200);else toast("Treino salvo!")};
+    icons();return}
+  const [name,sec,hint]=w.ex[P.i];const nxt=w.ex[P.i+1];
+  const prog=Math.round((P.i+(P.rest?1:1-P.left/sec))/w.ex.length*100);
+  el.innerHTML=`<div class="ph"><button class="rbtn" id="pclose" aria-label="Fechar"><i data-lucide="x"></i></button><div style="flex:1"><b>${w.t}</b><div style="font-size:13px;color:var(--muted)">Exercício ${P.i+1} de ${w.ex.length}</div></div><button class="rbtn" id="psnd" aria-label="${S.sound?"Desligar":"Ligar"} aviso sonoro" aria-pressed="${S.sound}"><i data-lucide="${S.sound?"volume-2":"volume-x"}"></i></button></div>
+  <div class="ptrack"><i id="ptr" style="width:${prog}%"></i></div>
+  <div class="pbody">${P.rest?"":`<div class="video"><div><i data-lucide="circle-play"></i><div style="font-weight:700;margin-top:8px">${name}</div><small>Vídeo demonstrativo gravado pelo personal</small></div></div>`}
+    <div class="ring ${P.rest?"rest":""}"><svg viewBox="0 0 200 200" aria-hidden="true"><circle class="bg" cx="100" cy="100" r="90"/><circle class="fg" id="rfg" cx="100" cy="100" r="90" stroke-dasharray="${RC}" stroke-dashoffset="${ringOff()}"/></svg><div class="timer" id="ptm">${fmt(P.left)}</div></div>
+    ${P.rest?`<p class="restnote">Descanse. A seguir:</p><div class="exname">${nxt[0]}</div><p class="exhint">${nxt[2]}</p>`:`<div class="exname">${name}</div><p class="exhint">${hint}</p>`}
+    <div class="exlist">${w.ex.map((e,i)=>`<div class="ex ${i===P.i&&!P.rest?"cur":i<P.i||(i===P.i&&P.rest)?"ok":""}"><i data-lucide="${i<P.i||(i===P.i&&P.rest)?"check":i===P.i?"play":"circle"}"></i>${e[0]}<span class="t">${e[1]<60?e[1]+" s":Math.round(e[1]/60*10)/10+" min"}</span></div>`).join("")}</div>
+    <p class="note"><i data-lucide="heart-pulse"></i>Sentiu dor, tontura ou falta de ar? Pare e avise sua personal.</p></div>
+  <div class="pfoot"><div class="in"><button class="btn btn-ghost" id="pskip">${P.rest?"Pular descanso":"Próximo"}</button><button class="btn btn-primary" id="pplay"><i data-lucide="${P.run?"pause":"play"}"></i>${P.run?"Pausar":P.started?"Continuar":"Começar"}</button></div></div>`;
+  $("#pclose").onclick=closeP;$("#pskip").onclick=()=>advance(true);
+  $("#psnd").onclick=()=>{S.sound=!S.sound;save();renderP()};
+  $("#pplay").onclick=()=>{P.run=!P.run;P.started=true;clearInterval(P.int);if(P.run){beep(880);wake(true);P.int=setInterval(tick,1000)}else wake(false);renderP()};
+  icons();
+}
+function tick(){P.left--;if(P.left<=0){advance(false);return}
+  if(P.left<=3)beep(520,90);
+  const t=$("#ptm"),r=$("#rfg"),tr=$("#ptr");if(t)t.textContent=fmt(P.left);if(r)r.style.strokeDashoffset=ringOff();
+  if(tr&&!P.rest){const sec=P.w.ex[P.i][1];tr.style.width=Math.round((P.i+1-P.left/sec)/P.w.ex.length*100)+"%"}}
+/* ao fim de um exercício entra um descanso curto; ao fim do descanso, o próximo começa sozinho */
+function advance(manual){
+  const last=P.i>=P.w.ex.length-1;
+  if(!P.rest&&last){clearInterval(P.int);P.run=false;beep(990,300);P.finished=true;renderP();return}
+  if(!P.rest){P.rest=true;P.left=REST}else{P.rest=false;P.i++;P.left=P.w.ex[P.i][1]}
+  if(!manual)beep(P.rest?660:880);
+  renderP();
+}
+function closeP(){if(P)clearInterval(P.int);wake(false);const el=$("#player");if(el)el.remove();document.body.style.overflow="";P=null;route(true)}
+
+/* agenda */
+let AG={day:0,slot:"",type:""};
+function vAgenda(){
+  const types=S.level===1?[["Primeira conversa","message-circle","15 min · grátis"]]:S.level===2?[["Check-in online","video","20 min"],["Primeira conversa","message-circle","15 min"]]:S.level===3?[["Ao ar livre","trees","Casa ou praça · 60 min"],["Check-in online","video","20 min"]]:[["Academia","dumbbell","60 min"],["Ao ar livre","trees","60 min"]];
+  if(!types.some(t=>t[0]===AG.type))AG.type=types[0][0];
+  const days=[...Array(10)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i+1);return d});
+  const slots=S.profile.period==="Manhã"?["07:00","08:00","09:00","10:00","11:00"]:S.profile.period==="Tarde"?["13:00","14:00","15:00","16:00","17:00"]:["18:00","19:00","20:00","21:00"];
+  const list=[...S.bookings].sort((a,b)=>a.ts-b.ts);
+  $("#view").innerHTML=`<div class="hello"><small>Agenda</small><h2>Marque no horário que for bom para você.</h2></div>
+  ${list.length?`<div class="block" style="margin-top:0"><div class="block-h"><h3>Seus agendamentos</h3></div><div class="tasks">${list.map((b,i)=>{const d=new Date(b.ts);const past=b.done;return `<div class="booking" style="${past?"opacity:.6":""}"><span class="d"><b>${d.getDate()}</b><small>${d.toLocaleDateString("pt-BR",{month:"short"}).replace(".","")}</small></span><span><b>${b.type}</b><br><small style="color:var(--muted)">${d.toLocaleDateString("pt-BR",{weekday:"long"})} · ${b.time} · ${b.mode}</small></span>${past?`<span class="chip ok" style="margin-left:auto"><i data-lucide="check"></i>Feito</span>`:`<button class="x" data-cancel="${b.ts}" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</div>`}).join("")}</div></div>`:""}
+  <div class="block"><div class="block-h"><h3>Novo agendamento</h3></div>
+    <div class="seg" style="grid-template-columns:repeat(${types.length},1fr)">${types.map(([t,ic,s])=>`<button aria-pressed="${AG.type===t}" data-type="${t}"><i data-lucide="${ic}"></i>${t}<small style="font-size:11px;color:var(--muted);font-weight:500">${s}</small></button>`).join("")}</div>
+    <p style="font-weight:700;margin:18px 0 10px">Dia</p>
+    <div class="days">${days.map((d,i)=>`<button class="day" aria-pressed="${AG.day===i}" data-d="${i}"><small>${d.toLocaleDateString("pt-BR",{weekday:"short"}).replace(".","")}</small><b>${d.getDate()}</b></button>`).join("")}</div>
+    <p style="font-weight:700;margin:18px 0 10px">Horário <span style="color:var(--muted);font-weight:500">(${S.profile.period.toLowerCase()})</span></p>
+    <div class="slots">${slots.map(s=>`<button class="slot" aria-pressed="${AG.slot===s}" data-s="${s}">${s}</button>`).join("")}</div>
+    <button class="btn btn-primary" id="book" style="width:100%;margin-top:18px" ${AG.slot?"":"disabled"}><i data-lucide="calendar-check"></i>Confirmar agendamento</button>
+  </div>
+  ${demoBox()}`;
+  document.querySelectorAll("[data-type]").forEach(b=>b.onclick=()=>{AG.type=b.dataset.type;vAgenda();icons()});
+  document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{AG.day=+b.dataset.d;vAgenda();icons()});
+  document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{AG.slot=b.dataset.s;vAgenda();icons()});
+  document.querySelectorAll("[data-cancel]").forEach(b=>b.onclick=()=>{S.bookings=S.bookings.filter(x=>x.ts!=b.dataset.cancel);save();toast("Agendamento cancelado");vAgenda();icons()});
+  $("#book").onclick=()=>{const d=days[AG.day];const [h,m]=AG.slot.split(":");d.setHours(+h,+m,0,0);
+    const mode=AG.type==="Ao ar livre"?"presencial":AG.type==="Academia"?"na academia":S.profile.contact.toLowerCase();
+    S.bookings.push({ts:d.getTime(),time:AG.slot,type:AG.type,mode,done:false});
+    S.messages.push({from:"them",text:`Recebi seu agendamento de ${AG.type.toLowerCase()} para ${d.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric"})} às ${AG.slot}. Até lá! 😊`,t:nowT()});S.unread++;
+    AG.slot="";save();toast("Agendado! Sua personal foi avisada.");vAgenda();icons()};
+  bindDemo();
+}
+
+/* chat */
+function vChat(){
+  const quick=["Estou com vergonha de começar","Posso treinar sentado?","Hoje não estou bem","Quero mudar meu horário"];
+  $("#view").innerHTML=`<div class="chat">
+    <div class="chat-h"><span class="avatar">${PERSONAL.initials}</span><div><b>${PERSONAL.name}</b><br><small>● Responde em até algumas horas</small></div></div>
+    <div class="msgs" id="msgs">${S.messages.map(m=>`<div class="msg ${m.from}">${esc(m.text)}<time>${m.t}</time></div>`).join("")}</div>
+    <div class="quick">${quick.map(q=>`<button data-q="${esc(q)}">${q}</button>`).join("")}</div>
+    <form class="composer" id="cf"><input id="ci" placeholder="Escreva uma mensagem" autocomplete="off" aria-label="Mensagem"><button aria-label="Enviar"><i data-lucide="send"></i></button></form>
+  </div>`;
+  const box=$("#msgs");box.scrollTop=box.scrollHeight;
+  const send=t=>{if(!t.trim())return;S.messages.push({from:"me",text:t.trim(),t:nowT()});save();vChat();icons();setTimeout(()=>{S.messages.push({from:"them",text:reply(t),t:nowT()});if(S.level===1&&!S.talked&&S.bookings.length){S.talked=true;S.messages.push({from:"them",text:"Adorei nossa primeira conversa! Seu plano está pronto. Quando se sentir à vontade, é só tocar em \"subir de nível\" no Início. 💛",t:nowT()})}save();if(location.hash.includes("mensagens")){vChat();icons()}},1200)};
+  $("#cf").onsubmit=e=>{e.preventDefault();send($("#ci").value)};
+  document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>send(b.dataset.q));
+}
+function reply(t){t=t.toLowerCase();
+  if(t.includes("vergonha")||t.includes("medo"))return"Isso é muito comum e faz total sentido. Por isso a gente começa em casa, sem ninguém olhando. Vamos no seu tempo, combinado?";
+  if(t.includes("sentad")||t.includes("cadeira"))return"Pode sim! O treino \"Força na cadeira\" e o de mobilidade são feitos sentado. Posso adaptar outros também.";
+  if(t.includes("não estou bem")||t.includes("nao estou bem")||t.includes("triste"))return"Obrigada por me contar. Hoje pode ser só uma respiração de 5 minutos, ou descanso mesmo. Se estiver muito difícil, o CVV atende 24h pelo 188. Estou aqui.";
+  if(t.includes("horário")||t.includes("horario"))return"Claro! Pode escolher outro horário na aba Agenda e cancelar o antigo.";
+  if(t.includes("dor"))return"Se sentir dor, pare o exercício. Me conta onde está doendo para eu ajustar o seu treino.";
+  return"Anotado! Vou olhar com calma e te respondo por aqui. 😊";
+}
+
+/* profile */
+function vPerfil(){
+  const e=earned();const p=S.profile;
+  $("#view").innerHTML=`<div class="hello" style="display:flex;gap:14px;align-items:center"><span class="avatar" style="width:60px;height:60px;font-size:24px">${esc(first()[0]||"?").toUpperCase()}</span><div><small>Seu perfil</small><h2>${esc(p.name)}</h2></div></div>
+  <div class="block" style="margin-top:4px"><div class="block-h"><h3>Conquistas</h3><span class="link">${e.filter(Boolean).length}/${BADGES.length}</span></div>
+    <div class="badges">${BADGES.map(([t,ic,d],i)=>`<div class="bdg ${e[i]?"on":""}" title="${d}"><span class="bi"><i data-lucide="${e[i]?ic:"lock"}"></i></span>${t}</div>`).join("")}</div></div>
+  <div class="block"><div class="block-h"><h3>Sua jornada</h3></div>
+    <div class="tasks">${LEVELS.map(l=>`<div class="task ${l.n<S.level?"done":""}" style="${l.n>S.level?"opacity:.55":""}"><span class="ti"><i data-lucide="${l.n<S.level?"check":l.icon}"></i></span><span><b>Nível ${l.n} · ${l.t}</b><small>${l.price} ${l.per}</small></span>${l.n===S.level?`<span class="chip ok" style="margin-left:auto">Atual</span>`:""}</div>`).join("")}</div></div>
+  <div class="block"><div class="block-h"><h3>Suas respostas</h3></div>
+    <div class="plist"><div><span>Objetivos</span><b>${p.goals.join(", ")}</b></div><div><span>O que te trava</span><b>${p.barriers.join(", ")}</b></div><div><span>Disponibilidade</span><b>${p.days.join(", ")} · ${p.period}</b></div><div><span>Contato preferido</span><b>${p.contact}</b></div><div><span>Liberação médica</span><b>${p.medical?"Necessária":"Não necessária"}</b></div></div></div>
+  <div class="block"><div class="block-h"><h3>Como você tem se sentido</h3></div>${feelHist()}</div>
+  <div class="block" style="display:grid;gap:10px"><div class="block-h" style="margin-bottom:2px"><h3>Preferências</h3></div>
+    <button class="toggle-row" role="switch" aria-checked="${isDark()}" id="tg-theme"><i data-lucide="moon"></i><span><b>Tema escuro</b></span><span class="sw"></span></button>
+    <button class="toggle-row" role="switch" aria-checked="${!!S.sound}" id="tg-sound"><i data-lucide="volume-2"></i><span><b>Aviso sonoro nos treinos</b><br><small style="color:var(--muted)">Toca ao trocar de exercício e vibra no celular</small></span><span class="sw"></span></button>
+  </div>
+  <div class="block" style="display:grid;gap:10px">
+    <a class="btn btn-ghost" href="#/"><i data-lucide="globe"></i>Ver o site</a>
+    <button class="btn btn-ghost" id="reset" style="color:var(--red)"><i data-lucide="rotate-ccw"></i>Recomeçar do zero</button>
+  </div>
+  <p class="note"><i data-lucide="heart"></i>Se estiver passando por um momento difícil, o CVV atende 24 horas pelo 188.</p>`;
+  $("#tg-theme").onclick=toggleTheme;
+  $("#tg-sound").onclick=()=>{S.sound=!S.sound;save();if(S.sound)beep(880);vPerfil();icons()};
+  $("#reset").onclick=()=>sheet("rotate-ccw","Recomeçar do zero?","Isso apaga suas respostas, treinos, agendamentos e conversas deste aparelho. Não dá para desfazer.","Apagar e recomeçar",{danger:true,cancel:"Manter meu progresso",onOk:()=>{S=fresh();save();OB={step:0,name:"",goals:[],barriers:[],days:[],period:"",contact:"",parq:Array(PARQ.length).fill(null),notes:""};location.hash="#/"}});
+}
+function feelHist(){
+  const FI={"Leve":"smile","Bom":"thumbs-up","Cansativo":"wind","Difícil":"frown"};
+  const items=[...S.workouts.map(w=>({at:w.at,t:(WORKOUTS.find(x=>x.id===w.id)||{}).t,f:w.feel})),...(S.breaths||[]).map(b=>({at:b,t:"Pausa para respirar",f:null}))].sort((a,b)=>b.at-a.at).slice(0,6);
+  if(!items.length)return`<div class="empty">Depois de cada treino você conta como se sentiu, e isso aparece aqui para você e sua personal acompanharem.</div>`;
+  return`<div class="hist">${items.map(x=>`<div><i data-lucide="${x.f?FI[x.f]:"wind"}"></i><span><b>${x.t}</b>${x.f?` · ${x.f.toLowerCase()}`:""}</span><small>${new Date(x.at).toLocaleDateString("pt-BR",{day:"numeric",month:"short"}).replace(".","")}</small></div>`).join("")}</div>`;
+}
+
+/* demo controls (simulate what the personal does) */
+function demoBox(){
+  const b=[];
+  if(S.level===1&&S.bookings.length&&!S.talked)b.push(["talk","Marcar conversa como realizada"]);
+  if(S.level===3)b.push(["outdoor","Registrar encontro ao ar livre"]);
+  if(S.level===4)b.push(["gym","Registrar aula na academia"]);
+  if(S.level===2&&S.workouts.length<8)b.push(["wk","Adicionar treino feito"]);
+  if(!b.length)return"";
+  return `<div class="demo"><span><b>Modo demonstração.</b> No app real, estas etapas são confirmadas pelo personal.</span><div class="row">${b.map(([k,t])=>`<button data-demo="${k}">${t}</button>`).join("")}</div></div>`;
+}
+function bindDemo(){document.querySelectorAll("[data-demo]").forEach(x=>x.onclick=()=>{const k=x.dataset.demo;
+  if(k==="talk"){S.talked=true;S.bookings.forEach(b=>b.done=true);S.messages.push({from:"them",text:"Adorei nossa conversa! Seu plano está pronto. 💛",t:nowT()});S.unread++}
+  if(k==="outdoor"){S.outdoor++;const b=S.bookings.find(b=>b.type==="Ao ar livre"&&!b.done);if(b)b.done=true}
+  if(k==="gym"){S.gymsessions++;const b=S.bookings.find(b=>b.type==="Academia"&&!b.done);if(b)b.done=true}
+  if(k==="wk"){const w=WORKOUTS[S.workouts.length%WORKOUTS.length];S.workouts.push({id:w.id,at:Date.now(),feel:"Bom"})}
+  save();toast("Registrado!");route()})}
+
+applyTheme();
+route();
+</script>
+
+</body>
+</html>
