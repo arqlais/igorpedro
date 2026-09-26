@@ -1002,6 +1002,13 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .vid-soon svg{width:34px;height:34px;color:var(--blue)}
 .vid-soon span{color:var(--muted);font-size:14px;max-width:40ch}
 
+.lg-f{margin:0}
+.lg-f input{border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--surface);font-size:16px;width:100%}
+.lg-links{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center;font-size:14px}
+.lg-links a{color:var(--blue);font-weight:600;text-decoration:none}
+.lg-test{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:#7A4E00;background:#FFF1CC;border:1px dashed #D9A441;border-radius:99px;padding:5px 11px}
+.lg-test svg{width:14px;height:14px}
+
 @media (min-width:901px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -1826,23 +1833,47 @@ function hbars(data,fmt=v=>v){const max=Math.max(...data.map(d=>d.v),1);return`<
 /* ================== SESSÃO / ENTRAR ================== */
 let SESS=(()=>{try{return JSON.parse(localStorage.getItem(SKEY))||{}}catch(e){return{}}})();
 function setSess(x){SESS=x;try{localStorage.setItem(SKEY,JSON.stringify(x))}catch(e){}}
+/* acesso de teste: o login real (senha com hash, recuperação por e-mail) vem com o servidor */
+const TEST_PASS="teste123",ADMIN_EMAIL="admin@primeiropasso.com.br";
+const mailOf=n=>n.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().split(" ").filter(Boolean).slice(0,2).join(".")+"@primeiropasso.com.br";
+DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
 function login(){
-  const has=!!S.profile,act=DB.personals.filter(p=>p.status==="ativo");
+  DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
+  const has=!!S.profile;
   $("#root").innerHTML=`<header class="topbar"><div class="wrap"><a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
     <a class="btn btn-ghost" href="#/" style="margin-left:auto"><i data-lucide="arrow-left"></i>Voltar ao site</a><button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button></div></header>
   <main class="login-main"><h1>Entrar</h1><p>Escolha o seu lado da jornada.</p>
   <div class="roles">
     <div class="role"><span class="ri"><i data-lucide="footprints"></i></span><h2>Sou cliente</h2><p>Seus treinos, sua agenda, conversa com a personal e suas conquistas.</p><a class="btn btn-primary" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Criar meu plano"}<i data-lucide="arrow-right"></i></a></div>
-    <div class="role"><span class="ri"><i data-lucide="dumbbell"></i></span><h2>Sou personal</h2><p>Alunos, alertas do dia, agenda, mensagens e seus ganhos.</p>
-      <label class="sr" for="lp" style="font-weight:700;font-size:14px">Entrar como</label><select id="lp">${act.map(p=>`<option value="${p.id}" ${SESS.pid===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select>
-      <button class="btn btn-primary" id="gop">Entrar no painel<i data-lucide="arrow-right"></i></button></div>
-    <div class="role"><span class="ri"><i data-lucide="building-2"></i></span><h2>Sou da empresa</h2><p>Visão geral do negócio, clientes, personais, financeiro, leads e preços.</p><button class="btn btn-primary" id="goa">Entrar no painel<i data-lucide="arrow-right"></i></button></div>
+    <form class="role" id="fpl" novalidate><span class="ri"><i data-lucide="dumbbell"></i></span><h2>Sou personal</h2><p>Alunos, alertas do dia, agenda, mensagens e seus ganhos.</p>
+      <div class="field lg-f"><label for="lpu">E-mail ou CREF</label><input id="lpu" autocomplete="username" inputmode="email"></div>
+      <div class="field lg-f"><label for="lpw">Senha</label><input id="lpw" type="password" autocomplete="current-password"></div>
+      <small class="err" id="lpe" role="alert"></small>
+      <button class="btn btn-primary">Entrar no painel<i data-lucide="arrow-right"></i></button>
+      <div class="lg-links"><a href="#" data-forgot>Esqueci minha senha</a>${TEST_MODE?`<button type="button" class="lg-test" data-test="personal"><i data-lucide="flask-conical"></i>Usar conta de teste</button>`:""}</div></form>
+    <form class="role" id="fal" novalidate><span class="ri"><i data-lucide="building-2"></i></span><h2>Sou da empresa</h2><p>Visão geral do negócio, clientes, personais, financeiro, segurança e preços.</p>
+      <div class="field lg-f"><label for="lau">E-mail</label><input id="lau" autocomplete="username" inputmode="email"></div>
+      <div class="field lg-f"><label for="law">Senha</label><input id="law" type="password" autocomplete="current-password"></div>
+      <small class="err" id="lae" role="alert"></small>
+      <button class="btn btn-primary">Entrar no painel<i data-lucide="arrow-right"></i></button>
+      <div class="lg-links"><a href="#" data-forgot>Esqueci minha senha</a>${TEST_MODE?`<button type="button" class="lg-test" data-test="admin"><i data-lucide="flask-conical"></i>Usar conta de teste</button>`:""}</div></form>
   </div>
-  <div class="info" style="margin-top:22px"><i data-lucide="info"></i><span><b style="color:var(--ink)">Versão de demonstração.</b> Não há senha: os três lados usam os mesmos dados, salvos só neste navegador. O que a personal faz no painel aparece no app do cliente, e os preços definidos pela empresa aparecem no site.</span></div>
+  <div class="info" style="margin-top:22px"><i data-lucide="info"></i><span><b style="color:var(--ink)">Versão de demonstração.</b> O login de verdade (com senha protegida e recuperação por e-mail) entra junto com o servidor. Aqui, use “Usar conta de teste”. Os três lados usam os mesmos dados, salvos só neste navegador. O que a personal faz no painel aparece no app do cliente, e os preços definidos pela empresa aparecem no site.</span></div>
   </main>`;
   $("#theme").onclick=toggleTheme;
-  $("#gop").onclick=()=>{setSess({role:"personal",pid:$("#lp").value});location.hash="#/personal"};
-  $("#goa").onclick=()=>{setSess({role:"admin"});location.hash="#/admin"};
+  const norm=v=>String(v).trim().toLowerCase(),dig=v=>String(v).replace(/\D/g,"");
+  $("#fpl").onsubmit=e=>{e.preventDefault();const u=norm($("#lpu").value),w=$("#lpw").value;
+    const p=DB.personals.find(x=>norm(x.email)===u||(dig(u).length>=6&&dig(x.cref)===dig(u)));
+    if(!u||!w){$("#lpe").textContent="Preencha e-mail (ou CREF) e senha.";return}
+    if(!p||w!==TEST_PASS){$("#lpe").textContent="E-mail, CREF ou senha incorretos.";return}
+    if(p.status!=="ativo"){$("#lpe").textContent=p.status==="pendente"?"Seu cadastro ainda está em análise. Avisamos por e-mail quando for aprovado.":"Este acesso está desativado. Fale com a empresa.";return}
+    setSess({role:"personal",pid:p.id});location.hash="#/personal"};
+  $("#fal").onsubmit=e=>{e.preventDefault();const u=norm($("#lau").value),w=$("#law").value;
+    if(!u||!w){$("#lae").textContent="Preencha e-mail e senha.";return}
+    if(u!==ADMIN_EMAIL||w!==TEST_PASS){$("#lae").textContent="E-mail ou senha incorretos.";return}
+    setSess({role:"admin"});location.hash="#/admin"};
+  document.querySelectorAll("[data-test]").forEach(b=>b.onclick=()=>{if(b.dataset.test==="personal"){$("#lpu").value=DB.personals.find(x=>x.status==="ativo").email;$("#lpw").value=TEST_PASS;$("#fpl").requestSubmit()}else{$("#lau").value=ADMIN_EMAIL;$("#law").value=TEST_PASS;$("#fal").requestSubmit()}});
+  document.querySelectorAll("[data-forgot]").forEach(a=>a.onclick=e=>{e.preventDefault();toast("Na versão final, enviamos um link de recuperação para o seu e-mail.")});
   icons();
 }
 function logout(){setSess({});location.hash="#/entrar"}
@@ -2094,7 +2125,7 @@ function aPersonais(bl){
     p.status=v;if(v==="ativo"&&!p.rating)p.rating=null;saveDB();toast(v==="ativo"?`${p.name.split(" ")[0]} está ativa`:"Personal desativada");route(true)});
   document.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>{DB.personals=DB.personals.filter(p=>p.id!==b.dataset.pdel);saveDB();toast("Cadastro recusado");route(true)});
   document.querySelectorAll("[data-asp]").forEach(b=>b.onclick=()=>{setSess({role:"personal",pid:b.dataset.asp,back:"admin"});location.hash="#/personal"});
-  $("#np").onsubmit=e=>{e.preventDefault();const name=$("#npn").value.trim();DB.personals.push({id:"p"+Date.now(),name,cref:"CREF "+$("#npc").value.trim(),area:$("#npa").value.trim(),bio:"",spec:[$("#nps").value.trim()||"Iniciantes"],status:"ativo",cap:15,rating:null,since:Date.now()});saveDB();toast(`${name.split(" ")[0]} cadastrada`);route(true)};
+  $("#np").onsubmit=e=>{e.preventDefault();const name=$("#npn").value.trim();DB.personals.push({id:"p"+Date.now(),name,email:mailOf(name),cref:"CREF "+$("#npc").value.trim(),area:$("#npa").value.trim(),bio:"",spec:[$("#nps").value.trim()||"Iniciantes"],status:"ativo",cap:15,rating:null,since:Date.now()});saveDB();toast(`${name.split(" ")[0]} cadastrada`);route(true)};
 }
 let LF="novo";
 function aLeads(){
@@ -2108,7 +2139,7 @@ function aLeads(){
   document.querySelectorAll("[data-lf]").forEach(b=>b.onclick=()=>{LF=b.dataset.lf;route(true)});
   document.querySelectorAll("[data-ls]").forEach(b=>b.onclick=()=>{DB.leads.find(l=>l.id===b.dataset.ls).status=b.dataset.v;saveDB();toast(b.dataset.v==="arquivado"?"Arquivado":"Marcado como em contato");route(true)});
   document.querySelectorAll("[data-conv]").forEach(b=>b.onclick=()=>{const l=DB.leads.find(x=>x.id===b.dataset.conv);l.status="convertido";
-    if(l.type==="personal"){DB.personals.push({id:"p"+Date.now(),name:l.name,cref:l.cref||"CREF a confirmar",area:l.area||"A definir",bio:l.msg,spec:["A definir"],status:"pendente",cap:15,rating:null,since:Date.now()});toast("Enviado para análise em Personais")}
+    if(l.type==="personal"){DB.personals.push({id:"p"+Date.now(),name:l.name,email:/@/.test(l.contact)?l.contact:mailOf(l.name),cref:l.cref||"CREF a confirmar",area:l.area||"A definir",bio:l.msg,spec:["A definir"],status:"pendente",cap:15,rating:null,since:Date.now()});toast("Enviado para análise em Personais")}
     else{const pid=DB.personals.find(p=>p.status==="ativo").id;DB.clients.push({id:"c"+Date.now(),name:l.name,level:1,pid,since:Date.now(),goals:["Me sentir melhor comigo"],barriers:["Não sei por onde começar"],contact:"Só mensagem",period:"Noite",days:["Seg","Qua"],medical:false,medOk:false,workouts:[],talked:false,outdoor:0,gym:0,status:"ativo",msgs:[{from:"me",text:l.msg,t:"",at:l.at}],phone:l.contact});toast("Cliente criado no nível 1")}
     saveDB();route(true)});
 }
