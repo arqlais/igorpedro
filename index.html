@@ -927,6 +927,50 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
   .freq small{display:none}
 }
 
+/* ---------- exercícios, jornada ---------- */
+.fig{display:block;width:100%;height:auto;max-width:100%}
+.fig .limb{stroke:var(--navy);stroke-width:5.5;stroke-linecap:round}
+.fig .head{fill:var(--navy)}
+.fig .ground{stroke:var(--line);stroke-width:2}
+.fig .prop{stroke:var(--muted);stroke-width:3;fill:none;stroke-linecap:round;opacity:.55}
+.fig .band{stroke:var(--gold);stroke-width:3;stroke-linecap:round}
+.fig.sm{max-width:120px}.fig.lg{max-width:240px;margin:0 auto}.fig.xs{width:44px;flex:none}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.exc{display:flex;flex-direction:column;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:18px;padding:12px;background:var(--surface);text-align:center;position:relative;width:100%}
+.exc .fig{background:var(--mist);border-radius:12px;padding:4px}
+.exc-t b{display:block;font-size:14.5px;line-height:1.25}
+.exc-t small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.exc .rxn{color:var(--blue);font-style:italic}
+.exc.locked{opacity:.6}
+.exc > svg:last-child:not(.fig){position:absolute;top:10px;right:10px;width:16px;height:16px;color:var(--muted)}
+.ex-stage{background:var(--mist);border-radius:18px;padding:10px}
+.ex-steps{margin:0;padding-left:22px;display:grid;gap:6px}
+.seg.tv{grid-template-columns:repeat(3,1fr);margin-bottom:14px}
+.seg.tv button{min-height:44px}
+.rxed{max-width:620px}
+.rx-cat{font-weight:700;color:var(--navy);margin:6px 0 4px}
+.rx-row{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:6px}
+.rx-row.on{border-color:var(--navy);background:var(--mist)}
+.rx-f{display:grid;grid-template-columns:1fr 1.4fr;gap:6px;margin-top:8px}
+.rx-f input{border:1.5px solid var(--line);border-radius:10px;padding:9px 10px;background:var(--surface);font-size:16px;min-width:0}
+.rxl{display:grid;gap:6px}
+.rxl div{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:6px 10px}
+.rxl b{display:block;font-size:14.5px}.rxl small{color:var(--muted);font-size:12.5px}
+.exshow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.exshow figure{margin:0;border:1.5px solid var(--line);border-radius:20px;padding:14px;background:var(--surface);display:grid;justify-items:center;gap:8px;text-align:center}
+.exshow .fig{max-width:150px;background:var(--mist);border-radius:14px;padding:6px}
+.exshow b{display:block;font-size:15px}.exshow span{color:var(--muted);font-size:13px}
+.journey{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:j}
+.journey li{position:relative}
+.journey li.cur .task{border-color:var(--navy);box-shadow:0 0 0 3px var(--sky)}
+.journey li.cur .ti{background:var(--navy);color:var(--on-navy)}
+.journey li.lock .task{opacity:.55;background:var(--mist);border-style:dashed}
+.journey li.lock .ti{background:var(--line);color:var(--muted)}
+.spin{width:28px;height:28px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--navy);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:900px){.exshow{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.exgrid{grid-template-columns:repeat(2,1fr)}.exshow{gap:10px}.exshow figure{padding:10px}.seg.tv button{font-size:13px;padding:8px 4px}.rx-f{grid-template-columns:1fr}}
+
 @media (min-width:901px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -1032,7 +1076,7 @@ function toggleTheme(){const t=isDark()?"light":"dark";try{localStorage.setItem(
 const themeIcon=()=>isDark()?"sun":"moon";
 const dayKey=ts=>{const d=new Date(ts);return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()};
 const today=()=>dayKey(Date.now());
-function activeDays(){const k=new Set();S.workouts.forEach(w=>k.add(dayKey(w.at)));(S.breaths||[]).forEach(b=>k.add(dayKey(b)));return k}
+function activeDays(){const k=new Set();S.workouts.forEach(w=>k.add(dayKey(w.at)));(S.breaths||[]).forEach(b=>k.add(dayKey(b)));(S.exlog||[]).forEach(x=>k.add(dayKey(x.at)));return k}
 let AC=null;
 function beep(f=660,ms=160){if(!S.sound)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;g.gain.setValueAtTime(.001,AC.currentTime);g.gain.exponentialRampToValueAtTime(.18,AC.currentTime+.02);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+ms/1000);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+ms/1000+.02)}catch(e){}try{navigator.vibrate&&navigator.vibrate(120)}catch(e){}}
 let WL=null;
@@ -1042,11 +1086,12 @@ function weekCount(){const w=Date.now()-7*864e5;return S.workouts.filter(x=>x.at
 /* level criteria */
 function criteria(){
   const lv=S.level;
-  if(lv===1)return[{t:"Responder o questionário",d:!!S.profile,go:"#/app"},{t:"Agendar a primeira conversa",d:S.bookings.length>0,go:"#/app/agenda"},{t:"Conversar com o personal",d:S.talked,go:"#/app/mensagens"}];
+  if(lv===1)return[{t:"Responder o questionário",d:!!S.profile,go:"#/app"},{t:"Verificar sua identidade",d:kycOf("me").status==="verificado",go:"#/app/verificacao"},{t:"Agendar a conversa gratuita de 15 min",d:S.talked||S.bookings.some(b=>b.type==="Primeira conversa"),go:"#/app/agenda"},{t:"Conversar com a personal",d:S.talked,go:"#/app/mensagens"},{t:"Pagar o nível 1 e receber seu plano",d:lv1Paid(),go:"#/app/perfil"}];
   if(lv===2){const n=S.workouts.length;return[{t:"Fazer o primeiro treino em casa",d:n>=1,go:"#/app/treinos"},{t:"Treinar 3 vezes em uma semana",d:weekCount()>=3||n>=3,go:"#/app/treinos"},{t:`Completar 8 treinos (${Math.min(n,8)}/8)`,d:n>=8,go:"#/app/treinos"}]}
   if(lv===3)return[{t:"Agendar o primeiro encontro ao ar livre",d:S.bookings.some(b=>b.type==="Ao ar livre"),go:"#/app/agenda"},{t:`Participar de 4 encontros (${Math.min(S.outdoor,4)}/4)`,d:S.outdoor>=4,go:"#/app/agenda"}];
   return[{t:"Agendar a primeira aula na academia",d:S.bookings.some(b=>b.type==="Academia"),go:"#/app/agenda"},{t:`Treinar 4 vezes na academia com o personal (${Math.min(S.gymsessions,4)}/4)`,d:S.gymsessions>=4,go:"#/app/agenda"},{t:"Montar seu plano para seguir sozinho",d:S.gymsessions>=4,go:"#/app/mensagens"}];
 }
+const lv1Paid=()=>bills().some(b=>b.cid==="me"&&b.lv===1&&b.paid);
 const pct=()=>{const c=criteria();return Math.round(c.filter(x=>x.d).length/c.length*100)};
 function earned(){const n=S.workouts.length;return[!!S.profile,S.talked,n>=1,weekCount()>=3||n>=3,S.level>=2,n>=8,S.level>=3,S.level>=4]}
 
@@ -1060,7 +1105,10 @@ function route(keep){
   if(h.startsWith("#/entrar"))return login();
   if(h.startsWith("#/personal"))return panelPersonal(h.split("/")[2]||"hoje");
   if(h.startsWith("#/admin"))return panelAdmin(h.split("/")[2]||"geral");
-  if(h.startsWith("#/app")){if(!S.profile){location.hash="#/comecar";return}return app(h.split("/")[2]||"inicio")}
+  if(h.startsWith("#/app")){if(!S.profile){location.hash="#/comecar";return}
+    /* sem identidade verificada o app não avança */
+    if(kycOf("me").status!=="verificado"&&h.split("/")[2]!=="verificacao"){location.hash="#/app/verificacao";return}
+    return app(h.split("/")[2]||"inicio")}
   site();
 }
 addEventListener("hashchange",()=>route());
@@ -1109,6 +1157,12 @@ function site(){
 <section class="sec" id="como" style="border-top:0"><div class="wrap">
   <div class="sec-h"><span class="kicker">Como funciona</span><h2>Quatro níveis. Você só sobe quando se sentir pronto.</h2><p>O mesmo personal acompanha você do começo ao fim. Nada de pular etapas.</p></div>
   <div class="steps">${LEVELS.map(l=>`<div class="stp"><div class="bar"></div><span class="n">Nível ${l.n}</span><h3><i data-lucide="${l.icon}"></i>${l.t}</h3><p class="om">${l.short}</p><p class="dm">${l.desc}</p><p class="when dm"><i data-lucide="arrow-up-right"></i>Avança quando: ${l.when.toLowerCase()}</p></div>`).join("")}</div>
+</div></section>
+
+<section class="sec" id="exercicios"><div class="wrap">
+  <div class="sec-h"><span class="kicker">Exercícios</span><h2>Cada exercício mostra como fazer.</h2><p class="dm">Sua personal escolhe os exercícios pelo que você contou: dores, medos e objetivos. Cada um tem demonstração animada, passo a passo e cuidados.</p></div>
+  <div class="exshow">${["resp","sentar","parede","equil"].map(id=>{const e=exById(id);return`<figure>${fig(e,"sm")}<figcaption><b>${e.n}</b><span>${e.cat}${e.seat?" · dá sentado":""}</span></figcaption></figure>`}).join("")}</div>
+  <p class="note"><i data-lucide="dumbbell"></i>São ${EXS.length} exercícios na biblioteca, de respiração a academia, com versões sentadas.</p>
 </div></section>
 
 <section class="sec" id="combinados"><div class="wrap">
@@ -1271,7 +1325,7 @@ function onboarding(){
   function next(){if(OB.step<OB_STEPS.length-1){OB.step++;onboarding();scrollTo(0,0);return}
     S=fresh();S.plan=OB.plan||null;S.profile={name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
     S.messages=[{from:"them",text:`Oi, ${OB.name.trim().split(" ")[0]}! Eu sou a ${PERSONAL.name.split(" ")[0]}, sua personal. Li suas respostas e fico feliz que você esteja aqui. 💛`,t:nowT()},{from:"them",text:"Quando quiser, agende nossa primeira conversa na aba Agenda. Pode ser só por mensagem, sem pressa nenhuma.",t:nowT()}];
-    S.unread=2;save();OB.step=0;location.hash="#/app";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
+    S.unread=2;save();OB.step=0;location.hash="#/app/verificacao";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
 }
 
 /* ================== APP ================== */
@@ -1283,7 +1337,7 @@ function app(tab){
     <header class="app-top"><div class="in"><a class="brand" href="#/" aria-label="Site"><span class="mk"><i data-lucide="footprints"></i></span></a><div><small style="color:var(--muted);font-weight:600;font-size:13px">Nível ${S.level}</small><div style="font-weight:700;line-height:1.1">${LEVELS[S.level-1].t}</div></div>
     <button class="icon-btn sos-ic" data-sos aria-label="Emergência e segurança"><i data-lucide="shield"></i></button><a class="icon-btn" href="#/app/mensagens" aria-label="Mensagens" style="margin-left:0"><i data-lucide="bell"></i>${S.unread?`<span class="dotb"></span>`:""}</a></div></header>
     <main class="view" id="view"></main>
-    <nav class="tabbar" aria-label="App"><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||(tab==="verificacao"&&k==="perfil")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
+    <nav class="tabbar" aria-label="App" ${kycOf("me").status!=="verificado"?"hidden":""}><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||(tab==="verificacao"&&k==="perfil")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
   </div>`;
   v();icons();
   document.querySelectorAll("[data-sos]").forEach(b=>b.onclick=()=>openSOS("cliente"));
@@ -1302,8 +1356,9 @@ function vHome(){
   ${ready?`<button class="btn btn-gold next" id="up" style="width:100%"><i data-lucide="party-popper"></i>${S.level<4?"Me sinto pronto para o nível "+(S.level+1):"Concluir a jornada"}</button>`:nxt?`<a class="btn btn-primary next" style="width:100%" href="${nxt.go}"><i data-lucide="arrow-right"></i>Próximo passo: ${nxt.t.replace(/\s*\(.*\)/,"")}</a>`:""}
   ${kycOf("me").status!=="verificado"?`<a class="kyc-cta" href="#/app/verificacao"><i data-lucide="${kycOf("me").status==="analise"?"hourglass":"shield-check"}"></i><span><b>${kycOf("me").status==="analise"?"Verificação em análise":"Verifique sua identidade"}</b><small>${kycOf("me").status==="analise"?"A equipe confere em até 1 dia útil.":"Leva 3 minutos e libera os encontros presenciais com segurança."}</small></span><i data-lucide="chevron-right"></i></a>`:""}
   <div class="block">${moodBox()}</div>
-  <div class="block"><div class="block-h"><h3>Para subir de nível</h3></div>
-    <div class="tasks">${c.map(x=>`<a class="task ${x.d?"done":""}" href="${x.go}" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="${x.d?"check":"circle-dashed"}"></i></span><span><b>${x.t}</b><small>${x.d?"Feito":"Pendente"}</small></span><i class="go" data-lucide="chevron-right"></i></a>`).join("")}</div>
+  <div class="block"><div class="block-h"><h3>Seu caminho, passo a passo</h3><span class="link">Nível ${S.level} de 4</span></div>
+    <ol class="journey">${(()=>{const cur=c.findIndex(x=>!x.d);return c.map((x,i)=>{const st=x.d?"done":i===cur?"cur":"lock";
+      return`<li class="${st}">${st==="lock"?`<div class="task"><span class="ti"><i data-lucide="lock"></i></span><span><b>${x.t}</b><small>Libera depois de: ${c[i-1].t.replace(/\s*\(.*\)/,"").toLowerCase()}</small></span></div>`:`<a class="task ${x.d?"done":""}" href="${x.go}" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="${x.d?"check":"arrow-right"}"></i></span><span><b>${x.t}</b><small>${x.d?"Feito":"É agora"}</small></span><i class="go" data-lucide="chevron-right"></i></a>`}</li>`}).join("")})()}</ol>
   </div>
   <div class="block"><div class="block-h"><h3>Seu progresso</h3></div>
     <div class="stats"><div class="stat"><b>${S.workouts.length}</b><small>treinos feitos</small></div><div class="stat"><b>${weekCount()}</b><small>nesta semana</small></div><div class="stat"><b>${earned().filter(Boolean).length}</b><small>conquistas</small></div></div>
@@ -1392,9 +1447,22 @@ function bindW(){document.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>
 
 let TF="Todos";
 const TFILTERS={"Todos":()=>true,"Sentado":w=>w.seat,"Até 10 min":w=>w.min<=10,"Ainda não fiz":w=>!S.workouts.some(x=>x.id===w.id)};
+let TV="indicados",XF="";
 function vTreinos(){
-  const list=WORKOUTS.filter(TFILTERS[TF]);
-  $("#view").innerHTML=`<div class="hello"><small>Treinos em casa</small><h2>No seu espaço, no seu ritmo.</h2></div>
+  const list=WORKOUTS.filter(TFILTERS[TF]),rx=rxOf("me");
+  const tabs=`<div class="seg tv" role="tablist" aria-label="Treinos">${[["indicados",`Indicados${rx.length?` (${rx.length})`:""}`],["treinos","Treinos em vídeo"],["biblioteca","Biblioteca"]].map(([k,t])=>`<button role="tab" aria-selected="${TV===k}" aria-pressed="${TV===k}" data-tv="${k}">${t}</button>`).join("")}</div>`;
+  if(TV!=="treinos"){
+    const L=TV==="indicados"?rx.map(r=>({e:exById(r.id),r})).filter(x=>x.e):EXS.filter(e=>!XF||e.cat===XF||(XF==="Sentado"&&e.seat)).map(e=>({e,r:rx.find(x=>x.id===e.id)}));
+    $("#view").innerHTML=`<div class="hello"><small>Treinos</small><h2>${TV==="indicados"?"Escolhidos para você.":"Biblioteca de exercícios."}</h2></div>${tabs}
+    ${TV==="indicados"?(rx.length?`<p class="week-note" style="margin:0 0 12px">A ${esc(PERSONAL.name.split(" ")[0])} escolheu estes exercícios pelo que você contou. Toque para ver a demonstração.</p>`:`<div class="empty">Sua personal indica os exercícios depois da conversa gratuita. Enquanto isso, dê uma olhada na biblioteca.</div>`)
+      :`<div class="filters" role="group" aria-label="Categoria">${["","Sentado",...EXCATS].map(c=>`<button aria-pressed="${XF===c}" data-xf="${c}">${c||"Todos"}</button>`).join("")}</div>`}
+    <div class="exgrid">${L.map(({e,r})=>exCard(e,r,!r&&e.lv>S.level)).join("")}</div>
+    <p class="note"><i data-lucide="heart-pulse"></i>Se sentir dor, tontura ou falta de ar, pare e avise sua personal.</p>`;
+    document.querySelectorAll("[data-tv]").forEach(b=>b.onclick=()=>{TV=b.dataset.tv;vTreinos();icons()});
+    document.querySelectorAll("[data-xf]").forEach(b=>b.onclick=()=>{XF=b.dataset.xf;vTreinos();icons()});
+    document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{const r=rx.find(x=>x.id===b.dataset.ex),e=exById(b.dataset.ex);exDetail(b.dataset.ex,{role:r||e.lv<=S.level?"cliente":"ver",rx:r})});
+    return}
+  $("#view").innerHTML=`<div class="hello"><small>Treinos em casa</small><h2>No seu espaço, no seu ritmo.</h2></div>${tabs}
   ${S.level<2?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="lock"></i><span>Os treinos em vídeo liberam no nível 2, depois da primeira conversa com a sua personal. Você já pode dar uma olhada.</span></div>`:""}
   ${S.profile.medical&&!S.profile.medOk?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="stethoscope"></i><span>Lembre de enviar a liberação médica para a sua personal antes de treinar.</span></div>`:""}
   <div class="filters" role="group" aria-label="Filtrar treinos">${Object.keys(TFILTERS).map(k=>`<button aria-pressed="${TF===k}" data-tf="${k}">${k}</button>`).join("")}</div>
@@ -1402,6 +1470,7 @@ function vTreinos(){
   <button class="task" id="brt" style="margin-top:10px"><span class="ti"><i data-lucide="wind"></i></span><span><b>Pausa para respirar</b><small>2 min · liberado em todos os níveis</small></span><i class="go" data-lucide="chevron-right"></i></button>
   <p class="note"><i data-lucide="heart-pulse"></i>Se sentir dor, tontura ou falta de ar, pare o treino e avise sua personal.</p>`;
   document.querySelectorAll("[data-tf]").forEach(b=>b.onclick=()=>{TF=b.dataset.tf;vTreinos();icons()});
+  document.querySelectorAll("[data-tv]").forEach(b=>b.onclick=()=>{TV=b.dataset.tv;vTreinos();icons()});
   $("#brt").onclick=()=>breathe();
   bindW();
 }
@@ -1459,14 +1528,15 @@ function closeP(){if(P)clearInterval(P.int);wake(false);const el=$("#player");if
 /* agenda */
 let AG={day:0,slot:"",type:""};
 function vAgenda(){
-  const types=S.level===1?[["Primeira conversa","message-circle","15 min · grátis"]]:S.level===2?[["Check-in online","video","20 min"],["Primeira conversa","message-circle","15 min"]]:S.level===3?[["Ao ar livre","trees","Casa ou praça · 60 min"],["Check-in online","video","20 min"]]:[["Academia","dumbbell","60 min"],["Ao ar livre","trees","60 min"]];
+  const types=S.level===1?[["Primeira conversa","message-circle","15 min · grátis · uma vez"]]:S.level===2?[["Check-in online","video","20 min"]]:S.level===3?[["Ao ar livre","trees","Casa ou praça · 60 min"],["Check-in online","video","20 min"]]:[["Academia","dumbbell","60 min"],["Ao ar livre","trees","60 min"]];
   if(!types.some(t=>t[0]===AG.type))AG.type=types[0][0];
   const days=[...Array(10)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i+1);return d});
   const slots=S.profile.period==="Manhã"?["07:00","08:00","09:00","10:00","11:00"]:S.profile.period==="Tarde"?["13:00","14:00","15:00","16:00","17:00"]:["18:00","19:00","20:00","21:00"];
   const list=[...S.bookings].sort((a,b)=>a.ts-b.ts);
   $("#view").innerHTML=`<div class="hello"><small>Agenda</small><h2>Marque no horário que for bom para você.</h2></div>
   ${list.length?`<div class="block" style="margin-top:0"><div class="block-h"><h3>Seus agendamentos</h3></div><div class="tasks">${list.map((b,i)=>{const d=new Date(b.ts);const past=b.done;return `<div class="booking" style="${past?"opacity:.6":""}"><span class="d"><b>${d.getDate()}</b><small>${d.toLocaleDateString("pt-BR",{month:"short"}).replace(".","")}</small></span><span><b>${b.type}</b><br><small style="color:var(--muted)">${d.toLocaleDateString("pt-BR",{weekday:"long"})} · ${b.time} · ${b.mode}</small>${PRESENCIAL(b.type)&&!past?`<br><small class="code">Código de segurança: <b>${meetCode({ts:b.ts,cid:"me"})}</b> · a personal diz ao chegar</small>`:""}</span>${past?`<span class="chip ok" style="margin-left:auto"><i data-lucide="check"></i>Feito</span>`:`<button class="x" data-cancel="${b.ts}" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</div>`}).join("")}</div></div>`:""}
-  <div class="block"><div class="block-h"><h3>Novo agendamento</h3></div>
+  ${(()=>{const fc=S.bookings.find(b=>b.type==="Primeira conversa");return S.level===1&&(fc||S.talked)?`<div class="block"><div class="alert ok" style="margin:0"><i data-lucide="calendar-check"></i><span>${S.talked?"Você já fez sua conversa gratuita. Os próximos agendamentos liberam no nível 2.":`Sua conversa gratuita está marcada para ${new Date(fc.ts).toLocaleDateString("pt-BR",{weekday:"long",day:"numeric"})} às ${fc.time}. Ela é uma só: para mudar o horário, cancele acima e marque de novo.`}</span></div></div>`:""})()}
+  <div class="block" ${S.level===1&&(S.talked||S.bookings.some(b=>b.type==="Primeira conversa"))?"hidden":""}><div class="block-h"><h3>Novo agendamento</h3></div>
     <div class="seg" style="grid-template-columns:repeat(${types.length},1fr)">${types.map(([t,ic,s])=>`<button aria-pressed="${AG.type===t}" data-type="${t}"><i data-lucide="${ic}"></i>${t}<small style="font-size:11px;color:var(--muted);font-weight:500">${s}</small></button>`).join("")}</div>
     <p style="font-weight:700;margin:18px 0 10px">Dia</p>
     <div class="days">${days.map((d,i)=>`<button class="day" aria-pressed="${AG.day===i}" data-d="${i}"><small>${d.toLocaleDateString("pt-BR",{weekday:"short"}).replace(".","")}</small><b>${d.getDate()}</b></button>`).join("")}</div>
@@ -1480,7 +1550,7 @@ function vAgenda(){
   document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{AG.day=+b.dataset.d;vAgenda();icons()});
   document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{AG.slot=b.dataset.s;vAgenda();icons()});
   document.querySelectorAll("[data-cancel]").forEach(b=>b.onclick=()=>{S.bookings=S.bookings.filter(x=>x.ts!=b.dataset.cancel);save();toast("Agendamento cancelado");vAgenda();icons()});
-  $("#book").onclick=()=>{const d=days[AG.day];const [h,m]=AG.slot.split(":");d.setHours(+h,+m,0,0);
+  $("#book").onclick=()=>{if(AG.type==="Primeira conversa"&&(S.talked||S.bookings.some(b=>b.type==="Primeira conversa"))){toast("A conversa gratuita é uma só e já está marcada");return}const d=days[AG.day];const [h,m]=AG.slot.split(":");d.setHours(+h,+m,0,0);
     const mode=AG.type==="Ao ar livre"?"presencial":AG.type==="Academia"?"na academia":S.profile.contact.toLowerCase();
     S.bookings.push({ts:d.getTime(),time:AG.slot,type:AG.type,mode,done:false});
     S.messages.push({from:"them",text:`Recebi seu agendamento de ${AG.type.toLowerCase()} para ${d.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric"})} às ${AG.slot}. Até lá! 😊`,t:nowT()});S.unread++;
@@ -1498,7 +1568,7 @@ function vChat(){
     <form class="composer" id="cf"><input id="ci" placeholder="Escreva uma mensagem" autocomplete="off" aria-label="Mensagem"><button aria-label="Enviar"><i data-lucide="send"></i></button></form>
   </div>`;
   const box=$("#msgs");box.scrollTop=box.scrollHeight;
-  const send=t=>{if(!t.trim())return;S.messages.push({from:"me",text:t.trim(),t:nowT()});save();vChat();icons();setTimeout(()=>{S.messages.push({from:"them",text:reply(t),t:nowT()});if(S.level===1&&!S.talked&&S.bookings.length){S.talked=true;S.messages.push({from:"them",text:"Adorei nossa primeira conversa! Seu plano está pronto. Quando se sentir à vontade, é só tocar em \"subir de nível\" no Início. 💛",t:nowT()})}save();if(location.hash.includes("mensagens")){vChat();icons()}},1200)};
+  const send=t=>{if(!t.trim())return;S.messages.push({from:"me",text:t.trim(),t:nowT()});save();vChat();icons();setTimeout(()=>{S.messages.push({from:"them",text:reply(t),t:nowT()});if(S.level===1&&!S.talked&&S.bookings.length){S.talked=true;autoRx();S.messages.push({from:"them",text:"Adorei nossa primeira conversa! Seu plano está pronto. Quando se sentir à vontade, é só tocar em \"subir de nível\" no Início. 💛",t:nowT()})}save();if(location.hash.includes("mensagens")){vChat();icons()}},1200)};
   $("#cf").onsubmit=e=>{e.preventDefault();send($("#ci").value)};
   document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>send(b.dataset.q));
 }
@@ -1547,7 +1617,7 @@ function vPerfil(){
 function myBills(){const all=bills().filter(b=>b.cid==="me").reverse();
   if(!all.length)return`<div class="empty">Nenhuma cobrança ainda.</div>`;
   const open=all.filter(b=>!b.paid),bl=open.length?open:all.slice(0,1),rest=all.filter(b=>!bl.includes(b));
-  const row=b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><i data-lucide="receipt"></i><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}<br><small style="margin:0">Nível ${b.lv} · vence dia 10</small></span><small style="display:flex;gap:8px;align-items:center">${b.paid?pill(k,ic,t):`${pill(k,ic,t)}<button class="btn btn-primary btn-sm" data-mypay="${b.key}">Pagar</button>`}</small></div>`};
+  const row=b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><i data-lucide="receipt"></i><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}<br><small style="margin:0">Nível ${b.lv} · vence dia 10</small></span><small style="display:flex;gap:8px;align-items:center">${b.paid?pill(k,ic,t):b.lv===1&&!S.talked?`<span style="color:var(--muted);font-size:12.5px;text-align:right">Libera depois da conversa grátis</span>`:`${pill(k,ic,t)}<button class="btn btn-primary btn-sm" data-mypay="${b.key}">Pagar</button>`}</small></div>`};
   return`<div class="hist">${bl.map(row).join("")}</div>${rest.length?`<details class="fold" style="margin-top:10px"><summary><span class="fs" style="margin:0">Ver histórico (${rest.length})</span><i data-lucide="chevron-down"></i></summary><div class="hist">${rest.map(row).join("")}</div></details>`:""}
   <p class="note" style="margin-top:10px"><i data-lucide="${METHODS[S.payMethod||"pix"].ic}"></i>Forma preferida: ${METHODS[S.payMethod||"pix"].l}${S.autopay?" · cobrança automática ligada":""}. Pagamentos ilustrativos por enquanto.</p>`}
 function weeksChart(){const w0=sod()-((new Date().getDay()+6)%7)*D1,data=[];
@@ -1572,7 +1642,7 @@ function demoBox(){
   return `<div class="demo"><span><b>Modo demonstração.</b> No app real, estas etapas são confirmadas pelo personal.</span><div class="row">${b.map(([k,t])=>`<button data-demo="${k}">${t}</button>`).join("")}</div></div>`;
 }
 function bindDemo(){document.querySelectorAll("[data-demo]").forEach(x=>x.onclick=()=>{const k=x.dataset.demo;
-  if(k==="talk"){S.talked=true;S.bookings.forEach(b=>b.done=true);S.messages.push({from:"them",text:"Adorei nossa conversa! Seu plano está pronto. 💛",t:nowT()});S.unread++}
+  if(k==="talk"){S.talked=true;autoRx();S.bookings.forEach(b=>b.done=true);S.messages.push({from:"them",text:"Adorei nossa conversa! Seu plano está pronto. 💛",t:nowT()});S.unread++}
   if(k==="outdoor"){S.outdoor++;const b=S.bookings.find(b=>b.type==="Ao ar livre"&&!b.done);if(b)b.done=true}
   if(k==="gym"){S.gymsessions++;const b=S.bookings.find(b=>b.type==="Academia"&&!b.done);if(b)b.done=true}
   if(k==="wk"){const w=WORKOUTS[S.workouts.length%WORKOUTS.length];S.workouts.push({id:w.id,at:Date.now(),feel:"Bom"})}
@@ -1649,10 +1719,13 @@ const findP=id=>DB.personals.find(p=>p.id===id);
 function bookingsAll(){return DB.bookings.concat(S.profile?S.bookings.map(b=>({id:"me-"+b.ts,cid:"me",pid:S.pid||"p1",ts:b.ts,type:b.type,mode:b.mode,status:b.done?"feito":"agendado"})):[])}
 function updC(id,patch){
   if(id==="me"){const map={level:"level",talked:"talked",outdoor:"outdoor",gym:"gymsessions",status:"status",pid:"pid"};
-    for(const k in patch){if(k==="medOk")S.profile.medOk=patch[k];else S[map[k]||k]=patch[k]}save()}
+    for(const k in patch){if(k==="medOk")S.profile.medOk=patch[k];else S[map[k]||k]=patch[k]}if(patch.talked)autoRx();save()}
   else{Object.assign(DB.clients.find(c=>c.id===id),patch);saveDB()}}
 function pushMsg(id,text){const m={from:"them",text,t:nowT(),at:Date.now()};
   if(id==="me"){S.messages.push(m);S.unread++;save()}else{DB.clients.find(c=>c.id===id).msgs.push(m);saveDB()}}
+function autoRx(){if(S.rx&&S.rx.length)return;const dor=(S.profile.barriers||[]).some(b=>/Dor|energia/.test(b));
+  S.rx=(dor?["resp","sentar","lateral","perna","remada"]:["resp","marcha","sentar","parede","ponte"]).map(id=>({id,dose:exById(id).dose,note:id==="resp"?"Comece sempre por este.":"",at:Date.now()}));
+  S.messages.push({from:"them",text:"Montei sua primeira lista de exercícios, com demonstração de cada um. Está em Treinos → Indicados. 💪",t:nowT()});S.unread++}
 function lastAct(c){const w=c.workouts[c.workouts.length-1];return w?w.at:c.since}
 const lastMsg=c=>c.msgs[c.msgs.length-1];
 const needsReply=c=>{const m=lastMsg(c);return !!m&&m.from==="me"};
@@ -1765,6 +1838,7 @@ function openClient(id,role){
     if(c.level===4)acts.push(["gym","dumbbell","Registrar aula na academia"]);
     if(c.medical&&!c.medOk)acts.push(["med","stethoscope","Registrar liberação médica"]);
     if(ready&&c.level<4)acts.push(["up","party-popper",`Subir para o nível ${c.level+1}`]);
+    if(role==="personal")acts.push(["rx","dumbbell","Indicar exercícios"]);
     acts.push(["msg","send","Mandar mensagem"]);
     acts.push(["pause",c.status==="pausado"?"play":"pause",c.status==="pausado"?"Reativar":"Pausar acompanhamento"]);
     m.innerHTML=`<div class="dp" role="dialog" aria-modal="true" aria-labelledby="dph">
@@ -1773,6 +1847,7 @@ function openClient(id,role){
       <div class="minis mt"><div><b>${c.workouts.length}</b><small>treinos em casa</small></div><div><b>${rel(lastAct(c))}</b><small>última atividade</small></div><div><b>${daysAgo(c.since)}d</b><small>de acompanhamento</small></div></div>
       <div class="sec2"><h3>Ações</h3><div class="acts">${acts.map(([k,ic,t])=>`<button class="btn ${k==="up"?"btn-gold":"btn-ghost"} btn-sm" data-a="${k}"><i data-lucide="${ic}"></i>${t}</button>`).join("")}</div></div>
       ${role==="admin"?`<div class="sec2"><h3>Personal responsável</h3><div class="toolbar" style="margin:0"><select id="dpp" aria-label="Personal responsável">${DB.personals.filter(x=>x.status==="ativo").map(x=>`<option value="${x.id}" ${x.id===c.pid?"selected":""}>${esc(x.name)}</option>`).join("")}</select></div></div>`:""}
+      <div class="sec2"><h3>Exercícios indicados</h3>${rxOf(c.id).length?`<div class="rxl">${rxOf(c.id).map(r=>{const e=exById(r.id);return e?`<div>${fig(e,"xs")}<span><b>${e.n}</b><small>${esc(r.dose)}${r.note?` · ${esc(r.note)}`:""}</small></span></div>`:""}).join("")}</div>`:`<p class="empty-s">Nenhum exercício indicado ainda.</p>`}</div>
       <div class="sec2"><h3>Para subir de nível</h3><div class="chk">${cr.map(([t,d])=>`<div class="${d?"y":""}"><i data-lucide="${d?"circle-check":"circle-dashed"}"></i>${esc(t)}</div>`).join("")}</div><div class="prog mt"><i style="width:${pctFor(c)}%"></i></div></div>
       <details class="fold sec2"><summary><h3>Questionário</h3><i data-lucide="chevron-down"></i></summary><div class="plist"><div><span>Objetivos</span><b>${esc(c.goals.join(", "))}</b></div><div><span>O que trava</span><b>${esc(c.barriers.join(", "))}</b></div><div><span>Contato preferido</span><b>${esc(c.contact)}</b></div><div><span>Disponibilidade</span><b>${esc((c.days||[]).join(", "))} · ${esc(c.period)}</b></div><div><span>Liberação médica</span><b>${c.medical?(c.medOk?"Recebida":"Pendente"):"Não necessária"}</b></div>${role==="admin"?`<div><span>Contato</span><b>${esc(c.phone)}</b></div><div><span>Personal</span><b>${esc(p?p.name:"-")}</b></div>`:""}</div></details>
       <details class="fold sec2"><summary><h3>Últimos treinos</h3><span class="fs">${c.workouts.length}</span><i data-lucide="chevron-down"></i></summary>${c.workouts.length?`<div class="hist">${c.workouts.slice(-5).reverse().map(w=>{const W=WORKOUTS.find(x=>x.id===w.id)||WORKOUTS[0];return`<div><i data-lucide="${FEEL_IC[w.feel]||"circle"}"></i><span><b>${W.t}</b> · ${(w.feel||"").toLowerCase()}</span><small>${rel(w.at)}</small></div>`}).join("")}</div>`:`<p class="empty-s">Nenhum treino ainda.</p>`}</details>
@@ -1782,6 +1857,7 @@ function openClient(id,role){
     $("#dpx").onclick=close;
     const dpp=$("#dpp");if(dpp)dpp.onchange=()=>{updC(c.id,{pid:dpp.value});toast("Personal alterada");render()};
     m.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{const a=b.dataset.a,first=c.name.split(" ")[0];
+      if(a==="rx"){removeEventListener("keydown",k);m.remove();openRxEditor(c.id);return}
       if(a==="talk"){updC(c.id,{talked:true});bookingsAll().filter(x=>x.cid===c.id&&x.type==="Primeira conversa").forEach(x=>setBk(x,"feito"));pushMsg(c.id,`Adorei nossa conversa, ${first}! Seu plano está pronto. 💛`);toast("Conversa confirmada")}
       if(a==="out"){updC(c.id,{outdoor:c.outdoor+1});const x=bookingsAll().find(x=>x.cid===c.id&&x.type==="Ao ar livre"&&x.status==="agendado");if(x)setBk(x,"feito",true);toast("Encontro registrado")}
       if(a==="gym"){updC(c.id,{gym:c.gym+1});const x=bookingsAll().find(x=>x.cid===c.id&&x.type==="Academia"&&x.status==="agendado");if(x)setBk(x,"feito",true);toast("Aula registrada")}
@@ -1810,12 +1886,12 @@ const myClients=p=>allClients().filter(c=>c.pid===p.id);
 function panelPersonal(tab){
   if(SESS.role!=="personal"&&SESS.role!=="admin"){location.hash="#/entrar";return}
   const p=curP(),cs=myClients(p),unr=cs.filter(needsReply).length;
-  const tabs=[{k:"hoje",ic:"layout-dashboard",l:"Hoje"},{k:"alunos",ic:"users",l:"Alunos"},{k:"agenda",ic:"calendar-days",l:"Agenda"},{k:"mensagens",ic:"message-circle",l:"Mensagens",s:"Conversas",cnt:unr},{k:"ganhos",ic:"wallet",l:"Ganhos"}];
-  const T={hoje:["Painel da personal",`${greet()}, ${p.name.split(" ")[0]}`],alunos:["Seus alunos","Alunos"],agenda:["Encontros e check-ins","Agenda"],mensagens:["Conversas com alunos","Mensagens"],ganhos:["Mensalidades e repasses","Ganhos"]}[tab]||["",""];
+  const tabs=[{k:"hoje",ic:"layout-dashboard",l:"Hoje"},{k:"alunos",ic:"users",l:"Alunos"},{k:"agenda",ic:"calendar-days",l:"Agenda"},{k:"mensagens",ic:"message-circle",l:"Mensagens",s:"Conversas",cnt:unr},{k:"exercicios",ic:"dumbbell",l:"Exercícios"},{k:"ganhos",ic:"wallet",l:"Ganhos"}];
+  const T={hoje:["Painel da personal",`${greet()}, ${p.name.split(" ")[0]}`],alunos:["Seus alunos","Alunos"],agenda:["Encontros e check-ins","Agenda"],mensagens:["Conversas com alunos","Mensagens"],exercicios:["Biblioteca com demonstração","Exercícios"],ganhos:["Mensalidades e repasses","Ganhos"]}[tab]||["",""];
   shell({role:"Personal",tabs,tab,base:"#/personal",me:{name:p.name,sub:p.cref},title:T[1],kick:T[0],acts:(SESS.back==="admin"?`<a class="btn btn-ghost btn-sm" href="#/admin" id="bk2"><i data-lucide="arrow-left"></i>Voltar à empresa</a>`:"")+`<button class="btn btn-ghost btn-sm sos-btn" data-sos><i data-lucide="siren"></i>Emergência</button>`});
   document.querySelectorAll("[data-sos]").forEach(b=>b.onclick=()=>openSOS("personal"));
   const b2=$("#bk2");if(b2)b2.onclick=()=>setSess({role:"admin"});
-  ({hoje:pHoje,alunos:pAlunos,agenda:pAgenda,mensagens:pMsgs,ganhos:pGanhos}[tab]||pHoje)(p,cs);
+  ({hoje:pHoje,alunos:pAlunos,agenda:pAgenda,mensagens:pMsgs,exercicios:pExs,ganhos:pGanhos}[tab]||pHoje)(p,cs);
   bindOpen("personal");icons();
 }
 function pHoje(p,cs){
@@ -1855,7 +1931,10 @@ function bookingForm(clients){const d=new Date(Date.now()+D1);const ds=d.toISOSt
     <div class="field" style="margin:0"><label for="nbd">Dia</label><input id="nbd" type="date" value="${ds}" required></div>
     <div class="field" style="margin:0"><label for="nbh">Horário</label><input id="nbh" type="time" value="09:00" required></div></div>
     <button class="btn btn-primary mt"><i data-lucide="calendar-plus"></i>Marcar e avisar o aluno</button></form>`}
-function bindBookingForm(pid,after){$("#nbk").onsubmit=e=>{e.preventDefault();const cid=$("#nbc").value,type=$("#nbt").value,[y,mo,da]=$("#nbd").value.split("-"),[h,mi]=$("#nbh").value.split(":");
+function bindBookingForm(pid,after){$("#nbk").onsubmit=e=>{e.preventDefault();const cid=$("#nbc").value,type=$("#nbt").value;
+  if(type==="Primeira conversa"){const c=findC(cid);if(c.talked||bookingsAll().some(b=>b.cid===cid&&b.type==="Primeira conversa"&&b.status!=="cancelado")){toast(`${c.name.split(" ")[0]} já usou a conversa gratuita`);return}}
+  if(PRESENCIAL(type)&&kycOf(cid).status!=="verificado"){toast("Encontro presencial só com a identidade do aluno verificada");return}
+  const[y,mo,da]=$("#nbd").value.split("-"),[h,mi]=$("#nbh").value.split(":");
   const ts=new Date(+y,+mo-1,+da,+h,+mi).getTime(),mode=type==="Ao ar livre"?"presencial":type==="Academia"?"na academia":"online";
   if(cid==="me"){S.bookings.push({ts,time:$("#nbh").value,type,mode:mode==="online"?S.profile.contact.toLowerCase():mode,done:false})}else DB.bookings.push({id:"b"+Date.now(),cid,pid,ts,type,mode,status:"agendado"});
   pushMsg(cid,`Marquei nosso ${type.toLowerCase()} para ${dlabel(ts).toLowerCase()} às ${hm(ts)}. Se não puder, é só me avisar. 😊`);saveDB();toast("Horário marcado e aluno avisado");after()}}
@@ -2219,14 +2298,17 @@ const KYC_PILL={verificado:["ok","shield-check","Identidade verificada"],analise
 let KV={step:0,d:{},doc:null,docB:null,selfie:null,ok:{}};
 function vVerif(){
   const k=kycOf("me");
+  if(k.status==="analise"){const left=4000-(Date.now()-(k.at||0));if(left<=0){S.kyc.status="verificado";S.kyc.approvedAt=Date.now();S.messages.push({from:"them",text:"Sua identidade foi verificada. Agora é só seguir o seu caminho, passo a passo. 🛡️",t:nowT()});S.unread++;save();toast("Identidade verificada!");location.hash="#/app";return}
+    clearTimeout(vVerif._t);vVerif._t=setTimeout(()=>{if(location.hash.includes("verificacao"))vVerif()},left+50)}
   if(k.status==="verificado"||k.status==="analise"){$("#view").innerHTML=`<div class="hello"><small>Segurança</small><h2>${k.status==="verificado"?"Sua identidade está verificada":"Recebemos seus dados"}</h2></div>
-    <div class="verif-done">${pill(...KYC_PILL[k.status])}<p>${k.status==="verificado"?"Você já pode marcar encontros presenciais. Seus dados ficam protegidos e só são usados para a segurança de todos.":"A equipe confere em até 1 dia útil. Enquanto isso, os treinos online continuam liberados."}</p>
+    <div class="verif-done">${pill(...KYC_PILL[k.status])}<p>${k.status==="verificado"?"Você já pode marcar encontros presenciais. Seus dados ficam protegidos e só são usados para a segurança de todos.":"Na versão final, a equipe e o serviço de verificação conferem em até 1 dia útil. Neste site de teste, a aprovação é automática em alguns segundos."}</p>${k.status==="verificado"?`<a class="btn btn-primary" href="#/app"><i data-lucide="arrow-right"></i>Seguir meu caminho</a>`:`<div class="spin" aria-hidden="true"></div>`}
     <div class="plist"><div><span>CPF</span><b>${esc(k.cpf||"—")}</b></div><div><span>Cidade</span><b>${esc(k.city||"—")}</b></div><div><span>Contato de emergência</span><b>${esc(k.emerg||"—")}</b></div><div><span>Enviado em</span><b>${k.at?new Date(k.at).toLocaleDateString("pt-BR"):"—"}</b></div></div></div>
     ${safetyTips()}`;return}
   const steps=["Seus dados","Documento","Selfie","Consentimento"],st=KV.step;
   const bar=`<div class="vsteps">${steps.map((t,i)=>`<div class="${i<st?"done":i===st?"cur":""}"><i>${i<st?"✓":i+1}</i><span>${t}</span></div>`).join("")}</div>`;
   let body="";
-  if(st===0)body=`<p class="sub">Pedimos isso de todo mundo, clientes e personais, porque existem encontros presenciais. É a mesma proteção para os dois lados.</p>
+  if(st===0)body=`<div class="alert warn" style="margin:0 0 14px"><i data-lucide="shield-check"></i><span><b>Obrigatório para continuar.</b> Sem a verificação, o app não libera agenda, conversa nem treinos.</span></div>
+    <p class="sub">Pedimos isso de todo mundo, clientes e personais, porque existem encontros presenciais. É a mesma proteção para os dois lados.</p>
     <div class="set">
       <div class="field"><label for="kn">Nome completo</label><input id="kn" autocomplete="name" value="${esc(KV.d.name||S.profile.name)}"></div>
       <div class="field"><label for="kc">CPF</label><input id="kc" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" value="${esc(KV.d.cpf||"")}"><small class="err" id="kce"></small></div>
@@ -2250,7 +2332,7 @@ function vVerif(){
     <label class="chkline big"><input type="checkbox" id="c3" ${KV.ok.c3?"checked":""}> Li e concordo com o código de conduta: respeito, sem assédio, sem discriminação, e uso do código de segurança nos encontros.</label>
     <div class="info"><i data-lucide="lock"></i><span>Seus dados ficam criptografados e só a equipe de segurança acessa. Personais veem apenas seu primeiro nome, a cidade e o código do encontro.</span></div>`;
   $("#view").innerHTML=`<div class="hello"><small>Segurança · passo ${st+1} de 4</small><h2>Verificar identidade</h2></div>${bar}<div class="vbody">${body}</div>
-    <div class="vfoot">${st?`<button class="btn btn-ghost" id="kbk"><i data-lucide="arrow-left"></i>Voltar</button>`:`<a class="btn btn-ghost" href="#/app/perfil">Depois</a>`}<button class="btn btn-primary" id="knx">${st===3?"Enviar para análise":"Continuar"}<i data-lucide="arrow-right"></i></button></div>
+    <div class="vfoot">${st?`<button class="btn btn-ghost" id="kbk"><i data-lucide="arrow-left"></i>Voltar</button>`:`<a class="btn btn-ghost" href="#/">Sair</a>`}<button class="btn btn-primary" id="knx">${st===3?"Enviar para análise":"Continuar"}<i data-lucide="arrow-right"></i></button></div>
     <p class="pay-demo"><i data-lucide="info"></i>Demonstração: as fotos aparecem só na sua tela e não são salvas nem enviadas. A leitura do documento e a comparação facial reais serão feitas por um serviço especializado.</p>`;
   icons();
   const save0=()=>{if(st!==0)return;["name:kn","cpf:kc","birth:kb","tel:kt","cep:kz","addr:ka","city:ky","en:en","et:et","er:er"].forEach(x=>{const[k,id]=x.split(":");KV.d[k]=$("#"+id).value})};
@@ -2382,6 +2464,112 @@ function renderPlans(){const box=$("#plansBox");if(!box)return;const rec=recLeve
   else box.querySelectorAll(".pv").forEach((el,i)=>{PL.shown[i]=+el.dataset.v});
 }
 function planLabel(pl){if(!pl)return"";if(pl.combo)return"Combo jornada completa (nível 1 + 3 meses do nível 2)";const L=LEVELS[pl.lv-1];return`Nível ${pl.lv} · ${L.t}${pl.lv>1?` · ${(PERIODS.find(x=>x[0]===pl.per)||[0,"Mensal"])[1].toLowerCase()}`:""}${pl.freq?` · ${pl.freq}x por semana`:""}`}
+
+/* ================== EXERCÍCIOS COM DEMONSTRAÇÃO ==================
+   Cada exercício tem poses (posições das articulações) e o boneco anima entre elas.
+   A personal indica exercícios para cada aluno; o aluno vê primeiro os indicados. */
+const ST={h:[60,20],n:[60,33],p:[60,72],el:[50,52],hl:[48,70],er:[70,52],hr:[72,70],kl:[55,100],fl:[54,127],kr:[65,100],fr:[66,127]};
+const PZ=o=>Object.assign({},ST,o);
+const SEAT={h:[52,40],n:[54,52],p:[44,90],el:[60,68],hl:[70,82],er:[62,68],hr:[72,82],kl:[68,92],fl:[68,127],kr:[70,92],fr:[72,127]};
+const shift=(o,dx,dy,skip=[])=>Object.fromEntries(Object.entries(o).map(([k,[x,y]])=>[k,skip.includes(k)?[x,y]:[x+dx,y+dy]]));
+const EXS=[
+ {id:"resp",n:"Respiração com braços",cat:"Respiração",lv:1,seat:true,dur:8,poses:[ST,PZ({el:[50,18],hl:[54,2],er:[70,18],hr:[66,2]})],dose:"5 respirações",
+  steps:["Em pé ou sentado, braços soltos.","Puxe o ar pelo nariz subindo os braços devagar.","Solte o ar pela boca descendo os braços."],tip:"Se ficar tonto, pare e respire normalmente."},
+ {id:"sentar",n:"Levantar e sentar da cadeira",cat:"Força",lv:2,seat:true,prop:"chair",dur:3.2,poses:[SEAT,{h:[60,20],n:[60,33],p:[58,72],el:[70,50],hl:[84,50],er:[72,50],hr:[86,50],kl:[62,100],fl:[68,127],kr:[64,100],fr:[72,127]}],dose:"2 séries de 8",
+  steps:["Sente na ponta de uma cadeira firme, pés no chão.","Incline o tronco para a frente e levante empurrando o chão.","Sente de novo devagar, controlando a descida."],tip:"Use as mãos na coxa ou na cadeira se precisar."},
+ {id:"marcha",n:"Marcha parada",cat:"Cardio leve",lv:2,dur:1.6,poses:[PZ({kl:[68,86],fl:[64,108],el:[52,52],hl:[56,68],er:[74,46],hr:[80,36]}),PZ({kr:[70,86],fr:[66,108],er:[68,52],hr:[64,68],el:[46,46],hl:[40,36]})],dose:"2 minutos",
+  steps:["Fique em pé, perto de uma parede se quiser apoio.","Levante um joelho de cada vez, no seu ritmo.","Balance os braços junto com as pernas."],tip:"Pode fazer sentado, só levantando os joelhos."},
+ {id:"lateral",n:"Elevação lateral de braços",cat:"Força",lv:2,seat:true,dur:2.8,poses:[ST,PZ({el:[42,34],hl:[24,32],er:[78,34],hr:[96,32]})],dose:"2 séries de 10",
+  steps:["Braços ao lado do corpo, ombros relaxados.","Suba os braços pelos lados até a altura dos ombros.","Desça devagar."],tip:"Garrafas de água servem de peso. Sem peso também vale."},
+ {id:"parede",n:"Flexão na parede",cat:"Força",lv:2,prop:"wall",dur:2.8,poses:[{h:[84,30],n:[80,40],p:[62,80],el:[92,46],hl:[103,46],er:[92,48],hr:[103,48],kl:[52,104],fl:[44,127],kr:[54,104],fr:[46,127]},{h:[92,36],n:[88,46],p:[66,82],el:[90,62],hl:[103,48],er:[90,64],hr:[103,50],kl:[54,105],fl:[44,127],kr:[56,105],fr:[46,127]}],dose:"2 séries de 8",
+  steps:["Mãos na parede na altura do peito, um passo para trás.","Dobre os cotovelos aproximando o peito da parede.","Empurre a parede e volte, corpo reto."],tip:"Quanto mais perto da parede, mais fácil."},
+ {id:"ponte",n:"Ponte no chão ou na cama",cat:"Força",lv:2,prop:"mat",dur:3,poses:[{h:[16,116],n:[26,118],p:[60,122],el:[36,124],hl:[48,126],er:[38,124],hr:[50,126],kl:[80,100],fl:[92,126],kr:[82,100],fr:[94,126]},{h:[16,116],n:[26,116],p:[60,100],el:[36,124],hl:[48,126],er:[38,124],hr:[50,126],kl:[82,92],fl:[92,126],kr:[84,92],fr:[94,126]}],dose:"2 séries de 10",
+  steps:["Deite de barriga para cima, joelhos dobrados.","Suba o quadril apertando o bumbum.","Segure 2 segundos e desça devagar."],tip:"Não force a lombar. Suba só até onde for confortável."},
+ {id:"ombros",n:"Círculos com os braços",cat:"Mobilidade",lv:1,seat:true,dur:3.2,poses:[PZ({el:[40,40],hl:[24,34],er:[80,40],hr:[96,34]}),PZ({el:[40,40],hl:[20,44],er:[80,40],hr:[100,44]}),PZ({el:[40,40],hl:[26,50],er:[80,40],hr:[94,50]}),PZ({el:[40,40],hl:[30,40],er:[80,40],hr:[90,40]})],dose:"10 para cada lado",
+  steps:["Abra os braços na altura dos ombros.","Faça círculos pequenos com as mãos.","Troque o sentido na metade."],tip:"Círculos pequenos já bastam. Ombro não deve doer."},
+ {id:"perna",n:"Extensão de perna sentado",cat:"Força",lv:2,seat:true,prop:"chair",dur:2.8,poses:[SEAT,Object.assign({},SEAT,{kr:[72,90],fr:[104,86]})],dose:"10 em cada perna",
+  steps:["Sente com as costas apoiadas.","Estique uma perna até ficar reta.","Segure 2 segundos e desça. Troque de perna."],tip:"Se o joelho estalar com dor, faça menos amplitude."},
+ {id:"remada",n:"Remada com toalha",cat:"Força",lv:2,seat:true,prop:"band",dur:2.6,poses:[PZ({el:[76,52],hl:[92,54],er:[78,54],hr:[94,56]}),PZ({el:[46,58],hl:[64,56],er:[48,60],hr:[66,58]})],dose:"2 séries de 12",
+  steps:["Segure uma toalha esticada com as duas mãos.","Puxe em direção à barriga, cotovelos para trás.","Estique os braços de novo devagar."],tip:"Aperte as escápulas, como se fosse fechar um livro nas costas."},
+ {id:"calcanhar",n:"Elevação de calcanhar",cat:"Força",lv:2,prop:"wall",dur:2.4,poses:[ST,Object.assign(shift(ST,0,-6,["fl","fr"]),{fl:[54,124],fr:[66,124]})],dose:"2 séries de 12",
+  steps:["Em pé, mãos apoiadas numa parede ou cadeira.","Suba na ponta dos pés.","Desça devagar."],tip:"Bom para circulação e equilíbrio."},
+ {id:"passo",n:"Passo lateral",cat:"Cardio leve",lv:2,dur:2,poses:[Object.assign(shift(ST,-10,0),{fl:[40,127],kl:[42,100]}),Object.assign(shift(ST,10,0),{fr:[80,127],kr:[78,100]})],dose:"2 minutos",
+  steps:["Dê um passo para o lado e junte os pés.","Volte para o outro lado.","Mantenha um ritmo confortável."],tip:"Aumente o ritmo só se estiver bem."},
+ {id:"alonga",n:"Alongamento lateral",cat:"Mobilidade",lv:1,seat:true,dur:4,poses:[ST,PZ({h:[52,22],n:[56,34],er:[60,16],hr:[48,6],el:[48,52],hl:[46,70]})],dose:"3 vezes para cada lado",
+  steps:["Suba um braço por cima da cabeça.","Incline o tronco para o outro lado, devagar.","Segure 10 segundos respirando. Troque."],tip:"Estica, não dói. Se doer, diminua."},
+ {id:"equil",n:"Equilíbrio com apoio",cat:"Equilíbrio",lv:2,prop:"wallL",dur:3,poses:[PZ({el:[40,48],hl:[20,48]}),PZ({el:[40,48],hl:[20,48],kr:[72,88],fr:[70,110]})],dose:"20 segundos em cada perna",
+  steps:["Fique de lado para uma parede, uma mão apoiada.","Levante um pé do chão.","Segure, respire e troque de perna."],tip:"Olhe para um ponto fixo à frente."},
+ {id:"afundo",n:"Afundo (passada)",cat:"Força",lv:3,dur:3,poses:[PZ({kl:[48,100],fl:[40,127],kr:[70,100],fr:[80,127]}),{h:[60,34],n:[60,47],p:[60,86],el:[52,64],hl:[52,82],er:[68,64],hr:[68,82],kl:[44,104],fl:[40,127],kr:[72,118],fr:[84,127]}],dose:"2 séries de 8 por perna",
+  steps:["Dê um passo grande à frente.","Desça o joelho de trás em direção ao chão.","Suba empurrando com a perna da frente."],tip:"O joelho da frente não passa da ponta do pé."},
+ {id:"polichinelo",n:"Polichinelo sem pulo",cat:"Cardio leve",lv:3,dur:1.8,poses:[ST,PZ({el:[46,18],hl:[40,4],er:[74,18],hr:[80,4],kr:[74,100],fr:[84,127]})],dose:"3 séries de 30 segundos",
+  steps:["Abra um pé para o lado e suba os braços.","Volte ao centro.","Alterne o lado."],tip:"Sem pular: mais seguro para joelhos e coluna."},
+ {id:"agacha",n:"Agachamento livre",cat:"Força",lv:4,dur:3,poses:[PZ({el:[70,50],hl:[84,50],er:[72,50],hr:[86,50]}),{h:[56,42],n:[58,54],p:[46,92],el:[72,58],hl:[88,58],er:[74,58],hr:[90,58],kl:[66,100],fl:[58,127],kr:[70,100],fr:[64,127]}],dose:"3 séries de 10",
+  steps:["Pés na largura dos ombros.","Desça o quadril para trás, como se fosse sentar.","Suba empurrando o chão."],tip:"Calcanhares sempre no chão."}
+];
+const EXCATS=["Força","Mobilidade","Cardio leve","Equilíbrio","Respiração"];
+const exById=id=>EXS.find(e=>e.id===id);
+/* desenha o boneco; com movimento reduzido fica parado na pose final */
+function fig(ex,cls=""){
+  const segs=[["n","p"],["n","el"],["el","hl"],["n","er"],["er","hr"],["p","kl"],["kl","fl"],["p","kr"],["kr","fr"]];
+  const still=matchMedia("(prefers-reduced-motion: reduce)").matches,ps=ex.poses,seq=ps.length>2?[...ps,ps[0]]:[ps[0],ps[1],ps[0]];
+  const kt=seq.map((_,i)=>(i/(seq.length-1)).toFixed(3)).join(";"),ks=seq.slice(1).map(()=>".45 0 .55 1").join(";");
+  const an=(attr,vals)=>still?"":`<animate attributeName="${attr}" values="${vals.join(";")}" keyTimes="${kt}" calcMode="spline" keySplines="${ks}" dur="${ex.dur}s" repeatCount="indefinite"/>`;
+  const P=ps[still?ps.length-1:0];
+  const props={chair:`<path class="prop" d="M30 92H60M32 92V127M58 92V127M30 92V58"/>`,wall:`<path class="prop" d="M106 20V127"/>`,wallL:`<path class="prop" d="M16 20V127"/>`,mat:`<path class="prop" d="M6 129H112" stroke-width="4"/>`,band:""}[ex.prop]||"";
+  const band=ex.prop==="band"?`<line class="band" x1="${P.hl[0]}" y1="${P.hl[1]}" x2="${P.hr[0]}" y2="${P.hr[1]}">${an("x1",seq.map(q=>q.hl[0]))}${an("y1",seq.map(q=>q.hl[1]))}${an("x2",seq.map(q=>q.hr[0]))}${an("y2",seq.map(q=>q.hr[1]))}</line>`:"";
+  return`<svg class="fig ${cls}" viewBox="0 0 120 136" role="img" aria-label="Demonstração animada: ${esc(ex.n)}"><line class="ground" x1="4" y1="130" x2="116" y2="130"/>${props}
+    ${segs.map(([a,b])=>`<line class="limb" x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}">${an("x1",seq.map(q=>q[a][0]))}${an("y1",seq.map(q=>q[a][1]))}${an("x2",seq.map(q=>q[b][0]))}${an("y2",seq.map(q=>q[b][1]))}</line>`).join("")}${band}
+    <circle class="head" cx="${P.h[0]}" cy="${P.h[1]}" r="9">${an("cx",seq.map(q=>q.h[0]))}${an("cy",seq.map(q=>q.h[1]))}</circle></svg>`}
+
+/* prescrições: cliente deste aparelho (S.rx) ou cliente de exemplo (c.rx) */
+const rxOf=cid=>cid==="me"?(S.rx||[]):((DB.clients.find(c=>c.id===cid)||{}).rx||[]);
+function setRx(cid,list){if(cid==="me"){S.rx=list;save()}else{DB.clients.find(c=>c.id===cid).rx=list;saveDB()}}
+function exCard(ex,rx,locked){return`<button class="exc ${locked?"locked":""}" data-ex="${ex.id}">${fig(ex,"sm")}<span class="exc-t"><b>${ex.n}</b><small>${rx?esc(rx.dose):ex.cat}${ex.seat?" · dá sentado":""}</small>${rx&&rx.note?`<small class="rxn">“${esc(rx.note)}”</small>`:""}</span>${locked?`<i data-lucide="lock"></i>`:""}</button>`}
+function exDetail(id,opts={}){
+  const ex=exById(id),rx=opts.rx;const md=document.createElement("div");md.className="modal";document.body.appendChild(md);document.body.style.overflow="hidden";
+  const close=()=>{removeEventListener("keydown",k);md.remove();document.body.style.overflow="";route(true)};const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);md.onclick=e=>{if(e.target===md)close()};
+  const cs=opts.role==="personal"?myClients(curP()).filter(c=>c.status==="ativo"):[];
+  md.innerHTML=`<div class="sheet pay" role="dialog" aria-modal="true" aria-labelledby="exh">
+    <div class="pay-h"><div><small>${ex.cat}${ex.seat?" · dá para fazer sentado":""}</small><h3 id="exh">${ex.n}</h3></div><button class="rbtn" id="exx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
+    <div class="ex-stage">${fig(ex,"lg")}</div>
+    ${rx?`<div class="alert ok" style="margin:0"><i data-lucide="user-round-check"></i><span><b>${esc(rx.dose)}</b>${rx.note?` · ${esc(rx.note)}`:""}<br><small>Indicado por ${esc(PERSONAL.name.split(" ")[0])}</small></span></div>`:`<p class="exhint" style="margin:0;text-align:left">Sugestão: ${esc(ex.dose)}</p>`}
+    <ol class="ex-steps">${ex.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+    <div class="alert warn" style="margin:0"><i data-lucide="heart-pulse"></i><span>${esc(ex.tip)} Sentiu dor, tontura ou falta de ar? Pare.</span></div>
+    ${opts.role==="cliente"?`<button class="btn btn-primary" id="exdo"><i data-lucide="check"></i>Fiz este exercício</button>`:""}
+    ${opts.role==="personal"&&cs.length?`<div class="toolbar" style="margin:0"><select id="exto" aria-label="Aluno">${cs.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select><button class="btn btn-primary btn-sm" id="exrx"><i data-lucide="send"></i>Indicar</button></div>`:""}
+  </div>`;icons();
+  $("#exx").onclick=close;
+  const d=$("#exdo");if(d)d.onclick=()=>{S.exlog=S.exlog||[];S.exlog.push({id,at:Date.now()});save();close();toast("Registrado! Cada movimento conta.")};
+  const r=$("#exrx");if(r)r.onclick=()=>{const cid=$("#exto").value,l=rxOf(cid).filter(x=>x.id!==id);l.push({id,dose:ex.dose,note:"",at:Date.now()});setRx(cid,l);pushMsg(cid,`Indiquei um exercício novo para você: ${ex.n}. Tem demonstração em Treinos → Indicados. 💪`);close();toast("Exercício indicado")};
+}
+/* personal monta a lista de exercícios do aluno */
+function openRxEditor(cid){
+  const c=findC(cid);let sel=Object.fromEntries(rxOf(cid).map(r=>[r.id,{dose:r.dose,note:r.note||""}]));
+  const md=document.createElement("div");md.className="modal";document.body.appendChild(md);
+  const close=()=>{removeEventListener("keydown",k);md.remove();openClient(cid,"personal")};const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);
+  const draw=()=>{md.innerHTML=`<form class="sheet pay rxed" role="dialog" aria-modal="true" aria-labelledby="rxh" id="rxf">
+    <div class="pay-h"><div><small>${esc(c.name)} · nível ${c.level}${c.medical&&!c.medOk?" · aguardando liberação médica":""}</small><h3 id="rxh">Indicar exercícios</h3></div><button type="button" class="rbtn" id="rxx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
+    <p class="exhint" style="margin:0;text-align:left">Trava: ${esc(c.barriers.join(", ").toLowerCase())}. Objetivo: ${esc(c.goals.join(", ").toLowerCase())}.</p>
+    ${EXCATS.map(cat=>`<div><p class="rx-cat">${cat}</p>${EXS.filter(e=>e.cat===cat).map(e=>{const s=sel[e.id];return`<div class="rx-row ${s?"on":""}"><label class="chkline"><input type="checkbox" data-rx="${e.id}" ${s?"checked":""}> ${e.n}${e.lv>c.level?` <small style="color:var(--muted)">(nível ${e.lv})</small>`:""}</label>${s?`<div class="rx-f"><input data-dose="${e.id}" value="${esc(s.dose)}" aria-label="Séries e repetições de ${esc(e.n)}"><input data-note="${e.id}" value="${esc(s.note)}" placeholder="Recado (opcional)" aria-label="Recado para ${esc(e.n)}"></div>`:""}</div>`}).join("")}</div>`).join("")}
+    <button class="btn btn-primary"><i data-lucide="send"></i>Salvar e avisar ${esc(c.name.split(" ")[0])}</button></form>`;icons();
+    $("#rxx").onclick=close;
+    md.querySelectorAll("[data-rx]").forEach(i=>i.onchange=()=>{const e=exById(i.dataset.rx);if(i.checked)sel[e.id]={dose:e.dose,note:""};else delete sel[e.id];draw()});
+    md.querySelectorAll("[data-dose]").forEach(i=>i.oninput=()=>{sel[i.dataset.dose].dose=i.value});
+    md.querySelectorAll("[data-note]").forEach(i=>i.oninput=()=>{sel[i.dataset.note].note=i.value});
+    $("#rxf").onsubmit=e=>{e.preventDefault();const list=Object.entries(sel).map(([id,v])=>({id,dose:v.dose.trim()||exById(id).dose,note:v.note.trim(),at:Date.now()}));setRx(cid,list);
+      pushMsg(cid,list.length?`Montei sua lista com ${list.length} exercícios. Estão em Treinos → Indicados, com demonstração de cada um. 💪`:"Tirei os exercícios da sua lista por enquanto. Conversamos!");removeEventListener("keydown",k);md.remove();toast("Lista salva e aluno avisado");openClient(cid,"personal")}};
+  draw();
+}
+/* painel da personal: biblioteca */
+let PXF="";
+function pExs(p){
+  const L=EXS.filter(e=>!PXF||e.cat===PXF);
+  $("#pv").innerHTML=`<div class="filters" role="group" aria-label="Categoria">${["",...EXCATS].map(c=>`<button aria-pressed="${PXF===c}" data-pxf="${c}">${c||"Todos"}</button>`).join("")}</div>
+  <div class="exgrid">${L.map(e=>exCard(e)).join("")}</div>
+  <div class="info mt"><i data-lucide="info"></i><span>Toque num exercício para ver a demonstração e indicar para um aluno. Para montar a lista completa, abra a ficha do aluno e use “Indicar exercícios”.</span></div>`;
+  document.querySelectorAll("[data-pxf]").forEach(b=>b.onclick=()=>{PXF=b.dataset.pxf;route(true)});
+  document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>exDetail(b.dataset.ex,{role:"personal"}));
+}
 
 /* formulários do site → contatos da empresa */
 function bindSiteForms(){
