@@ -1032,7 +1032,28 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .lg-back{display:inline-flex;align-items:center;gap:6px;margin-top:18px;color:var(--muted);font-weight:600;text-decoration:none}
 .lg-back svg{width:16px;height:16px}
 
-@media (min-width:901px){.mnav{display:none}}
+/* acesso no cabeçalho */
+.acc{position:relative;margin-left:4px}
+.acc-btn{min-height:42px;padding:8px 14px;font-size:15px;gap:6px}
+.acc-btn svg{width:18px;height:18px}
+.acc-btn .acc-ch{width:15px;height:15px;transition:transform .2s}
+.acc-btn[aria-expanded="true"] .acc-ch{transform:rotate(180deg)}
+.acc-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:50;min-width:260px;background:var(--bg);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 40px -16px rgba(15,23,32,.35);padding:6px;display:grid;gap:2px}
+.acc-menu a{display:flex;gap:12px;align-items:center;padding:10px;border-radius:12px;color:var(--ink);text-decoration:none}
+.acc-menu a:hover,.acc-menu a:focus-visible{background:var(--mist)}
+.acc-menu .ai{width:38px;height:38px;border-radius:12px;background:var(--gold-soft);color:var(--navy);display:grid;place-items:center;flex:none}
+.acc-menu .ai svg{width:19px;height:19px}
+.acc-menu b{display:block;font-size:15px}
+.acc-menu small{color:var(--muted);font-size:13px}
+@media (max-width:900px){.acc{margin-left:auto}.topbar .tb-cta{margin-left:0}}
+.topnav a,.brand{white-space:nowrap}
+.topbar .wrap{gap:10px}
+.topnav{gap:0}
+.topnav a{padding:8px 8px;font-size:14.5px}
+@media (max-width:1180px){.topnav{display:none}.menu-btn{display:grid}.acc{margin-left:auto}.topbar .tb-cta{margin-left:0}}
+@media (max-width:560px){.tb-cta{display:none}.acc-btn{padding:8px 12px}.acc{position:static}.acc-menu{left:12px;right:12px;top:calc(100% + 6px);min-width:0}}
+
+@media (min-width:1181px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
   .phone{width:270px}
@@ -1184,8 +1205,16 @@ function site(){
   $("#root").innerHTML=`
 <header class="topbar"><div class="wrap">
   <a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
-  <nav class="topnav" aria-label="Seções"><a href="#como" data-scroll>Como funciona</a><a href="#seguranca" data-scroll>Segurança</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#duvidas" data-scroll>Dúvidas</a><a href="#/entrar">Entrar</a></nav>
-  <a class="btn btn-primary" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Começar"}</a>
+  <nav class="topnav" aria-label="Seções"><a href="#como" data-scroll>Como funciona</a><a href="#seguranca" data-scroll>Segurança</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#duvidas" data-scroll>Dúvidas</a></nav>
+  <div class="acc">
+    <button class="btn btn-ghost acc-btn" id="accb" aria-haspopup="true" aria-expanded="false" aria-controls="accm"><i data-lucide="circle-user-round"></i><span>Entrar</span><i data-lucide="chevron-down" class="acc-ch"></i></button>
+    <div class="acc-menu" id="accm" hidden>
+      <a href="${has?"#/app":"#/comecar"}"><span class="ai"><i data-lucide="footprints"></i></span><span><b>Área do aluno</b><small>${has?"Abrir meu app":"Criar meu plano"}</small></span></a>
+      <a href="#/entrar/personal"><span class="ai"><i data-lucide="dumbbell"></i></span><span><b>Área da personal</b><small>Alunos, agenda e ganhos</small></span></a>
+      <a href="#/entrar/empresa"><span class="ai"><i data-lucide="building-2"></i></span><span><b>Área da empresa</b><small>Gestão completa</small></span></a>
+    </div>
+  </div>
+  <a class="btn btn-primary tb-cta" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Começar"}</a>
   <button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button>
   <button class="rbtn menu-btn" id="menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="mnav"><i data-lucide="menu"></i></button>
 </div><nav class="mnav wrap" id="mnav" aria-label="Seções" hidden><a href="#como" data-scroll>Como funciona</a><a href="#combinados" data-scroll>Nossos combinados</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#seguranca" data-scroll>Segurança</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#parceiros" data-scroll>Seja parceiro</a><a href="#duvidas" data-scroll>Dúvidas</a><a href="#contato" data-scroll>Contato</a><a href="#/entrar">Entrar (cliente, personal ou empresa)</a></nav></header>
@@ -1335,6 +1364,10 @@ function site(){
   $("#theme").onclick=toggleTheme;
   bindSiteForms();
   renderPlans();
+  {const ab=$("#accb"),am=$("#accm"),setA=o=>{am.hidden=!o;ab.setAttribute("aria-expanded",o)};
+   ab.onclick=e=>{e.stopPropagation();setA(am.hidden)};
+   document.addEventListener("click",e=>{if(!am.hidden&&!e.target.closest(".acc"))setA(false)});
+   document.addEventListener("keydown",e=>{if(e.key==="Escape")setA(false)})}
   document.querySelectorAll("[data-reveal]").forEach(b=>b.onclick=()=>{const f=$("#"+b.dataset.reveal);f.classList.remove("m-hide");b.remove();const i=f.querySelector("input");if(i)i.focus()});
   const fm=$("#faqmore");if(fm)fm.onclick=()=>{$(".faq").classList.remove("clip");fm.remove()};
   document.querySelectorAll("[data-scroll]").forEach(a=>a.onclick=e=>{e.preventDefault();setMenu(false);document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})});
@@ -1391,14 +1424,14 @@ function onboarding(){
 /* ================== APP ================== */
 function app(tab){
   const tabs=[["inicio","house","Início"],["treinos","circle-play","Treinos"],["agenda","calendar-days","Agenda"],["mensagens","message-circle","Conversa"],["perfil","user-round","Perfil"]];
-  const v={inicio:vHome,treinos:vTreinos,agenda:vAgenda,mensagens:vChat,perfil:vPerfil,verificacao:vVerif}[tab]||vHome;
+  const v={inicio:vHome,treinos:vTreinos,agenda:vAgenda,mensagens:vChat,perfil:vPerfil,verificacao:vVerif,dados:vDados}[tab]||vHome;
   if(tab==="mensagens")S.unread=0,save();
   $("#root").innerHTML=`<div class="app">
     <header class="app-top"><div class="in"><a class="brand" href="#/" aria-label="Site"><span class="mk"><i data-lucide="footprints"></i></span></a><div><small style="color:var(--muted);font-weight:600;font-size:13px">Nível ${S.level}</small><div style="font-weight:700;line-height:1.1">${LEVELS[S.level-1].t}</div></div>
     <button class="icon-btn sos-ic" data-sos aria-label="Emergência e segurança"><i data-lucide="shield"></i></button><a class="icon-btn" href="#/app/mensagens" aria-label="Mensagens" style="margin-left:0"><i data-lucide="bell"></i>${S.unread?`<span class="dotb"></span>`:""}</a></div></header>
     ${TEST_MODE?`<div class="tbar"><i data-lucide="flask-conical"></i>Modo de teste: as etapas obrigatórias estão liberadas para você ver tudo.</div>`:""}
     <main class="view" id="view"></main>
-    <nav class="tabbar" aria-label="App" ${!TEST_MODE&&kycOf("me").status!=="verificado"?"hidden":""}><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||(tab==="verificacao"&&k==="perfil")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
+    <nav class="tabbar" aria-label="App" ${!TEST_MODE&&kycOf("me").status!=="verificado"?"hidden":""}><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||((tab==="verificacao"||tab==="dados")&&k==="perfil")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
   </div>`;
   v();icons();
   document.querySelectorAll("[data-sos]").forEach(b=>b.onclick=()=>openSOS("cliente"));
@@ -1669,6 +1702,7 @@ function vPerfil(){
   <div class="block"><div class="block-h"><h3>Segurança</h3></div><div class="tasks">
     <a class="task" href="#/app/verificacao" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="shield-check"></i></span><span><b>Verificação de identidade</b><small>${KYC_PILL[kycOf("me").status][2]}</small></span><i class="go" data-lucide="chevron-right"></i></a>
     ${rateCard()}
+    <a class="task" href="#/app/dados" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="id-card"></i></span><span><b>Meus dados e contrato</b><small>Dados pessoais, plano, documentos e privacidade</small></span><i class="go" data-lucide="chevron-right"></i></a>
     <button class="task" id="myterms" style="text-align:left"><span class="ti"><i data-lucide="file-text"></i></span><span><b>Termos de uso</b><small>Aulas e pagamentos sempre pelo app</small></span><i class="go" data-lucide="chevron-right"></i></button>
     <button class="task" data-sos style="text-align:left"><span class="ti"><i data-lucide="siren"></i></span><span><b>Emergência e relato confidencial</b><small>Polícia, SAMU, central e canal de relato</small></span><i class="go" data-lucide="chevron-right"></i></button></div></div>
   <div class="block" style="display:grid;gap:10px"><div class="block-h" style="margin-bottom:2px"><h3>Preferências</h3></div>
@@ -1779,7 +1813,7 @@ function seedDB(){
   const db={v:1,personals,clients,bookings,leads,prices:[100,180,480,560],split:70,paid:{}};
   const cur=mkey(now),prev=monthsBack(2)[0];
   billsOf(db,clients).forEach(b=>{db.paid[b.key]=b.m<cur?!(b.cid==="c10"&&b.m>=prev):rnd()<.6});
-  return seedTerms(seedSafety(seedPay(seedFin(db))));
+  return seedInfo(seedTerms(seedSafety(seedPay(seedFin(db)))));
 }
 let DB=loadDB();
 function loadDB(){try{const r=localStorage.getItem(DBKEY);if(r)return JSON.parse(r)}catch(e){}return seedDB()}
@@ -1858,7 +1892,7 @@ let SESS=(()=>{try{return JSON.parse(localStorage.getItem(SKEY))||{}}catch(e){re
 function setSess(x){SESS=x;try{localStorage.setItem(SKEY,JSON.stringify(x))}catch(e){}}
 /* acesso de teste: o login real (senha com hash, recuperação por e-mail) vem com o servidor */
 const TEST_PASS="teste123",ADMIN_EMAIL="admin@primeiropasso.com.br";
-const mailOf=n=>n.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().split(" ").filter(Boolean).slice(0,2).join(".")+"@primeiropasso.com.br";
+function mailOf(n){return n.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().split(" ").filter(Boolean).slice(0,2).join(".")+"@primeiropasso.com.br"}
 DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
 function login(){
   DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
@@ -1956,6 +1990,7 @@ function openClient(id,role){
       <div class="sec2"><h3>Para subir de nível</h3><div class="chk">${cr.map(([t,d])=>`<div class="${d?"y":""}"><i data-lucide="${d?"circle-check":"circle-dashed"}"></i>${esc(t)}</div>`).join("")}</div><div class="prog mt"><i style="width:${pctFor(c)}%"></i></div></div>
       <details class="fold sec2"><summary><h3>Questionário</h3><i data-lucide="chevron-down"></i></summary><div class="plist"><div><span>Objetivos</span><b>${esc(c.goals.join(", "))}</b></div><div><span>O que trava</span><b>${esc(c.barriers.join(", "))}</b></div><div><span>Contato preferido</span><b>${esc(c.contact)}</b></div><div><span>Disponibilidade</span><b>${esc((c.days||[]).join(", "))} · ${esc(c.period)}</b></div><div><span>Liberação médica</span><b>${c.medical?(c.medOk?"Recebida":"Pendente"):"Não necessária"}</b></div>${role==="admin"?`<div><span>Contato</span><b>${esc(c.phone)}</b></div><div><span>Personal</span><b>${esc(p?p.name:"-")}</b></div>`:""}</div></details>
       <details class="fold sec2"><summary><h3>Últimos treinos</h3><span class="fs">${c.workouts.length}</span><i data-lucide="chevron-down"></i></summary>${c.workouts.length?`<div class="hist">${c.workouts.slice(-5).reverse().map(w=>{const W=WORKOUTS.find(x=>x.id===w.id)||WORKOUTS[0];return`<div><i data-lucide="${FEEL_IC[w.feel]||"circle"}"></i><span><b>${W.t}</b> · ${(w.feel||"").toLowerCase()}</span><small>${rel(w.at)}</small></div>`}).join("")}</div>`:`<p class="empty-s">Nenhum treino ainda.</p>`}</details>
+      ${role==="admin"?`<details class="fold sec2"><summary><h3>Dados e contrato</h3><i data-lucide="chevron-down"></i></summary><div class="plist">${(()=>{const inf=c.you?(S.info||{}):{};const k=kycOf(c.id);return dline("Identidade",KYC_PILL[k.status][2])+dline("CPF",esc(k.cpf||"—"))+dline("Celular",esc(inf.tel||c.phone||"—"))+dline("Cidade",esc(inf.city||k.city||"—"))+dline("Emergência",esc(inf.en?`${inf.en} (${inf.er}) ${inf.et}`:k.emerg||"—"))+dline("Plano",esc(c.you&&S.plan?planLabel(S.plan):`Nível ${c.level} · ${LEVELS[c.level-1].t}`))+dline("Termos de uso",c.you?(S.termsAt?`Aceitos ${new Date(S.termsAt).toLocaleDateString("pt-BR")}`:k.status!=="pendente"?"Aceitos na verificação":"Pendente"):(k.status!=="pendente"?"Aceitos na verificação":"Pendente"))})()}</div></details>`:""}
       ${role==="admin"?`<details class="fold sec2"><summary><h3>Pagamentos</h3><i data-lucide="chevron-down"></i></summary>${cb.length?`<div class="hist">${cb.map(b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}</span><small>${pill(k,ic,t)}</small></div>`}).join("")}</div>`:`<p class="empty-s">Sem cobranças.</p>`}</details>`:""}
     </div>`;
     icons();
@@ -1991,12 +2026,12 @@ const myClients=p=>allClients().filter(c=>c.pid===p.id);
 function panelPersonal(tab){
   if(SESS.role!=="personal"&&SESS.role!=="admin"){location.hash="#/entrar";return}
   const p=curP(),cs=myClients(p),unr=cs.filter(needsReply).length;
-  const tabs=[{k:"hoje",ic:"layout-dashboard",l:"Hoje"},{k:"alunos",ic:"users",l:"Alunos"},{k:"agenda",ic:"calendar-days",l:"Agenda"},{k:"mensagens",ic:"message-circle",l:"Mensagens",s:"Conversas",cnt:unr},{k:"exercicios",ic:"dumbbell",l:"Exercícios"},{k:"ganhos",ic:"wallet",l:"Ganhos"}];
-  const T={hoje:["Painel da personal",`${greet()}, ${p.name.split(" ")[0]}`],alunos:["Seus alunos","Alunos"],agenda:["Encontros e check-ins","Agenda"],mensagens:["Conversas com alunos","Mensagens"],exercicios:["Biblioteca com demonstração","Exercícios"],ganhos:["Mensalidades e repasses","Ganhos"]}[tab]||["",""];
+  const tabs=[{k:"hoje",ic:"layout-dashboard",l:"Hoje"},{k:"alunos",ic:"users",l:"Alunos"},{k:"agenda",ic:"calendar-days",l:"Agenda"},{k:"mensagens",ic:"message-circle",l:"Mensagens",s:"Conversas",cnt:unr},{k:"exercicios",ic:"dumbbell",l:"Exercícios"},{k:"ganhos",ic:"wallet",l:"Ganhos"},{k:"dados",ic:"id-card",l:"Meus dados"}];
+  const T={hoje:["Painel da personal",`${greet()}, ${p.name.split(" ")[0]}`],alunos:["Seus alunos","Alunos"],agenda:["Encontros e check-ins","Agenda"],mensagens:["Conversas com alunos","Mensagens"],exercicios:["Biblioteca com demonstração","Exercícios"],dados:["Dados pessoais, contrato e documentos","Meus dados"],ganhos:["Mensalidades e repasses","Ganhos"]}[tab]||["",""];
   shell({role:"Personal",tabs,tab,base:"#/personal",me:{name:p.name,sub:p.cref},title:T[1],kick:T[0],acts:(SESS.back==="admin"?`<a class="btn btn-ghost btn-sm" href="#/admin" id="bk2"><i data-lucide="arrow-left"></i>Voltar à empresa</a>`:"")+`<button class="btn btn-ghost btn-sm sos-btn" data-sos><i data-lucide="siren"></i>Emergência</button>`});
   document.querySelectorAll("[data-sos]").forEach(b=>b.onclick=()=>openSOS("personal"));
   const b2=$("#bk2");if(b2)b2.onclick=()=>setSess({role:"admin"});
-  ({hoje:pHoje,alunos:pAlunos,agenda:pAgenda,mensagens:pMsgs,exercicios:pExs,ganhos:pGanhos}[tab]||pHoje)(p,cs);
+  ({hoje:pHoje,alunos:pAlunos,agenda:pAgenda,mensagens:pMsgs,exercicios:pExs,ganhos:pGanhos,dados:pDados}[tab]||pHoje)(p,cs);
   bindOpen("personal");icons();
   window._tseen=window._tseen||{};
   if(!p.terms&&(!TEST_MODE||!window._tseen[p.id])){window._tseen[p.id]=1;openTerms("personal",{required:true,accept:()=>{p.terms={v:TERMS_V,at:Date.now()};saveDB()}})}
@@ -2136,7 +2171,7 @@ function aPersonais(bl){
       <p class="dm" style="color:var(--muted);font-size:14.5px">${esc(p.bio||"")}</p>
       ${p.status==="ativo"?`<div><div style="display:flex;justify-content:space-between;font-size:14px"><span>Alunos</span><b>${n} de ${p.cap}</b></div><div class="prog mt" style="margin-top:6px"><i style="width:${Math.min(100,n/p.cap*100)}%"></i></div></div>
       <div class="kv"><div><span>Termo de parceria</span><b>${p.terms?`Aceito ${new Date(p.terms.at).toLocaleDateString("pt-BR")}`:`<span style="color:var(--red)">Pendente</span>`}</b></div><div><span>Faturado no mês</span><b>${money(rev)}</b></div><div><span>Repasse (${pctf(splitOf(p.id))})</span><b>${money(rev*splitOf(p.id))}</b></div><div><span>Avaliação (${ratingOf(p.id).n})</span><b>${ratingOf(p.id).n?ratingOf(p.id).avg.toLocaleString("pt-BR",{maximumFractionDigits:1})+" ★":"—"}</b></div></div>
-      <div class="acts pc-foot"><button class="btn btn-ghost btn-sm" data-asp="${p.id}"><i data-lucide="log-in"></i>Ver o painel dela</button><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="inativo"><i data-lucide="pause"></i>Desativar</button></div>`
+      <div class="acts pc-foot"><button class="btn btn-ghost btn-sm" data-pfi="${p.id}"><i data-lucide="id-card"></i>Ficha completa</button><button class="btn btn-ghost btn-sm" data-asp="${p.id}"><i data-lucide="log-in"></i>Ver o painel dela</button><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="inativo"><i data-lucide="pause"></i>Desativar</button></div>`
       :p.status==="pendente"?`<div class="acts pc-foot"><button class="btn btn-primary btn-sm" data-pst="${p.id}" data-v="ativo"><i data-lucide="check"></i>Aprovar</button><button class="btn btn-ghost btn-sm" data-pdel="${p.id}"><i data-lucide="x"></i>Recusar</button></div>`
       :`<div class="acts pc-foot"><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="ativo"><i data-lucide="play"></i>Reativar</button></div>`}</article>`}).join("")}</div>
   <form class="form mt" id="np" style="max-width:720px"><h3>Cadastrar personal</h3><div class="set">
@@ -2150,6 +2185,7 @@ function aPersonais(bl){
     if(v==="inativo"&&allClients().some(c=>c.pid===p.id&&c.status==="ativo")){toast("Transfira os alunos dela antes de desativar");return}
     p.status=v;if(v==="ativo"&&!p.rating)p.rating=null;saveDB();toast(v==="ativo"?`${p.name.split(" ")[0]} está ativa`:"Personal desativada");route(true)});
   document.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>{DB.personals=DB.personals.filter(p=>p.id!==b.dataset.pdel);saveDB();toast("Cadastro recusado");route(true)});
+  document.querySelectorAll("[data-pfi]").forEach(b=>b.onclick=()=>openPFicha(b.dataset.pfi));
   document.querySelectorAll("[data-asp]").forEach(b=>b.onclick=()=>{setSess({role:"personal",pid:b.dataset.asp,back:"admin"});location.hash="#/personal"});
   $("#np").onsubmit=e=>{e.preventDefault();const name=$("#npn").value.trim();DB.personals.push({id:"p"+Date.now(),name,email:mailOf(name),cref:"CREF "+$("#npc").value.trim(),area:$("#npa").value.trim(),bio:"",spec:[$("#nps").value.trim()||"Iniciantes"],status:"ativo",cap:15,rating:null,since:Date.now()});saveDB();toast(`${name.split(" ")[0]} cadastrada`);route(true)};
 }
@@ -2233,8 +2269,7 @@ function pGanhos(p){
   </div>
   <section class="mt"><div class="card-h"><h3>Mensalidades de ${mlabel(cur,1)}</h3></div><div class="tbl"><table><thead><tr><th>Aluno</th><th class="hm">Nível</th><th class="num hm">Mensalidade</th><th class="num">Sua parte</th><th>Situação</th></tr></thead><tbody>${mine.map(b=>{const c=findC(b.cid);return`<tr data-open="${b.cid}"><td><span class="nm">${avatar(c)}<b>${esc(c.name)}</b></span></td><td class="hm">${lvb(b.lv)}</td><td class="num hm">${money(b.amount)}</td><td class="num"><b>${money(b.amount*sp)}</b></td><td>${pill(...BILL_PILL[b.status])}</td></tr>`}).join("")}</tbody></table></div></section>
   <section class="card mt"><div class="card-h"><h3>Seus repasses</h3></div><div class="rows">${ms.slice(0,5).reverse().map(m=>{const f=fin(bl.filter(b=>b.m===m)),d=DB.payouts[payoutKey(p.id,m)];return`<div class="rw"><span><b>${mlabel(m,1)} de ${m.slice(0,4)}</b><small>${f.paidN} mensalidades pagas</small></span><span class="end"><b style="font-variant-numeric:tabular-nums">${money(f.rep)}</b>${(()=>{const ps=payoutState(p.id,m);return pill(ps.k,ps.ic,ps.t)})()}</span></div>`}).join("")}</div></section>
-  ${payoutForm(p)}`;
-  $("#pof").onsubmit=e=>{e.preventDefault();p.payout={type:$("#pot").value,key:$("#pok").value.trim()};saveDB();toast("Dados de recebimento salvos")};
+  <a class="task mt" href="#/personal/dados" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="landmark"></i></span><span><b>Onde você recebe</b><small>${p.payout&&p.payout.key?`Pix ${esc(p.payout.type)} ${esc(p.payout.key)}`:"Cadastre sua chave Pix"} · em Meus dados</small></span><i class="go" data-lucide="chevron-right"></i></a>`;
 }
 
 /* ---------- empresa: financeiro ---------- */
@@ -2465,7 +2500,7 @@ function vVerif(){
     if(st===2&&!(KV.selfie&&KV.ok.face)){toast(KV.selfie?"Aguarde a comparação terminar":"Tire ou envie sua selfie");return}
     if(st===3){if(!(KV.ok.c1&&KV.ok.c2&&KV.ok.c3&&KV.ok.c4)){toast("Marque as quatro autorizações para continuar");return}
       [KV.doc,KV.docB,KV.selfie].forEach(u=>{try{u&&URL.revokeObjectURL(u)}catch(e){}});
-      S.kyc={status:"analise",at:Date.now(),cpf:maskCpf(KV.d.cpf),city:KV.d.city.trim(),emerg:`${KV.d.en.trim()} (${KV.d.er})`,emergTel:KV.d.et,doc:KV.d.dt||"RG"};save();
+      S.termsAt=Date.now();S.info=Object.assign(S.info||{},{name:KV.d.name,birth:KV.d.birth,tel:KV.d.tel,cep:KV.d.cep,addr:KV.d.addr,city:KV.d.city,en:KV.d.en,et:KV.d.et,er:KV.d.er});S.kyc={status:"analise",at:Date.now(),cpf:maskCpf(KV.d.cpf),city:KV.d.city.trim(),emerg:`${KV.d.en.trim()} (${KV.d.er})`,emergTel:KV.d.et,doc:KV.d.dt||"RG"};save();
       KV={step:0,d:{},doc:null,docB:null,selfie:null,ok:{}};toast("Enviado! A equipe confere em até 1 dia útil.");vVerif();icons();return}
     KV.step++;vVerif();scrollTo(0,0)};
 }
@@ -2761,6 +2796,77 @@ function offCheck(text,from,cid,pid,send,keep){
 }
 function seedTerms(db){db.flags=[{id:"f0",from:"personal",cid:"c4",pid:"p2",cname:"Carlos Eduardo Santos",pname:"Rafael Nunes",text:"Se quiser, me chama no zap que faço um valor melhor por fora.",at:Date.now()-3*D1,status:"aberto"}];db.personals.forEach(p=>{if(p.status==="ativo"&&!p.terms)p.terms={v:"1.0",at:p.since+2*D1}});return db}
 if(!DB.flags){seedTerms(DB);saveDB()}
+
+/* ================== MEUS DADOS (aluno e personal) ==================
+   Dados pessoais, contrato, documentos e privacidade (LGPD). CPF só aparece mascarado. */
+const INFO_FIELDS=[["name","Nome completo","text","name"],["email","E-mail","email","email"],["tel","Celular","tel","tel"],["birth","Data de nascimento","date","bday"],["cep","CEP","text","postal-code"],["addr","Endereço e número","text","street-address"],["city","Cidade","text","address-level2"]];
+const EMERG_FIELDS=[["en","Nome","text",""],["et","Telefone","tel","tel"],["er","Relação","text",""]];
+function infoForm(id,info,fields){return`<div class="set">${fields.map(([k,l,t,ac])=>`<div class="field" style="margin:0"><label for="${id}-${k}">${l}</label><input id="${id}-${k}" data-inf="${k}" type="${t}" ${ac?`autocomplete="${ac}"`:""} value="${esc(info[k]||"")}"></div>`).join("")}</div>`}
+const readInfo=(root,into)=>{root.querySelectorAll("[data-inf]").forEach(i=>{into[i.dataset.inf]=i.value.trim()});return into};
+const dline=(l,v)=>`<div><span>${l}</span><b>${v}</b></div>`;
+function privacyBlock(){return`<section class="card mt"><div class="card-h"><h3>Privacidade (LGPD)</h3></div>
+  <p class="week-note" style="margin:0 0 12px">Seus dados são usados só para o seu acompanhamento e a sua segurança. Você pode ver tudo o que guardamos e pedir a exclusão quando quiser.</p>
+  <div class="pc-foot"><button class="btn btn-ghost btn-sm" data-copyme><i data-lucide="clipboard-copy"></i>Copiar meus dados</button><button class="btn btn-ghost btn-sm" data-delme style="color:var(--red)"><i data-lucide="trash-2"></i>Pedir exclusão</button></div></section>`}
+
+/* ---------- aluno ---------- */
+function vDados(){
+  const p=S.profile,k=kycOf("me"),inf=S.info=S.info||{name:p.name},bl=bills().filter(b=>b.cid==="me"),per=findP(S.pid||"p1");
+  const plan=S.plan?planLabel(S.plan):`Nível ${S.level} · ${LEVELS[S.level-1].t}`;
+  $("#view").innerHTML=`<div class="hello"><small>Perfil</small><h2>Meus dados</h2></div>
+  <form class="card" id="dfm"><div class="card-h"><h3>Dados pessoais</h3>${pill(...KYC_PILL[k.status])}</div>
+    ${infoForm("mi",inf,INFO_FIELDS)}
+    <div class="field" style="margin:12px 0 0"><label>CPF</label><input value="${esc(k.cpf||"Informado na verificação")}" disabled></div>
+    <div class="card-h" style="margin:18px 0 10px"><h3 style="font-size:16px">Contato de emergência</h3></div>${infoForm("me",inf,EMERG_FIELDS)}
+    <button class="btn btn-primary mt"><i data-lucide="save"></i>Salvar alterações</button></form>
+  <section class="card mt"><div class="card-h"><h3>Meu contrato</h3><button type="button" class="link" data-termsc>Ver termos de uso</button></div>
+    <div class="plist">${dline("Plano",esc(plan))}${dline("Nível atual",`${S.level} · ${LEVELS[S.level-1].t}`)}${dline("Valor",`${LEVELS[S.level-1].price} ${LEVELS[S.level-1].per}`)}${dline("Forma de pagamento",METHODS[S.payMethod||"pix"].l+(S.autopay?" · automático":""))}${dline("Personal",esc(per.name))}${dline("Cliente desde",new Date(p.since).toLocaleDateString("pt-BR"))}${dline("Termos de uso",S.termsAt?`Aceitos em ${new Date(S.termsAt).toLocaleDateString("pt-BR")} · v${TERMS_V}`:(k.status!=="pendente"?"Aceitos na verificação":`<span style="color:var(--red)">Pendente</span>`))}${dline("Fidelidade","Não há. O que sobrar de planos longos vira crédito.")}</div>
+    <p class="week-note">${bl.filter(b=>b.paid).length} mensalidades pagas · ${bl.filter(b=>!b.paid).length} em aberto. Detalhes em Perfil → Pagamentos.</p></section>
+  <section class="card mt"><div class="card-h"><h3>Documentos</h3></div><div class="plist">${dline("Identidade",KYC_PILL[k.status][2])}${dline("Documento enviado",k.doc||(k.status==="pendente"?"—":"RG"))}${dline("Selfie",k.status==="pendente"?"—":"Comparada ao documento")}${dline("Liberação médica",p.medical?(p.medOk?"Recebida pela personal":"Pendente"):"Não necessária")}</div>
+    ${k.status==="pendente"?`<a class="btn btn-primary mt" href="#/app/verificacao"><i data-lucide="shield-check"></i>Verificar identidade</a>`:""}</section>
+  ${privacyBlock()}`;
+  $("#dfm").onsubmit=e=>{e.preventDefault();readInfo($("#dfm"),inf);if(inf.name){p.name=inf.name}save();toast("Dados salvos")};
+  $("[data-termsc]").onclick=()=>openTerms("cliente");
+  $("[data-copyme]").onclick=()=>copyText(JSON.stringify({dados:Object.assign({},inf,{cpf:k.cpf}),questionario:{objetivos:p.goals,travas:p.barriers,disponibilidade:[p.days,p.period],contato:p.contact},plano:plan,treinos:S.workouts.length,exercicios:(S.exlog||[]).length},null,2),"Seus dados foram copiados");
+  $("[data-delme]").onclick=()=>sheet("trash-2","Pedir exclusão dos dados?","A equipe confirma por e-mail em até 15 dias e apaga seus dados pessoais. Registros financeiros ficam guardados pelo prazo que a lei exige.","Enviar pedido",{danger:true,cancel:"Cancelar",onOk:()=>{DB.leads.push({id:"l"+Date.now(),type:"cliente",name:p.name,contact:inf.email||inf.tel||"app",msg:"Pedido de exclusão de dados (LGPD).",at:Date.now(),status:"novo"});saveDB();toast("Pedido enviado. A empresa foi avisada.");route(true)}});
+}
+
+/* ---------- personal ---------- */
+function pDados(p){
+  const inf=p.info=p.info||{name:p.name,email:p.email},s=p.safety||{},po=p.payout||{};
+  $("#pv").innerHTML=`<div class="grid2" style="margin-top:0">
+  <form class="card" id="pdf"><div class="card-h"><h3>Dados pessoais</h3>${pSafe(p)?pill("ok","shield-check","Verificada"):pill("warn","shield-alert","Verificação incompleta")}</div>
+    ${infoForm("pi",inf,INFO_FIELDS)}
+    <div class="set mt"><div class="field" style="margin:0"><label>CPF</label><input value="${esc(inf.cpf||"***.***.***-**")}" disabled></div><div class="field" style="margin:0"><label>CREF</label><input value="${esc(p.cref)}" disabled></div></div>
+    <div class="field mt" style="margin-bottom:0"><label for="pi-area">Região onde atende</label><input id="pi-area" value="${esc(p.area||"")}"></div>
+    <div class="field mt" style="margin-bottom:0"><label for="pi-bio">Sobre você (aparece para os alunos)</label><textarea id="pi-bio" rows="3">${esc(p.bio||"")}</textarea></div>
+    <button class="btn btn-primary mt"><i data-lucide="save"></i>Salvar alterações</button></form>
+  <div style="display:grid;gap:14px;align-content:start">
+    <section class="card"><div class="card-h"><h3>Meu contrato</h3><button type="button" class="link" data-termsp>Ver termo</button></div>
+      <div class="plist">${dline("Termo de parceria",p.terms?`Aceito em ${new Date(p.terms.at).toLocaleDateString("pt-BR")} · v${p.terms.v}`:`<span style="color:var(--red)">Pendente</span>`)}${dline("Sua parte",pctf(splitOf(p.id))+" de cada mensalidade paga")}${dline("Repasse",`Todo dia ${DB.payoutDay||5} do mês seguinte`)}${dline("Não aliciamento","Durante a parceria e 12 meses depois")}${dline("Vagas",`${p.cap} alunos`)}${dline("Parceira desde",new Date(p.since).toLocaleDateString("pt-BR"))}</div></section>
+    <section class="card"><div class="card-h"><h3>Documentos</h3></div><div class="chk">${[["doc","Documento com foto"],["selfie","Selfie comparada ao documento"],["cref","CREF ativo no conselho"],["crim","Certidão de antecedentes criminais"]].map(([k,t])=>`<div class="${s[k]?"y":""}"><i data-lucide="${s[k]?"circle-check":"circle-dashed"}"></i>${t}</div>`).join("")}</div>
+      <p class="week-note">Para atualizar um documento, envie pela central. A empresa confere e marca aqui.</p></section>
+  </div></div>
+  ${payoutForm(p)}
+  ${privacyBlock()}`;
+  $("#pdf").onsubmit=e=>{e.preventDefault();readInfo($("#pdf"),inf);if(inf.name)p.name=inf.name;if(inf.email)p.email=inf.email;p.area=$("#pi-area").value.trim();p.bio=$("#pi-bio").value.trim();saveDB();toast("Dados salvos");route(true)};
+  $("#pof").onsubmit=e=>{e.preventDefault();p.payout={type:$("#pot").value,key:$("#pok").value.trim()};saveDB();toast("Dados de recebimento salvos")};
+  $("[data-termsp]").onclick=()=>openTerms("personal");
+  $("[data-copyme]").onclick=()=>copyText(JSON.stringify({dados:Object.assign({},inf,{cref:p.cref,area:p.area}),contrato:{termo:p.terms,percentual:splitOf(p.id),repasse_dia:DB.payoutDay},recebimento:{tipo:po.type,chave:po.key}},null,2),"Seus dados foram copiados");
+  $("[data-delme]").onclick=()=>sheet("trash-2","Pedir exclusão dos dados?","Para excluir seus dados, a parceria precisa ser encerrada (aviso de 30 dias). Registros financeiros e o termo ficam guardados pelo prazo que a lei exige.","Enviar pedido",{danger:true,cancel:"Cancelar",onOk:()=>{DB.leads.push({id:"l"+Date.now(),type:"personal",name:p.name,contact:p.email,msg:"Pedido de exclusão de dados e encerramento da parceria (LGPD).",at:Date.now(),status:"novo"});saveDB();toast("Pedido enviado à empresa");route(true)}});
+}
+/* empresa: ficha completa da personal */
+function openPFicha(id){const p=findP(id),inf=p.info||{},s=p.safety||{},po=p.payout||{},r=ratingOf(p.id),n=allClients().filter(c=>c.pid===p.id&&c.status==="ativo").length;
+  const m=document.createElement("div");m.className="drawer";document.body.appendChild(m);document.body.style.overflow="hidden";
+  const close=()=>{removeEventListener("keydown",k);m.remove();document.body.style.overflow="";route(true)};const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);m.onclick=e=>{if(e.target===m)close()};
+  m.innerHTML=`<div class="dp" role="dialog" aria-modal="true" aria-labelledby="pfh"><div class="dp-h"><span class="av">${esc(initials(p.name))}</span><div><h2 id="pfh">${esc(p.name)}</h2><small style="color:var(--muted)">${esc(p.cref)} · ${esc(p.area)}</small></div><button class="rbtn" id="pfx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
+    <div class="sec2"><h3>Dados pessoais</h3><div class="plist">${dline("E-mail",esc(p.email||"—"))}${dline("Celular",esc(inf.tel||"—"))}${dline("CPF",esc(inf.cpf||"***.***.***-**"))}${dline("Nascimento",inf.birth?new Date(inf.birth+"T12:00").toLocaleDateString("pt-BR"):"—")}${dline("Endereço",esc([inf.addr,inf.city].filter(Boolean).join(", ")||"—"))}</div></div>
+    <div class="sec2"><h3>Contrato</h3><div class="plist">${dline("Termo de parceria",p.terms?`Aceito ${new Date(p.terms.at).toLocaleDateString("pt-BR")} · v${p.terms.v}`:"Pendente")}${dline("Percentual",pctf(splitOf(p.id)))}${dline("Recebimento",`Pix ${esc(po.type||"")} ${esc(po.key||"não cadastrado")}`)}${dline("Alunos ativos",`${n} de ${p.cap}`)}${dline("Avaliação (confidencial)",r.n?`${r.avg.toLocaleString("pt-BR",{maximumFractionDigits:1})} ★ · ${r.n} avaliações`:"—")}</div></div>
+    <div class="sec2"><h3>Documentos</h3><div class="chk">${[["doc","Documento com foto"],["selfie","Selfie"],["cref","CREF"],["crim","Antecedentes criminais"]].map(([k2,t])=>`<div class="${s[k2]?"y":""}"><i data-lucide="${s[k2]?"circle-check":"circle-dashed"}"></i>${t}</div>`).join("")}</div></div>
+    <div class="sec2"><button class="btn btn-ghost btn-sm" id="pft"><i data-lucide="file-text"></i>Ver termo de parceria</button></div></div>`;
+  icons();$("#pfx").onclick=close;$("#pft").onclick=()=>openTerms("personal",{onClose:()=>{}});}
+function seedInfo(db){const I={p1:{tel:"(11) 90000-0101",cpf:"***.321.654-**",birth:"1989-03-14",addr:"Rua das Flores, 120",city:"Santo André"},p2:{tel:"(11) 90000-0202",cpf:"***.987.123-**",birth:"1992-08-02",addr:"Av. Goiás, 850",city:"São Caetano do Sul"},p3:{tel:"(11) 90000-0303",cpf:"***.555.222-**",birth:"1985-11-20",addr:"Rua Principal, 45",city:"Diadema"}};
+  db.personals.forEach(p=>{if(!p.info)p.info=Object.assign({name:p.name,email:p.email||mailOf(p.name)},I[p.id]||{})});return db}
+if(!DB.personals.some(p=>p.info)){seedInfo(DB);saveDB()}
 
 /* formulários do site → contatos da empresa */
 function bindSiteForms(){
