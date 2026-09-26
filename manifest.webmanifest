@@ -1,0 +1,17 @@
+{
+  "name": "Primeiro Passo",
+  "short_name": "Primeiro Passo",
+  "description": "Seu primeiro passo na atividade física, no seu tempo.",
+  "lang": "pt-BR",
+  "start_url": "./#/app",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1B3A5C",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
