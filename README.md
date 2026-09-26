@@ -18,6 +18,8 @@ Plataforma de acompanhamento físico em quatro níveis (conhecer, em casa, ao ar
 - **Modo de teste**: a constante `TEST_MODE` (no início do script) libera todas as etapas obrigatórias para explorar, com cada uma sinalizada. Troque para `false` para clientes reais.
 - **Jornada em ordem**: cada etapa só libera depois da anterior (questionário, verificação de identidade, conversa gratuita única de 15 min, pagamento do nível 1 e assim por diante).
 - **Exercícios**: biblioteca com demonstração animada, passo a passo e cuidados; a personal indica os exercícios de cada aluno com séries e recado.
+- **Proteção contra desvio de clientes**: termo de parceria da personal (não aliciamento por 12 meses, pagamentos só pela plataforma), termos de uso do aluno e alerta no chat para contato ou pagamento por fora, registrado para a empresa.
+- **Vídeos**: cada exercício já tem a aba Vídeo; basta preencher o campo `video` do exercício com o link do arquivo.
 - **Segurança**: verificação de identidade obrigatória (dados, CPF, documento, selfie, consentimento LGPD; no site de teste a aprovação é automática), checagem das personais (CREF e antecedentes), código de segurança em cada encontro presencial, check-in, botão de emergência e relato confidencial.
 
 ### Para virar produto real

@@ -991,6 +991,17 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .journey li.tlock .task{border-style:dashed;background:var(--mist)}
 .journey li.tlock .ti{background:#FFF1CC;color:#7A4E00}
 
+.terms{max-width:640px}
+.terms-l{margin:0;padding-left:22px;display:grid;gap:8px;font-size:15px}
+.terms-l b{color:var(--navy)}
+
+.seg.exmode{grid-template-columns:1fr 1fr}
+.seg.exmode button{grid-auto-flow:column;gap:6px;min-height:44px}
+.ex-vid video{width:100%;border-radius:16px;background:#000;aspect-ratio:16/9}
+.vid-soon{display:grid;justify-items:center;gap:6px;text-align:center;border:1.5px dashed var(--line);border-radius:18px;padding:28px 18px;background:var(--mist);aspect-ratio:16/10;align-content:center}
+.vid-soon svg{width:34px;height:34px;color:var(--blue)}
+.vid-soon span{color:var(--muted);font-size:14px;max-width:40ch}
+
 @media (min-width:901px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -1240,7 +1251,7 @@ function site(){
 <section class="sec" id="parceiros"><div class="wrap split">
   <div class="sec-h" style="margin:0"><span class="kicker">Para profissionais</span><h2>É personal e gosta de começar do zero com as pessoas?</h2>
     <p>Procuramos profissionais de educação física que tenham paciência, escutem sem julgar e queiram trabalhar com iniciantes.</p>
-    <ul class="dm"><li><i data-lucide="check"></i><span>Alunos chegam já com questionário de saúde e objetivos respondidos</span></li><li><i data-lucide="check"></i><span>Painel próprio com alertas, agenda, mensagens e ganhos</span></li><li><i data-lucide="check"></i><span>Repasse de ${DB.split}% de cada mensalidade paga</span></li><li><i data-lucide="check"></i><span>Formação em comunicação sem julgamento e atividade física adaptada</span></li></ul></div>
+    <ul class="dm"><li><i data-lucide="check"></i><span>Alunos chegam já com questionário de saúde e objetivos respondidos</span></li><li><i data-lucide="check"></i><span>Painel próprio com alertas, agenda, mensagens e ganhos</span></li><li><i data-lucide="check"></i><span>Repasse de ${DB.split}% de cada mensalidade paga</span></li><li><i data-lucide="check"></i><span>Termo de parceria claro: alunos da plataforma são atendidos só pela plataforma, com repasse garantido</span></li><li><i data-lucide="check"></i><span>Formação em comunicação sem julgamento e atividade física adaptada</span></li></ul></div>
   <button class="btn btn-primary om-btn" data-reveal="fp"><i data-lucide="badge-check"></i>Quero ser parceiro</button>
   <form class="form m-hide" id="fp"><h3>Quero ser parceiro</h3>
     <div class="field"><label for="fpn">Nome</label><input id="fpn" required autocomplete="name"></div>
@@ -1259,6 +1270,7 @@ function site(){
        ["Preciso de atestado médico?","Você responde um questionário de saúde (PAR-Q) antes de começar. Se alguma resposta indicar risco, pedimos a liberação de um médico antes dos treinos."],
        ["Os personals são formados?","Sim. Todos os personals parceiros têm registro no CREF e passam por formação em comunicação sem julgamento e atividade física adaptada."],
        ["Tenho depressão. Isso substitui terapia?","Não. A atividade física ajuda, mas não substitui o acompanhamento psicológico. Se precisar, indicamos profissionais parceiros."],
+       ["Posso contratar a personal por fora?","Não. Aulas e pagamentos são sempre pela plataforma, e isso protege você: fora dela não existe verificação de identidade, código do encontro, central de apoio nem garantia do serviço."],
        ["Posso parar ou voltar um nível?","Pode. Não existe fidelidade e você pode voltar para um nível anterior sempre que precisar."]
       ].map(([q,a])=>`<details><summary>${q}<i data-lucide="plus"></i></summary><p>${a}</p></details>`).join("")}
   </div>
@@ -1596,7 +1608,9 @@ function vChat(){
     <form class="composer" id="cf"><input id="ci" placeholder="Escreva uma mensagem" autocomplete="off" aria-label="Mensagem"><button aria-label="Enviar"><i data-lucide="send"></i></button></form>
   </div>`;
   const box=$("#msgs");box.scrollTop=box.scrollHeight;
-  const send=t=>{if(!t.trim())return;S.messages.push({from:"me",text:t.trim(),t:nowT()});save();vChat();icons();setTimeout(()=>{S.messages.push({from:"them",text:reply(t),t:nowT()});if(S.level===1&&!S.talked&&S.bookings.length){S.talked=true;autoRx();S.messages.push({from:"them",text:"Adorei nossa primeira conversa! Seu plano está pronto. Quando se sentir à vontade, é só tocar em \"subir de nível\" no Início. 💛",t:nowT()})}save();if(location.hash.includes("mensagens")){vChat();icons()}},1200)};
+  if(window._chd){$("#ci").value=window._chd;window._chd=""}
+  const send=t=>{if(!t.trim())return;offCheck(t.trim(),"cliente","me",S.pid||"p1",()=>{window._chd="";doSend(t)},d=>{window._chd=d})};
+  const doSend=t=>{S.messages.push({from:"me",text:t.trim(),t:nowT()});save();vChat();icons();setTimeout(()=>{S.messages.push({from:"them",text:reply(t),t:nowT()});if(S.level===1&&!S.talked&&S.bookings.length){S.talked=true;autoRx();S.messages.push({from:"them",text:"Adorei nossa primeira conversa! Seu plano está pronto. Quando se sentir à vontade, é só tocar em \"subir de nível\" no Início. 💛",t:nowT()})}save();if(location.hash.startsWith("#/app/mensagens")){vChat();icons()}},1200)};
   $("#cf").onsubmit=e=>{e.preventDefault();send($("#ci").value)};
   document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>send(b.dataset.q));
 }
@@ -1625,6 +1639,7 @@ function vPerfil(){
   <div class="block"><div class="block-h"><h3>Segurança</h3></div><div class="tasks">
     <a class="task" href="#/app/verificacao" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="shield-check"></i></span><span><b>Verificação de identidade</b><small>${KYC_PILL[kycOf("me").status][2]}</small></span><i class="go" data-lucide="chevron-right"></i></a>
     ${rateCard()}
+    <button class="task" id="myterms" style="text-align:left"><span class="ti"><i data-lucide="file-text"></i></span><span><b>Termos de uso</b><small>Aulas e pagamentos sempre pelo app</small></span><i class="go" data-lucide="chevron-right"></i></button>
     <button class="task" data-sos style="text-align:left"><span class="ti"><i data-lucide="siren"></i></span><span><b>Emergência e relato confidencial</b><small>Polícia, SAMU, central e canal de relato</small></span><i class="go" data-lucide="chevron-right"></i></button></div></div>
   <div class="block" style="display:grid;gap:10px"><div class="block-h" style="margin-bottom:2px"><h3>Preferências</h3></div>
     <button class="toggle-row" role="switch" aria-checked="${isDark()}" id="tg-theme"><i data-lucide="moon"></i><span><b>Tema escuro</b></span><span class="sw"></span></button>
@@ -1637,6 +1652,7 @@ function vPerfil(){
   <p class="note"><i data-lucide="heart"></i>Se estiver passando por um momento difícil, o CVV atende 24 horas pelo 188.</p>`;
   $("#tg-theme").onclick=toggleTheme;
   document.querySelectorAll("#view [data-sos]").forEach(b=>b.onclick=()=>openSOS("cliente"));
+  $("#myterms").onclick=()=>openTerms("cliente");
   document.querySelectorAll("[data-mypay]").forEach(b=>b.onclick=()=>openCheckout(b.dataset.mypay));
   const rt=$("#rate");if(rt)rt.onclick=openRating;
   $("#tg-sound").onclick=()=>{S.sound=!S.sound;save();if(S.sound)beep(880);vPerfil();icons()};
@@ -1733,7 +1749,7 @@ function seedDB(){
   const db={v:1,personals,clients,bookings,leads,prices:[100,180,480,560],split:70,paid:{}};
   const cur=mkey(now),prev=monthsBack(2)[0];
   billsOf(db,clients).forEach(b=>{db.paid[b.key]=b.m<cur?!(b.cid==="c10"&&b.m>=prev):rnd()<.6});
-  return seedSafety(seedPay(seedFin(db)));
+  return seedTerms(seedSafety(seedPay(seedFin(db))));
 }
 let DB=loadDB();
 function loadDB(){try{const r=localStorage.getItem(DBKEY);if(r)return JSON.parse(r)}catch(e){}return seedDB()}
@@ -1925,6 +1941,8 @@ function panelPersonal(tab){
   const b2=$("#bk2");if(b2)b2.onclick=()=>setSess({role:"admin"});
   ({hoje:pHoje,alunos:pAlunos,agenda:pAgenda,mensagens:pMsgs,exercicios:pExs,ganhos:pGanhos}[tab]||pHoje)(p,cs);
   bindOpen("personal");icons();
+  window._tseen=window._tseen||{};
+  if(!p.terms&&(!TEST_MODE||!window._tseen[p.id])){window._tseen[p.id]=1;openTerms("personal",{required:true,accept:()=>{p.terms={v:TERMS_V,at:Date.now()};saveDB()}})}
 }
 function pHoje(p,cs){
   const act=cs.filter(c=>c.status==="ativo"),t0=sod();
@@ -1938,7 +1956,9 @@ function pHoje(p,cs){
   </div>
   <div class="grid2"><section class="card"><div class="card-h"><h3>Seus alunos por nível</h3></div>${hbars(LEVELS.map(l=>({label:`${l.n} · ${l.t}`,v:act.filter(c=>c.level===l.n).length})))}</section>
   <section class="card"><div class="card-h"><h3>Sua verificação</h3>${pSafe(p)?pill("ok","shield-check","Completa"):pill("warn","shield-alert","Incompleta")}</div><div class="chk">${[["doc","Documento com foto"],["selfie","Selfie comparada ao documento"],["cref","CREF ativo no conselho"],["crim","Certidão de antecedentes criminais"]].map(([k,t])=>`<div class="${(p.safety||{})[k]?"y":""}"><i data-lucide="${(p.safety||{})[k]?"circle-check":"circle-dashed"}"></i>${t}</div>`).join("")}</div>
-    <p class="week-note">${pSafe(p)?"Tudo em dia. Você pode fazer encontros presenciais.":"Encontros presenciais ficam bloqueados até a empresa conferir todos os itens."} Cada encontro presencial tem um código: diga ao aluno quando chegar.</p></section></div>`;
+    <p class="week-note">${pSafe(p)?"Tudo em dia. Você pode fazer encontros presenciais.":"Encontros presenciais ficam bloqueados até a empresa conferir todos os itens."} Cada encontro presencial tem um código: diga ao aluno quando chegar.</p>
+    <button class="task mt" data-terms style="text-align:left"><span class="ti"><i data-lucide="file-signature"></i></span><span><b>Termo de parceria</b><small>${p.terms?`Aceito em ${new Date(p.terms.at).toLocaleDateString("pt-BR")} · versão ${p.terms.v}`:"Pendente: toque para ler e aceitar"}</small></span><i class="go" data-lucide="chevron-right"></i></button></section></div>`;
+  $("[data-terms]").onclick=()=>openTerms("personal",p.terms?{}:{required:true,accept:()=>{p.terms={v:TERMS_V,at:Date.now()};saveDB()}});
 }
 let PF={q:"",lv:"0",st:"ativo"};
 function clientTable(list,role){
@@ -2003,7 +2023,9 @@ function pMsgs(p,cs){
   if(!wide)document.body.style.overflow="hidden";
   const box=$("#pmsgs");box.scrollTop=box.scrollHeight;
   const cvb=$("#cvb");if(cvb)cvb.onclick=()=>{PM.cid=null;route(true)};
-  const send=t=>{if(!t.trim())return;pushMsg(c.id,t.trim());route(true);
+  if(PM.draft){$("#pci").value=PM.draft;PM.draft=""}
+  const send=t=>{if(!t.trim())return;offCheck(t.trim(),"personal",c.id,c.pid,()=>{PM.draft="";doSend(t)},d=>{PM.draft=d})};
+  const doSend=t=>{pushMsg(c.id,t.trim());route(true);
     if(!c.you)setTimeout(()=>{const x=DB.clients.find(y=>y.id===c.id);if(!x)return;x.msgs.push({from:"me",text:["Obrigado! 😊","Combinado!","Vou tentar hoje à noite.","Valeu pelo cuidado 💛"][x.msgs.length%4],t:nowT(),at:Date.now()});saveDB();if(location.hash.includes("personal/mensagens")&&!document.querySelector(".drawer"))route(true)},1800)};
   $("#pcf").onsubmit=e=>{e.preventDefault();send($("#pci").value)};
   document.querySelectorAll("[data-tq]").forEach(b=>b.onclick=()=>send(b.dataset.tq));
@@ -2013,7 +2035,7 @@ function pMsgs(p,cs){
 function panelAdmin(tab){
   if(SESS.role!=="admin"){location.hash="#/entrar";return}
   const bl=bills(),late=bl.filter(b=>b.status==="atrasado").length,nl=DB.leads.filter(l=>l.status==="novo").length,pp=DB.personals.filter(p=>p.status==="pendente").length;
-  const tabs=[{k:"geral",ic:"layout-dashboard",l:"Visão geral",s:"Geral"},{k:"clientes",ic:"users",l:"Clientes"},{k:"personais",ic:"badge-check",l:"Personais",cnt:pp},{k:"financeiro",ic:"wallet",l:"Financeiro",s:"Finanças",cnt:late},{k:"seguranca",ic:"shield-check",l:"Segurança",cnt:allClients().filter(c=>kycOf(c.id).status==="analise").length+DB.incidents.filter(i=>i.status==="aberto").length},{k:"leads",ic:"inbox",l:"Contatos",cnt:nl},{k:"ajustes",ic:"settings",l:"Ajustes"}];
+  const tabs=[{k:"geral",ic:"layout-dashboard",l:"Visão geral",s:"Geral"},{k:"clientes",ic:"users",l:"Clientes"},{k:"personais",ic:"badge-check",l:"Personais",cnt:pp},{k:"financeiro",ic:"wallet",l:"Financeiro",s:"Finanças",cnt:late},{k:"seguranca",ic:"shield-check",l:"Segurança",cnt:allClients().filter(c=>kycOf(c.id).status==="analise").length+DB.incidents.filter(i=>i.status==="aberto").length+(DB.flags||[]).filter(f=>f.status==="aberto").length},{k:"leads",ic:"inbox",l:"Contatos",cnt:nl},{k:"ajustes",ic:"settings",l:"Ajustes"}];
   const T={geral:["Painel da empresa","Visão geral"],clientes:["Todos os clientes","Clientes"],personais:["Equipe e novos parceiros","Personais"],financeiro:["Mensalidades e repasses","Financeiro"],leads:["Mensagens do site","Contatos"],seguranca:["Verificações, encontros e relatos","Segurança"],ajustes:["Preços, pagamentos e dados","Ajustes"]}[tab]||["",""];
   shell({role:"Empresa",tabs,tab,base:"#/admin",me:{name:"Administração",sub:"Primeiro Passo"},title:T[1],kick:T[0]});
   ({geral:aGeral,clientes:aClientes,personais:aPersonais,financeiro:aFin,seguranca:aSeg,leads:aLeads,ajustes:aAjustes}[tab]||aGeral)(bl);
@@ -2025,6 +2047,7 @@ function aGeral(bl){
   const novos=cs.filter(c=>mkey(c.since)===cur).length,idle=act.filter(c=>c.level>=2&&daysAgo(lastAct(c))>=14);
   const pend=[...DB.personals.filter(p=>p.status==="pendente").map(p=>["badge-check",`${p.name} quer ser personal parceira`,"#/admin/personais","warn","Analisar"]),
     ...(late.length?[["circle-alert",`${late.length} mensalidades atrasadas (${money(late.reduce((s,b)=>s+b.amount,0))})`,"#/admin/financeiro","bad","Ver"]]:[]),
+    ...(DB.flags||[]).filter(f=>f.status==="aberto").map(f=>["shield-alert",`Possível contato por fora: ${f.pname.split(" ")[0]} e ${f.cname.split(" ")[0]}`,"#/admin/seguranca",f.from==="personal"?"bad":"warn","Ver"]),
     ...DB.incidents.filter(i=>i.status==="aberto").map(i=>["message-square-warning",`Relato: ${i.type.toLowerCase()} (${i.who})`,"#/admin/seguranca",i.sev==="alta"?"bad":"warn","Ver"]),
     ...allClients().filter(c=>kycOf(c.id).status==="analise").map(c=>["shield-check",`${c.name} enviou documentos para verificação`,"#/admin/seguranca","warn","Conferir"]),
     ...DB.personals.filter(p=>p.status==="ativo").flatMap(p=>monthsBack(6).filter(m=>payoutState(p.id,m).late&&fin(bills().filter(b=>b.pid===p.id&&b.m===m)).rep>0).map(m=>["wallet",`Repasse de ${mlabel(m,1)} da ${p.name.split(" ")[0]} está atrasado`,"#/admin/financeiro","bad","Pagar"])),
@@ -2055,7 +2078,7 @@ function aPersonais(bl){
       <div style="display:flex;gap:6px;flex-wrap:wrap">${p.status==="ativo"?pill("ok","circle-check","Ativa"):p.status==="pendente"?pill("warn","hourglass","Aguardando análise"):pill("mute","pause","Inativa")}${p.spec.map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div>
       <p class="dm" style="color:var(--muted);font-size:14.5px">${esc(p.bio||"")}</p>
       ${p.status==="ativo"?`<div><div style="display:flex;justify-content:space-between;font-size:14px"><span>Alunos</span><b>${n} de ${p.cap}</b></div><div class="prog mt" style="margin-top:6px"><i style="width:${Math.min(100,n/p.cap*100)}%"></i></div></div>
-      <div class="kv"><div><span>Faturado no mês</span><b>${money(rev)}</b></div><div><span>Repasse (${pctf(splitOf(p.id))})</span><b>${money(rev*splitOf(p.id))}</b></div><div><span>Avaliação (${ratingOf(p.id).n})</span><b>${ratingOf(p.id).n?ratingOf(p.id).avg.toLocaleString("pt-BR",{maximumFractionDigits:1})+" ★":"—"}</b></div></div>
+      <div class="kv"><div><span>Termo de parceria</span><b>${p.terms?`Aceito ${new Date(p.terms.at).toLocaleDateString("pt-BR")}`:`<span style="color:var(--red)">Pendente</span>`}</b></div><div><span>Faturado no mês</span><b>${money(rev)}</b></div><div><span>Repasse (${pctf(splitOf(p.id))})</span><b>${money(rev*splitOf(p.id))}</b></div><div><span>Avaliação (${ratingOf(p.id).n})</span><b>${ratingOf(p.id).n?ratingOf(p.id).avg.toLocaleString("pt-BR",{maximumFractionDigits:1})+" ★":"—"}</b></div></div>
       <div class="acts pc-foot"><button class="btn btn-ghost btn-sm" data-asp="${p.id}"><i data-lucide="log-in"></i>Ver o painel dela</button><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="inativo"><i data-lucide="pause"></i>Desativar</button></div>`
       :p.status==="pendente"?`<div class="acts pc-foot"><button class="btn btn-primary btn-sm" data-pst="${p.id}" data-v="ativo"><i data-lucide="check"></i>Aprovar</button><button class="btn btn-ghost btn-sm" data-pdel="${p.id}"><i data-lucide="x"></i>Recusar</button></div>`
       :`<div class="acts pc-foot"><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="ativo"><i data-lucide="play"></i>Reativar</button></div>`}</article>`}).join("")}</div>
@@ -2362,6 +2385,7 @@ function vVerif(){
     <label class="chkline big"><input type="checkbox" id="c1" ${KV.ok.c1?"checked":""}> Autorizo o uso dos meus dados pessoais para verificar minha identidade e proteger os encontros presenciais.</label>
     <label class="chkline big"><input type="checkbox" id="c2" ${KV.ok.c2?"checked":""}> Autorizo o tratamento da minha biometria facial (dado sensível, LGPD art. 11) só para confirmar que sou eu.</label>
     <label class="chkline big"><input type="checkbox" id="c3" ${KV.ok.c3?"checked":""}> Li e concordo com o código de conduta: respeito, sem assédio, sem discriminação, e uso do código de segurança nos encontros.</label>
+    <label class="chkline big"><input type="checkbox" id="c4" ${KV.ok.c4?"checked":""}> Entendo que aulas e pagamentos são sempre pelo app, e que contratar a personal por fora viola os <a href="#" data-terms-c style="color:var(--blue);font-weight:700">termos de uso</a>.</label>
     <div class="info"><i data-lucide="lock"></i><span>Seus dados ficam criptografados e só a equipe de segurança acessa. Personais veem apenas seu primeiro nome, a cidade e o código do encontro.</span></div>`;
   $("#view").innerHTML=`<div class="hello"><small>Segurança · passo ${st+1} de 4</small><h2>Verificar identidade</h2></div>${bar}<div class="vbody">${body}</div>
     <div class="vfoot">${st?`<button class="btn btn-ghost" id="kbk"><i data-lucide="arrow-left"></i>Voltar</button>`:`<a class="btn btn-ghost" href="${TEST_MODE?"#/app":"#/"}">${TEST_MODE?"Pular (teste)":"Sair"}</a>`}<button class="btn btn-primary" id="knx">${st===3?"Enviar para análise":"Continuar"}<i data-lucide="arrow-right"></i></button></div>
@@ -2372,7 +2396,8 @@ function vVerif(){
   document.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{KV.d.dt=b.dataset.dt;vVerif()});
   document.querySelectorAll("input[type=file]").forEach(inp=>inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;const u=URL.createObjectURL(f);
     if(inp.id==="docf")KV.doc=u;if(inp.id==="docb")KV.docB=u;if(inp.id==="self"){KV.selfie=u;KV.ok.face=false;setTimeout(()=>{KV.ok.face=true;if(location.hash.includes("verificacao"))vVerif()},1600)}vVerif()});
-  ["c1","c2","c3"].forEach(id=>{const c=$("#"+id);if(c)c.onchange=()=>{KV.ok[id]=c.checked}});
+  document.querySelectorAll("[data-terms-c]").forEach(a=>a.onclick=e=>{e.preventDefault();openTerms("cliente",{onClose:()=>{}})});
+  ["c1","c2","c3","c4"].forEach(id=>{const c=$("#"+id);if(c)c.onchange=()=>{KV.ok[id]=c.checked}});
   const bk=$("#kbk");if(bk)bk.onclick=()=>{save0();KV.step--;vVerif();scrollTo(0,0)};
   $("#knx").onclick=()=>{
     if(st===0){save0();const d=KV.d,age=d.birth?(Date.now()-new Date(d.birth))/(365.25*D1):0;
@@ -2381,7 +2406,7 @@ function vVerif(){
       if(age<18){toast("Menores de 18 anos precisam de um responsável. Fale com a gente pelo chat.");return}}
     if(st===1&&!(KV.doc&&KV.docB)){toast("Envie a frente e o verso do documento");return}
     if(st===2&&!(KV.selfie&&KV.ok.face)){toast(KV.selfie?"Aguarde a comparação terminar":"Tire ou envie sua selfie");return}
-    if(st===3){if(!(KV.ok.c1&&KV.ok.c2&&KV.ok.c3)){toast("Marque as três autorizações para continuar");return}
+    if(st===3){if(!(KV.ok.c1&&KV.ok.c2&&KV.ok.c3&&KV.ok.c4)){toast("Marque as quatro autorizações para continuar");return}
       [KV.doc,KV.docB,KV.selfie].forEach(u=>{try{u&&URL.revokeObjectURL(u)}catch(e){}});
       S.kyc={status:"analise",at:Date.now(),cpf:maskCpf(KV.d.cpf),city:KV.d.city.trim(),emerg:`${KV.d.en.trim()} (${KV.d.er})`,emergTel:KV.d.et,doc:KV.d.dt||"RG"};save();
       KV={step:0,d:{},doc:null,docB:null,selfie:null,ok:{}};toast("Enviado! A equipe confere em até 1 dia útil.");vVerif();icons();return}
@@ -2445,12 +2470,19 @@ function aSeg(){
   <section class="mt"><div class="card-h"><h3>Relatos</h3>${pill("info","shield-check","Confidencial")}</div><div class="pgrid">${inc.length?inc.map(i=>`<article class="lead"><div class="top">${pill(SEV[i.sev][0],"flag","Prioridade "+SEV[i.sev][1].toLowerCase())}${i.status==="aberto"?pill("warn","clock","Aberto"):pill("ok","check","Resolvido")}<small style="margin-left:auto">${rel(i.at)}</small></div>
     <b>${esc(i.type)}</b><small>De ${i.from==="cliente"?"cliente":"personal"}: ${esc(i.who)}${i.about&&i.about!=="—"?` · sobre ${esc(i.about)}`:""}</small><p>“${esc(i.text)}”</p>
     <div class="pc-foot">${i.status==="aberto"?`<button class="btn btn-primary btn-sm" data-inc="${i.id}"><i data-lucide="check"></i>Marcar resolvido</button>`:`<button class="btn btn-ghost btn-sm" data-inc="${i.id}">Reabrir</button>`}</div></article>`).join(""):`<div class="empty">Nenhum relato.</div>`}</div></section>
+  <section class="mt"><div class="card-h"><h3>Alertas de conduta</h3>${pill("info","shield-check","Contato ou pagamento fora da plataforma")}</div>
+    ${(DB.flags||[]).length?`<div class="pgrid">${DB.flags.slice().sort((a,b)=>(a.status==="aberto"?0:1)-(b.status==="aberto"?0:1)||b.at-a.at).map(f=>`<article class="lead"><div class="top">${f.from==="personal"?pill("bad","user-round-x","Enviado pela personal"):pill("warn","user-round","Enviado pelo aluno")}${f.status==="aberto"?pill("warn","clock","Aberto"):pill("ok","check","Tratado")}<small style="margin-left:auto">${rel(f.at)}</small></div>
+      <small>${esc(f.pname)} ↔ ${esc(f.cname)}</small><p>“${esc(f.text)}”</p>
+      <div class="pc-foot">${f.status==="aberto"?`<button class="btn btn-primary btn-sm" data-flag="${f.id}" data-v="tratado"><i data-lucide="check"></i>Marcar tratado</button>${f.from==="personal"?`<button class="btn btn-ghost btn-sm" data-flag="${f.id}" data-v="adv"><i data-lucide="file-warning"></i>Advertir personal</button>`:""}`:`<button class="btn btn-ghost btn-sm" data-flag="${f.id}" data-v="aberto">Reabrir</button>`}</div></article>`).join("")}</div>`:`<div class="empty">Nenhum alerta. As mensagens do chat são checadas automaticamente.</div>`}
+    <p class="week-note">O chat avisa antes de enviar mensagens com telefone, redes sociais ou pagamento por fora. Se a pessoa enviar mesmo assim, o alerta aparece aqui. Termo de parceria, item 4: não aliciamento por 12 meses.</p></section>
   <section class="card mt"><div class="card-h"><h3>Verificação das personais</h3></div><div class="rows">${DB.personals.filter(p=>p.status!=="inativo").map(p=>{const s=p.safety||{};return`<div class="rw"><span class="av">${esc(initials(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.cref)}</small></span><span class="end">${[["doc","Documento"],["selfie","Selfie"],["cref","CREF"],["crim","Antecedentes"]].map(([k,t])=>`<button class="pill ${s[k]?"ok":"mute"} tog" data-ps="${p.id}" data-k="${k}" aria-pressed="${!!s[k]}"><i data-lucide="${s[k]?"check":"circle-dashed"}"></i>${t}</button>`).join("")}</span></div>`}).join("")}</div>
     <p class="week-note">Uma personal só recebe alunos para encontros presenciais com os quatro itens conferidos. Toque para marcar ou desmarcar.</p></section>`;
   document.querySelectorAll("[data-kyc]").forEach(b=>b.onclick=()=>{const id=b.dataset.kyc,v=b.dataset.v;
     if(id==="me"){S.kyc=Object.assign(S.kyc||{},{status:v,at:Date.now()});save();S.messages.push({from:"them",text:v==="verificado"?"Sua identidade foi verificada. Agora podemos marcar encontros presenciais com segurança. 🛡️":"Não conseguimos confirmar sua identidade com as fotos enviadas. Pode tentar de novo pelo seu perfil?",t:nowT()});S.unread++;save()}
     else{DB.kyc[id]=Object.assign(DB.kyc[id]||{},{status:v});saveDB()}
     toast(v==="verificado"?"Identidade aprovada":"Verificação recusada");route(true)});
+  document.querySelectorAll("[data-flag]").forEach(b=>b.onclick=()=>{const f=DB.flags.find(x=>x.id===b.dataset.flag),v=b.dataset.v;
+    if(v==="adv"){f.status="tratado";f.warned=Date.now();toast(`Advertência registrada para ${f.pname.split(" ")[0]}`)}else{f.status=v;toast(v==="tratado"?"Alerta tratado":"Alerta reaberto")}saveDB();route(true)});
   document.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{const i=DB.incidents.find(x=>x.id===b.dataset.inc);i.status=i.status==="aberto"?"resolvido":"aberto";saveDB();route(true)});
   document.querySelectorAll("[data-ps]").forEach(b=>b.onclick=()=>{const p=findP(b.dataset.ps);p.safety=p.safety||{};p.safety[b.dataset.k]=!p.safety[b.dataset.k];saveDB();route(true)});
 }
@@ -2572,7 +2604,9 @@ function exDetail(id,opts={}){
   const cs=opts.role==="personal"?myClients(curP()).filter(c=>c.status==="ativo"):[];
   md.innerHTML=`<div class="sheet pay" role="dialog" aria-modal="true" aria-labelledby="exh">
     <div class="pay-h"><div><small>${ex.cat}${ex.seat?" · dá para fazer sentado":""}</small><h3 id="exh">${ex.n}</h3></div><button class="rbtn" id="exx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
-    <div class="ex-stage"><div id="exfig">${fig(ex,"lg")}</div>
+    <div class="seg exmode" role="tablist" aria-label="Formato da demonstração"><button role="tab" aria-pressed="true" data-exm="fig"><i data-lucide="person-standing"></i>Boneco</button><button role="tab" aria-pressed="false" data-exm="vid"><i data-lucide="video"></i>Vídeo</button></div>
+    <div class="ex-vid" id="exvid" hidden>${ex.video?`<video src="${esc(ex.video)}" controls playsinline preload="metadata"></video>`:`<div class="vid-soon"><i data-lucide="clapperboard"></i><b>Vídeo em breve</b><span>Aqui vai entrar o vídeo gravado pela personal ensinando este exercício. Enquanto isso, o boneco mostra o movimento para você não ficar parado nos dias sem acompanhamento.</span></div>`}</div>
+    <div class="ex-stage" id="exstage"><div id="exfig">${fig(ex,"lg")}</div>
       <p class="ex-cap" id="excap" aria-live="polite">1 · ${esc(ex.steps[0])}</p>
       <div class="ex-ctl"><button class="btn btn-ghost btn-sm" id="expp"><i data-lucide="pause"></i>Pausar</button><button class="btn btn-ghost btn-sm" id="exsl" aria-pressed="false"><i data-lucide="turtle"></i>Mais devagar</button></div></div>
     ${rx?`<div class="alert ok" style="margin:0"><i data-lucide="user-round-check"></i><span><b>${esc(rx.dose)}</b>${rx.note?` · ${esc(rx.note)}`:""}<br><small>Indicado por ${esc(PERSONAL.name.split(" ")[0])}</small></span></div>`:`<p class="exhint" style="margin:0;text-align:left">Sugestão: ${esc(ex.dose)}</p>`}
@@ -2582,6 +2616,7 @@ function exDetail(id,opts={}){
     ${opts.role==="personal"&&cs.length?`<div class="toolbar" style="margin:0"><select id="exto" aria-label="Aluno">${cs.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select><button class="btn btn-primary btn-sm" id="exrx"><i data-lucide="send"></i>Indicar</button></div>`:""}
   </div>`;icons();
   $("#exx").onclick=close;
+  md.querySelectorAll("[data-exm]").forEach(b=>b.onclick=()=>{const v=b.dataset.exm==="vid";md.querySelectorAll("[data-exm]").forEach(x=>x.setAttribute("aria-pressed",x===b));$("#exvid").hidden=!v;$("#exstage").hidden=v;const vd=md.querySelector("#exvid video");if(vd&&!v)vd.pause()});
   /* legenda acompanha o boneco: posição inicial → movimento → volta */
   /* legenda acompanha o boneco: indo = passo 2 (o movimento), voltando = passo 3 */
   let last=-1;const show=()=>{const sv=md.querySelector("#exfig svg");if(!sv||sv._seg==null)return;const nseg=figSeq(ex).length-1,step=nseg>2?1:(sv._seg===0?1:Math.min(2,ex.steps.length-1));if(step===last)return;last=step;
@@ -2620,6 +2655,55 @@ function pExs(p){
   document.querySelectorAll("[data-pxf]").forEach(b=>b.onclick=()=>{PXF=b.dataset.pxf;route(true)});
   document.querySelectorAll(".exc[data-ex]").forEach(b=>b.onclick=()=>exDetail(b.dataset.ex,{role:"personal"}));
 }
+
+/* ================== TERMOS E PROTEÇÃO CONTRA DESVIO DE CLIENTES ==================
+   Modelos ilustrativos: o texto final deve ser revisado por um advogado. */
+const TERMS_V="1.0";
+const TERMS={
+ personal:{t:"Termo de parceria da personal",items:()=>[
+  ["Objeto","A personal atende, como profissional autônoma parceira, clientes que chegam pela plataforma Primeiro Passo."],
+  ["Remuneração",`${pctf(DB.split/100)} de cada mensalidade paga (ou o percentual combinado e registrado no painel), repassado até o dia ${DB.payoutDay||5} do mês seguinte, na chave Pix cadastrada.`],
+  ["Pagamentos só pela plataforma","É proibido receber qualquer valor diretamente de clientes da plataforma, em dinheiro, Pix, cartão ou outro meio."],
+  ["Não aliciamento","Durante a parceria e por 12 meses depois do término, a personal não pode oferecer, aceitar ou prestar serviços por fora a clientes que conheceu pela plataforma, nem incentivá-los a sair dela."],
+  ["Contato pelo app","A comunicação com os alunos acontece pelo app. Não é permitido passar telefone, redes sociais ou convidar para outros canais com o objetivo de contratar por fora."],
+  ["Confidencialidade e LGPD","Os dados dos alunos servem só para o atendimento. É proibido copiar, exportar ou usar para outros fins."],
+  ["Conduta e segurança","Respeito sempre, sem assédio nem discriminação. Código do encontro e check-in são obrigatórios nos encontros presenciais."],
+  ["Penalidades","O descumprimento dos itens 3 a 6 gera descredenciamento imediato e multa de 10 vezes o valor da última mensalidade de cada cliente envolvido, além de perdas e danos."],
+  ["Vigência","Prazo indeterminado. Qualquer parte pode encerrar com 30 dias de aviso. Os itens 4 e 6 continuam valendo depois do fim."]]},
+ cliente:{t:"Termos de uso do aluno",items:()=>[
+  ["Contratação pela plataforma","Planos, aulas e pagamentos acontecem sempre pelo app."],
+  ["Sem contratação por fora","Contratar a personal diretamente, fora da plataforma, durante o acompanhamento ou em até 12 meses depois, viola estes termos e encerra o acesso ao app."],
+  ["Por que isso protege você","Fora da plataforma não existe verificação de identidade, código do encontro, check-in, central de apoio nem garantia do serviço."],
+  ["Respeito","Vale o mesmo código de conduta para alunos e personais."],
+  ["Seus dados","Tratados conforme a LGPD. Você pode pedir a exclusão quando quiser."]]}
+};
+function openTerms(kind,opts={}){
+  const T=TERMS[kind],md=document.createElement("div");md.className="modal";document.body.appendChild(md);document.body.style.overflow="hidden";
+  const close=()=>{removeEventListener("keydown",k);md.remove();document.body.style.overflow="";if(opts.onClose)opts.onClose();else route(true)};
+  const k=e=>{if(e.key==="Escape"&&!opts.required)close()};addEventListener("keydown",k);md.onclick=e=>{if(e.target===md&&!opts.required)close()};
+  md.innerHTML=`<div class="sheet pay terms" role="dialog" aria-modal="true" aria-labelledby="tmh">
+    <div class="pay-h"><div><small>Versão ${TERMS_V} · modelo ilustrativo</small><h3 id="tmh">${T.t}</h3></div>${opts.required&&!TEST_MODE?"":`<button class="rbtn" id="tmx" aria-label="Fechar"><i data-lucide="x"></i></button>`}</div>
+    ${opts.required?`<div class="alert warn" style="margin:0"><i data-lucide="file-signature"></i><span><b>Obrigatório para atender alunos.</b>${TEST_MODE?`<br>${testTag()}`:""}</span></div>`:""}
+    <ol class="terms-l">${T.items().map(([h,t],i)=>`<li><b>${h}.</b> ${t}</li>`).join("")}</ol>
+    <p class="pay-demo"><i data-lucide="scale"></i>Texto de exemplo. Antes de usar com pessoas reais, revise com um advogado.</p>
+    ${opts.accept?`<label class="chkline big"><input type="checkbox" id="tmok"> Li e aceito o ${T.t.toLowerCase()}.</label><button class="btn btn-primary" id="tmgo" disabled><i data-lucide="file-check"></i>Aceitar e continuar</button>${TEST_MODE?`<button class="btn btn-ghost" id="tmlater">Ver depois (teste)</button>`:""}`:""}
+  </div>`;icons();
+  const x=$("#tmx");if(x)x.onclick=close;
+  const ok=$("#tmok");if(ok){ok.onchange=()=>{$("#tmgo").disabled=!ok.checked};$("#tmgo").onclick=()=>{opts.accept();close();toast("Termo aceito. Obrigado!")}}
+  const lt=$("#tmlater");if(lt)lt.onclick=close;
+}
+/* mensagens que combinam contato ou pagamento por fora */
+const OFFPLAT=/(\(?\b\d{2}\)?\s?9?\d{4}[-\s.]?\d{4}\b)|whats|zap\b|telegram|pix\s*(direto|pra mim|pra você|meu)|me paga (direto|no pix)|por fora|fora do app|fora da plataforma|direto comigo|meu (n[uú]mero|contato|insta|telefone|celular)|instagram|\binsta\b|@[a-z0-9_.]{3,}|sem (a )?(empresa|plataforma|app)|mais barato (comigo|direto)/i;
+function offCheck(text,from,cid,pid,send,keep){
+  if(!OFFPLAT.test(text))return send();
+  const c=findC(cid),p=findP(pid);
+  const log=()=>{DB.flags=DB.flags||[];DB.flags.push({id:"f"+Date.now(),from,cid,pid,cname:c?c.name:"",pname:p?p.name:"",text,at:Date.now(),status:"aberto"});saveDB()};
+  if(from==="personal")sheet("shield-alert","Contato ou pagamento por fora?","Esta mensagem parece combinar contato ou pagamento fora da plataforma. Isso vai contra o item 4 do termo de parceria (não aliciamento). Se enviar, ela fica registrada para a empresa.","Enviar mesmo assim",{danger:true,cancel:"Editar mensagem",onOk:()=>{log();send()}});
+  else sheet("shield-check","Combine tudo pelo app","Por segurança, aulas e pagamentos ficam sempre pela plataforma. Por fora não há verificação, código do encontro, central de apoio nem garantia.","Enviar mesmo assim",{cancel:"Editar mensagem",onOk:()=>{log();send()}});
+  keep(text);
+}
+function seedTerms(db){db.flags=[{id:"f0",from:"personal",cid:"c4",pid:"p2",cname:"Carlos Eduardo Santos",pname:"Rafael Nunes",text:"Se quiser, me chama no zap que faço um valor melhor por fora.",at:Date.now()-3*D1,status:"aberto"}];db.personals.forEach(p=>{if(p.status==="ativo"&&!p.terms)p.terms={v:"1.0",at:p.since+2*D1}});return db}
+if(!DB.flags){seedTerms(DB);saveDB()}
 
 /* formulários do site → contatos da empresa */
 function bindSiteForms(){
