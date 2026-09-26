@@ -982,6 +982,15 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .soon p{color:var(--muted);font-size:15px}
 .soon-steps{margin:12px 0 0;padding-left:20px;display:grid;gap:4px;font-size:14.5px}
 
+.tmode{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:12px;font-weight:700;color:#7A4E00;background:#FFF1CC;border:1px dashed #D9A441;border-radius:99px;padding:2px 9px}
+.tmode svg{width:13px;height:13px}
+:root[data-theme="dark"] .tmode{color:#F0BE5A;background:#3A2F17}
+.tbar{max-width:760px;margin:10px auto 0;padding:8px 14px;display:flex;gap:8px;align-items:center;font-size:13px;font-weight:600;color:#7A4E00;background:#FFF1CC;border:1px dashed #D9A441;border-radius:12px;width:calc(100% - 40px)}
+.tbar svg{width:16px;height:16px;flex:none}
+:root[data-theme="dark"] .tbar{color:#F0BE5A;background:#3A2F17}
+.journey li.tlock .task{border-style:dashed;background:var(--mist)}
+.journey li.tlock .ti{background:#FFF1CC;color:#7A4E00}
+
 @media (min-width:901px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -1070,6 +1079,10 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
 /* ================== HELPERS ================== */
 const $=s=>document.querySelector(s);
+/* MODO DE TESTE: true libera todas as etapas obrigatórias para explorar o site, sinalizando cada uma.
+   Para clientes reais, troque para false e as travas voltam a valer. */
+const TEST_MODE=true;
+const testTag=(t="Obrigatório")=>`<span class="tmode"><i data-lucide="flask-conical"></i>${t} · liberado no modo de teste</span>`;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function clipLists(){document.querySelectorAll(".rows.clip").forEach(r=>{if(r.nextElementSibling&&r.nextElementSibling.matches("[data-more]"))return;const n=r.children.length;if(n<=4)return;
   const b=document.createElement("button");b.className="btn btn-ghost btn-sm more";b.dataset.more="";b.textContent=`Ver mais ${n-4}`;b.onclick=()=>{r.classList.remove("clip");b.remove()};r.after(b)})}
@@ -1118,7 +1131,7 @@ function route(keep){
   if(h.startsWith("#/admin"))return panelAdmin(h.split("/")[2]||"geral");
   if(h.startsWith("#/app")){if(!S.profile){location.hash="#/comecar";return}
     /* sem identidade verificada o app não avança */
-    if(kycOf("me").status!=="verificado"&&h.split("/")[2]!=="verificacao"){location.hash="#/app/verificacao";return}
+    if(!TEST_MODE&&kycOf("me").status!=="verificado"&&h.split("/")[2]!=="verificacao"){location.hash="#/app/verificacao";return}
     return app(h.split("/")[2]||"inicio")}
   site();
 }
@@ -1330,7 +1343,7 @@ function onboarding(){
   function next(){if(OB.step<OB_STEPS.length-1){OB.step++;onboarding();scrollTo(0,0);return}
     S=fresh();S.plan=OB.plan||null;S.profile={name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
     S.messages=[{from:"them",text:`Oi, ${OB.name.trim().split(" ")[0]}! Eu sou a ${PERSONAL.name.split(" ")[0]}, sua personal. Li suas respostas e fico feliz que você esteja aqui. 💛`,t:nowT()},{from:"them",text:"Quando quiser, agende nossa primeira conversa na aba Agenda. Pode ser só por mensagem, sem pressa nenhuma.",t:nowT()}];
-    S.unread=2;save();OB.step=0;location.hash="#/app/verificacao";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
+    S.unread=2;save();OB.step=0;location.hash=TEST_MODE?"#/app":"#/app/verificacao";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
 }
 
 /* ================== APP ================== */
@@ -1341,8 +1354,9 @@ function app(tab){
   $("#root").innerHTML=`<div class="app">
     <header class="app-top"><div class="in"><a class="brand" href="#/" aria-label="Site"><span class="mk"><i data-lucide="footprints"></i></span></a><div><small style="color:var(--muted);font-weight:600;font-size:13px">Nível ${S.level}</small><div style="font-weight:700;line-height:1.1">${LEVELS[S.level-1].t}</div></div>
     <button class="icon-btn sos-ic" data-sos aria-label="Emergência e segurança"><i data-lucide="shield"></i></button><a class="icon-btn" href="#/app/mensagens" aria-label="Mensagens" style="margin-left:0"><i data-lucide="bell"></i>${S.unread?`<span class="dotb"></span>`:""}</a></div></header>
+    ${TEST_MODE?`<div class="tbar"><i data-lucide="flask-conical"></i>Modo de teste: as etapas obrigatórias estão liberadas para você ver tudo.</div>`:""}
     <main class="view" id="view"></main>
-    <nav class="tabbar" aria-label="App" ${kycOf("me").status!=="verificado"?"hidden":""}><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||(tab==="verificacao"&&k==="perfil")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
+    <nav class="tabbar" aria-label="App" ${!TEST_MODE&&kycOf("me").status!=="verificado"?"hidden":""}><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||(tab==="verificacao"&&k==="perfil")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
   </div>`;
   v();icons();
   document.querySelectorAll("[data-sos]").forEach(b=>b.onclick=()=>openSOS("cliente"));
@@ -1363,7 +1377,7 @@ function vHome(){
   <div class="block">${moodBox()}</div>
   <div class="block"><div class="block-h"><h3>Seu caminho, passo a passo</h3><span class="link">Nível ${S.level} de 4</span></div>
     <ol class="journey">${(()=>{const cur=c.findIndex(x=>!x.d);return c.map((x,i)=>{const st=x.d?"done":i===cur?"cur":"lock";
-      return`<li class="${st}">${st==="lock"?`<div class="task"><span class="ti"><i data-lucide="lock"></i></span><span><b>${x.t}</b><small>Libera depois de: ${c[i-1].t.replace(/\s*\(.*\)/,"").toLowerCase()}</small></span></div>`:`<a class="task ${x.d?"done":""}" href="${x.go}" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="${x.d?"check":"arrow-right"}"></i></span><span><b>${x.t}</b><small>${x.d?"Feito":"É agora"}</small></span><i class="go" data-lucide="chevron-right"></i></a>`}</li>`}).join("")})()}</ol>
+      return`<li class="${st}${st==="lock"&&TEST_MODE?" tlock":""}">${st==="lock"&&TEST_MODE?`<a class="task" href="${x.go}" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="lock-open"></i></span><span><b>${x.t}</b><small>Na ordem, vem depois de: ${c[i-1].t.replace(/\s*\(.*\)/,"").toLowerCase()}</small>${testTag("Ordem obrigatória")}</span><i class="go" data-lucide="chevron-right"></i></a>`:st==="lock"?`<div class="task"><span class="ti"><i data-lucide="lock"></i></span><span><b>${x.t}</b><small>Libera depois de: ${c[i-1].t.replace(/\s*\(.*\)/,"").toLowerCase()}</small></span></div>`:`<a class="task ${x.d?"done":""}" href="${x.go}" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="${x.d?"check":"arrow-right"}"></i></span><span><b>${x.t}</b><small>${x.d?"Feito":"É agora"}</small></span><i class="go" data-lucide="chevron-right"></i></a>`}</li>`}).join("")})()}</ol>
   </div>
   <div class="block"><div class="block-h"><h3>Seu progresso</h3></div>
     <div class="stats"><div class="stat"><b>${S.workouts.length}</b><small>treinos feitos</small></div><div class="stat"><b>${weekCount()}</b><small>nesta semana</small></div><div class="stat"><b>${earned().filter(Boolean).length}</b><small>conquistas</small></div></div>
@@ -1446,9 +1460,9 @@ function sheet(ic,t,p,btn,opt={}){const prev=document.activeElement;const m=docu
   $("#sh-ok").onclick=()=>close(true);const no=$("#sh-no");if(no)no.onclick=()=>close(false);
   m.onclick=e=>{if(e.target===m)close(false)};$("#sh-ok").focus()}
 
-function wcard(w){const done=S.workouts.filter(x=>x.id===w.id).length;const lock=S.level<2;
+function wcard(w){const done=S.workouts.filter(x=>x.id===w.id).length;const lock=!TEST_MODE&&S.level<2;
   return `<button class="wcard ${lock?"locked":""}" data-w="${w.id}"><span class="th"><i data-lucide="${w.icon}"></i></span><span><b>${w.t}</b><span class="chips"><span class="chip"><i data-lucide="clock"></i>${w.min} min</span><span class="chip">${w.tag}</span>${w.seat?`<span class="chip"><i data-lucide="armchair"></i>Sentado</span>`:""}${done?`<span class="chip ok"><i data-lucide="check"></i>${done}x</span>`:""}</span></span><i data-lucide="${lock?"lock":"play"}" style="color:var(--navy)"></i></button>`}
-function bindW(){document.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{if(S.level<2){toast("Os treinos em casa liberam no nível 2");return}player(WORKOUTS.find(w=>w.id===b.dataset.w))})}
+function bindW(){document.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{if(!TEST_MODE&&S.level<2){toast("Os treinos em casa liberam no nível 2");return}player(WORKOUTS.find(w=>w.id===b.dataset.w))})}
 
 let TF="Todos";
 const TFILTERS={"Todos":()=>true,"Sentado":w=>w.seat,"Até 10 min":w=>w.min<=10,"Ainda não fiz":w=>!S.workouts.some(x=>x.id===w.id)};
@@ -1456,7 +1470,7 @@ let TV="indicados",XF="";
 function vTreinos(){
   const list=WORKOUTS.filter(TFILTERS[TF]),rx=rxOf("me");
   const tabs=`<div class="seg tv" role="tablist" aria-label="Treinos">${[["indicados",`Indicados${rx.length?` (${rx.length})`:""}`],["treinos","Treinos em vídeo"],["biblioteca","Biblioteca"]].map(([k,t])=>`<button role="tab" aria-selected="${TV===k}" aria-pressed="${TV===k}" data-tv="${k}">${t}</button>`).join("")}</div>`;
-  const exOn=S.level>=2||lv1Paid();
+  const exOn=TEST_MODE||S.level>=2||lv1Paid();
   if(TV!=="treinos"&&!exOn){
     $("#view").innerHTML=`<div class="hello"><small>Treinos</small><h2>Seus exercícios chegam na hora certa.</h2></div>${tabs}
     <div class="soon"><i data-lucide="sparkles"></i><div><b>Primeiro a gente se conhece</b><p>Depois da conversa gratuita e do seu plano, a ${esc(PERSONAL.name.split(" ")[0])} escolhe os exercícios para você. Cada um vem com demonstração passo a passo e cuidados.</p>
@@ -1464,19 +1478,20 @@ function vTreinos(){
     <button class="task" id="brt" style="margin-top:14px"><span class="ti"><i data-lucide="wind"></i></span><span><b>Enquanto isso: pausa para respirar</b><small>2 min · liberado desde já</small></span><i class="go" data-lucide="chevron-right"></i></button>`;
     document.querySelectorAll("[data-tv]").forEach(b=>b.onclick=()=>{TV=b.dataset.tv;vTreinos();icons()});$("#brt").onclick=()=>breathe();return}
   if(TV!=="treinos"){
-    const L=TV==="indicados"?rx.map(r=>({e:exById(r.id),r})).filter(x=>x.e):EXS.filter(e=>(e.lv<=S.level||rx.some(x=>x.id===e.id))&&(!XF||e.cat===XF||(XF==="Sentado"&&e.seat))).map(e=>({e,r:rx.find(x=>x.id===e.id)}));
-    $("#view").innerHTML=`<div class="hello"><small>Treinos</small><h2>${TV==="indicados"?"Escolhidos para você.":"Biblioteca de exercícios."}</h2></div>${tabs}
+    const note=TEST_MODE&&!(S.level>=2||lv1Paid())?`<div class="alert warn" style="margin:0 0 14px"><i data-lucide="lock"></i><span>Os exercícios liberam depois da conversa e do plano.<br>${testTag()}</span></div>`:"";
+    const L=TV==="indicados"?rx.map(r=>({e:exById(r.id),r})).filter(x=>x.e):EXS.filter(e=>(TEST_MODE||e.lv<=S.level||rx.some(x=>x.id===e.id))&&(!XF||e.cat===XF||(XF==="Sentado"&&e.seat))).map(e=>({e,r:rx.find(x=>x.id===e.id)}));
+    $("#view").innerHTML=`<div class="hello"><small>Treinos</small><h2>${TV==="indicados"?"Escolhidos para você.":"Biblioteca de exercícios."}</h2></div>${tabs}${note}
     ${TV==="indicados"?(rx.length?`<p class="week-note" style="margin:0 0 12px">A ${esc(PERSONAL.name.split(" ")[0])} escolheu estes exercícios pelo que você contou. Toque para ver a demonstração.</p>`:`<div class="empty">Sua personal indica os exercícios depois da conversa gratuita. Enquanto isso, dê uma olhada na biblioteca.</div>`)
       :`<div class="filters" role="group" aria-label="Categoria">${["","Sentado",...EXCATS].map(c=>`<button aria-pressed="${XF===c}" data-xf="${c}">${c||"Todos"}</button>`).join("")}</div>`}
     <div class="exgrid">${L.map(({e,r})=>exCard(e,r,false)).join("")}</div>
-    ${TV==="biblioteca"?`<p class="week-note">Mostramos os exercícios do seu nível. Novos exercícios aparecem quando você sobe de nível.</p>`:""}
+    ${TV==="biblioteca"?`<p class="week-note">Para o aluno, aparecem só os exercícios do nível dele. Novos exercícios liberam quando ele sobe de nível.</p>`:""}
     <p class="note"><i data-lucide="heart-pulse"></i>Se sentir dor, tontura ou falta de ar, pare e avise sua personal.</p>`;
     document.querySelectorAll("[data-tv]").forEach(b=>b.onclick=()=>{TV=b.dataset.tv;vTreinos();icons()});
     document.querySelectorAll("[data-xf]").forEach(b=>b.onclick=()=>{XF=b.dataset.xf;vTreinos();icons()});
     document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>exDetail(b.dataset.ex,{role:"cliente",rx:rx.find(x=>x.id===b.dataset.ex)}));
     return}
   $("#view").innerHTML=`<div class="hello"><small>Treinos em casa</small><h2>No seu espaço, no seu ritmo.</h2></div>${tabs}
-  ${S.level<2?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="lock"></i><span>Os treinos em vídeo liberam no nível 2, depois da primeira conversa com a sua personal. Você já pode dar uma olhada.</span></div>`:""}
+  ${S.level<2?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="lock"></i><span>Os treinos em vídeo liberam no nível 2, depois da primeira conversa com a sua personal.${TEST_MODE?`<br>${testTag()}`:" Você já pode dar uma olhada."}</span></div>`:""}
   ${S.profile.medical&&!S.profile.medOk?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="stethoscope"></i><span>Lembre de enviar a liberação médica para a sua personal antes de treinar.</span></div>`:""}
   <div class="filters" role="group" aria-label="Filtrar treinos">${Object.keys(TFILTERS).map(k=>`<button aria-pressed="${TF===k}" data-tf="${k}">${k}</button>`).join("")}</div>
   <div class="wk">${list.length?list.map(wcard).join(""):`<div class="empty">Você já fez todos os treinos pelo menos uma vez. Pode repetir o que mais gostou!</div>`}</div>
@@ -1555,8 +1570,8 @@ function vAgenda(){
     <div class="days">${days.map((d,i)=>`<button class="day" aria-pressed="${AG.day===i}" data-d="${i}"><small>${d.toLocaleDateString("pt-BR",{weekday:"short"}).replace(".","")}</small><b>${d.getDate()}</b></button>`).join("")}</div>
     <p style="font-weight:700;margin:18px 0 10px">Horário <span style="color:var(--muted);font-weight:500">(${S.profile.period.toLowerCase()})</span></p>
     <div class="slots">${slots.map(s=>`<button class="slot" aria-pressed="${AG.slot===s}" data-s="${s}">${s}</button>`).join("")}</div>
-    ${PRESENCIAL(AG.type)&&kycOf("me").status!=="verificado"?`<div class="alert warn"><i data-lucide="shield-alert"></i><span>Encontros presenciais precisam da sua identidade verificada. <a href="#/app/verificacao" style="color:inherit;font-weight:700">Verificar agora</a></span></div>`:""}
-    <button class="btn btn-primary" id="book" style="width:100%;margin-top:18px" ${AG.slot&&!(PRESENCIAL(AG.type)&&kycOf("me").status!=="verificado")?"":"disabled"}><i data-lucide="calendar-check"></i>Confirmar agendamento</button>
+    ${PRESENCIAL(AG.type)&&kycOf("me").status!=="verificado"?`<div class="alert warn"><i data-lucide="shield-alert"></i><span>Encontros presenciais precisam da sua identidade verificada. <a href="#/app/verificacao" style="color:inherit;font-weight:700">Verificar agora</a>${TEST_MODE?`<br>${testTag()}`:""}</span></div>`:""}
+    <button class="btn btn-primary" id="book" style="width:100%;margin-top:18px" ${AG.slot&&(TEST_MODE||!(PRESENCIAL(AG.type)&&kycOf("me").status!=="verificado"))?"":"disabled"}><i data-lucide="calendar-check"></i>Confirmar agendamento</button>
   </div>
   ${demoBox()}`;
   document.querySelectorAll("[data-type]").forEach(b=>b.onclick=()=>{AG.type=b.dataset.type;vAgenda();icons()});
@@ -1630,7 +1645,7 @@ function vPerfil(){
 function myBills(){const all=bills().filter(b=>b.cid==="me").reverse();
   if(!all.length)return`<div class="empty">Nenhuma cobrança ainda.</div>`;
   const open=all.filter(b=>!b.paid),bl=open.length?open:all.slice(0,1),rest=all.filter(b=>!bl.includes(b));
-  const row=b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><i data-lucide="receipt"></i><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}<br><small style="margin:0">Nível ${b.lv} · vence dia 10</small></span><small style="display:flex;gap:8px;align-items:center">${b.paid?pill(k,ic,t):b.lv===1&&!S.talked?`<span style="color:var(--muted);font-size:12.5px;text-align:right">Libera depois da conversa grátis</span>`:`${pill(k,ic,t)}<button class="btn btn-primary btn-sm" data-mypay="${b.key}">Pagar</button>`}</small></div>`};
+  const row=b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><i data-lucide="receipt"></i><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}<br><small style="margin:0">Nível ${b.lv} · vence dia 10</small></span><small style="display:flex;gap:8px;align-items:center">${b.paid?pill(k,ic,t):b.lv===1&&!S.talked&&!TEST_MODE?`<span style="color:var(--muted);font-size:12.5px;text-align:right">Libera depois da conversa grátis</span>`:`${pill(k,ic,t)}<button class="btn btn-primary btn-sm" data-mypay="${b.key}">Pagar</button>`}</small></div>`};
   return`<div class="hist">${bl.map(row).join("")}</div>${rest.length?`<details class="fold" style="margin-top:10px"><summary><span class="fs" style="margin:0">Ver histórico (${rest.length})</span><i data-lucide="chevron-down"></i></summary><div class="hist">${rest.map(row).join("")}</div></details>`:""}
   <p class="note" style="margin-top:10px"><i data-lucide="${METHODS[S.payMethod||"pix"].ic}"></i>Forma preferida: ${METHODS[S.payMethod||"pix"].l}${S.autopay?" · cobrança automática ligada":""}. Pagamentos ilustrativos por enquanto.</p>`}
 function weeksChart(){const w0=sod()-((new Date().getDay()+6)%7)*D1,data=[];
@@ -1651,10 +1666,14 @@ function demoBox(){
   if(S.level===3)b.push(["outdoor","Registrar encontro ao ar livre"]);
   if(S.level===4)b.push(["gym","Registrar aula na academia"]);
   if(S.level===2&&S.workouts.length<8)b.push(["wk","Adicionar treino feito"]);
+  if(TEST_MODE&&S.level<4)b.push(["lvup",`Ir para o nível ${S.level+1} (teste)`]);
+  if(TEST_MODE&&kycOf("me").status!=="verificado")b.push(["kyc","Marcar identidade como verificada (teste)"]);
   if(!b.length)return"";
   return `<div class="demo"><span><b>Modo demonstração.</b> No app real, estas etapas são confirmadas pelo personal.</span><div class="row">${b.map(([k,t])=>`<button data-demo="${k}">${t}</button>`).join("")}</div></div>`;
 }
 function bindDemo(){document.querySelectorAll("[data-demo]").forEach(x=>x.onclick=()=>{const k=x.dataset.demo;
+  if(k==="lvup"){S.level=Math.min(4,S.level+1);S.talked=true;autoRx();S.messages.push({from:"them",text:`Modo de teste: você foi para o nível ${S.level}.`,t:nowT()})}
+  if(k==="kyc"){S.kyc={status:"verificado",at:Date.now(),cpf:"***.000.000-**",city:"Teste",emerg:"Contato de teste"}}
   if(k==="talk"){S.talked=true;autoRx();S.bookings.forEach(b=>b.done=true);S.messages.push({from:"them",text:"Adorei nossa conversa! Seu plano está pronto. 💛",t:nowT()});S.unread++}
   if(k==="outdoor"){S.outdoor++;const b=S.bookings.find(b=>b.type==="Ao ar livre"&&!b.done);if(b)b.done=true}
   if(k==="gym"){S.gymsessions++;const b=S.bookings.find(b=>b.type==="Academia"&&!b.done);if(b)b.done=true}
@@ -1946,7 +1965,7 @@ function bookingForm(clients){const d=new Date(Date.now()+D1);const ds=d.toISOSt
     <button class="btn btn-primary mt"><i data-lucide="calendar-plus"></i>Marcar e avisar o aluno</button></form>`}
 function bindBookingForm(pid,after){$("#nbk").onsubmit=e=>{e.preventDefault();const cid=$("#nbc").value,type=$("#nbt").value;
   if(type==="Primeira conversa"){const c=findC(cid);if(c.talked||bookingsAll().some(b=>b.cid===cid&&b.type==="Primeira conversa"&&b.status!=="cancelado")){toast(`${c.name.split(" ")[0]} já usou a conversa gratuita`);return}}
-  if(PRESENCIAL(type)&&kycOf(cid).status!=="verificado"){toast("Encontro presencial só com a identidade do aluno verificada");return}
+  if(PRESENCIAL(type)&&kycOf(cid).status!=="verificado"){if(!TEST_MODE){toast("Encontro presencial só com a identidade do aluno verificada");return}toast("Aviso: identidade do aluno não verificada (obrigatório, liberado no teste)")}
   const[y,mo,da]=$("#nbd").value.split("-"),[h,mi]=$("#nbh").value.split(":");
   const ts=new Date(+y,+mo-1,+da,+h,+mi).getTime(),mode=type==="Ao ar livre"?"presencial":type==="Academia"?"na academia":"online";
   if(cid==="me"){S.bookings.push({ts,time:$("#nbh").value,type,mode:mode==="online"?S.profile.contact.toLowerCase():mode,done:false})}else DB.bookings.push({id:"b"+Date.now(),cid,pid,ts,type,mode,status:"agendado"});
@@ -1955,7 +1974,7 @@ function pAgenda(p,cs){
   const t0=sod(),all=bookingsAll().filter(b=>b.pid===p.id&&b.status!=="cancelado");
   const up=all.filter(b=>b.ts>=t0).sort((a,b)=>a.ts-b.ts),past=all.filter(b=>b.ts<t0).sort((a,b)=>b.ts-a.ts).slice(0,6);
   const groups={};up.forEach(b=>{const k=dlabel(b.ts);(groups[k]=groups[k]||[]).push(b)});
-  const row=b=>{const c=findC(b.cid);if(!c)return"";return`<div class="rw"><span class="time">${hm(b.ts)}</span>${avatar(c)}<span><b>${esc(c.name)}</b><small>${b.type} · ${b.mode}${PRESENCIAL(b.type)?` · <b class="code">código ${meetCode(b)}</b>`:""}</small></span><span class="end">${b.status==="feito"?pill("ok","check","Feito"):PRESENCIAL(b.type)?((DB.checkins[b.id]||{}).in?`${pill("info","map-pin-check","Chegou "+hm(DB.checkins[b.id].in))}<button class="btn btn-primary btn-sm" data-ck="${b.id}" data-v="out"><i data-lucide="log-out"></i>Encerrar</button>`:`<button class="btn btn-primary btn-sm" data-ck="${b.id}" data-v="in" ${kycOf(c.id).status!=="verificado"||!pSafe(p)?"disabled title='Cliente ou personal sem verificação'":""}><i data-lucide="map-pin-check"></i>Cheguei</button>`):`<button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="feito"><i data-lucide="check"></i>Concluir</button><button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="cancelado" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</span></div>`};
+  const row=b=>{const c=findC(b.cid);if(!c)return"";return`<div class="rw"><span class="time">${hm(b.ts)}</span>${avatar(c)}<span><b>${esc(c.name)}</b><small>${b.type} · ${b.mode}${PRESENCIAL(b.type)?` · <b class="code">código ${meetCode(b)}</b>`:""}</small></span><span class="end">${b.status==="feito"?pill("ok","check","Feito"):PRESENCIAL(b.type)?((DB.checkins[b.id]||{}).in?`${pill("info","map-pin-check","Chegou "+hm(DB.checkins[b.id].in))}<button class="btn btn-primary btn-sm" data-ck="${b.id}" data-v="out"><i data-lucide="log-out"></i>Encerrar</button>`:`<button class="btn btn-primary btn-sm" data-ck="${b.id}" data-v="in" ${!TEST_MODE&&(kycOf(c.id).status!=="verificado"||!pSafe(p))?"disabled title='Cliente ou personal sem verificação'":""}><i data-lucide="map-pin-check"></i>Cheguei</button>`):`<button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="feito"><i data-lucide="check"></i>Concluir</button><button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="cancelado" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</span></div>`};
   $("#pv").innerHTML=`<div class="grid2 wide" style="margin-top:0">
     <section class="card"><div class="card-h"><h3>Próximos encontros</h3><span class="pill mute">${up.length}</span></div>${up.length?Object.entries(groups).map(([k,l])=>`<p style="font-weight:700;margin:10px 0 2px;text-transform:capitalize">${k}</p><div class="rows">${l.map(row).join("")}</div>`).join(""):`<p class="empty-s">Nada marcado. Use o formulário ao lado.</p>`}</section>
     <div style="display:grid;gap:14px;align-content:start">${bookingForm(cs)}<section class="card dm"><div class="card-h"><h3>Realizados recentemente</h3></div><div class="rows">${past.length?past.map(row).join(""):`<p class="empty-s">Nenhum ainda.</p>`}</div></section></div>
@@ -2320,7 +2339,7 @@ function vVerif(){
   const steps=["Seus dados","Documento","Selfie","Consentimento"],st=KV.step;
   const bar=`<div class="vsteps">${steps.map((t,i)=>`<div class="${i<st?"done":i===st?"cur":""}"><i>${i<st?"✓":i+1}</i><span>${t}</span></div>`).join("")}</div>`;
   let body="";
-  if(st===0)body=`<div class="alert warn" style="margin:0 0 14px"><i data-lucide="shield-check"></i><span><b>Obrigatório para continuar.</b> Sem a verificação, o app não libera agenda, conversa nem treinos.</span></div>
+  if(st===0)body=`<div class="alert warn" style="margin:0 0 14px"><i data-lucide="shield-check"></i><span><b>Obrigatório para continuar.</b> Sem a verificação, o app não libera agenda, conversa nem treinos.${TEST_MODE?`<br>${testTag("Nesta versão de teste você pode sair e explorar")}`:""}</span></div>
     <p class="sub">Pedimos isso de todo mundo, clientes e personais, porque existem encontros presenciais. É a mesma proteção para os dois lados.</p>
     <div class="set">
       <div class="field"><label for="kn">Nome completo</label><input id="kn" autocomplete="name" value="${esc(KV.d.name||S.profile.name)}"></div>
@@ -2345,7 +2364,7 @@ function vVerif(){
     <label class="chkline big"><input type="checkbox" id="c3" ${KV.ok.c3?"checked":""}> Li e concordo com o código de conduta: respeito, sem assédio, sem discriminação, e uso do código de segurança nos encontros.</label>
     <div class="info"><i data-lucide="lock"></i><span>Seus dados ficam criptografados e só a equipe de segurança acessa. Personais veem apenas seu primeiro nome, a cidade e o código do encontro.</span></div>`;
   $("#view").innerHTML=`<div class="hello"><small>Segurança · passo ${st+1} de 4</small><h2>Verificar identidade</h2></div>${bar}<div class="vbody">${body}</div>
-    <div class="vfoot">${st?`<button class="btn btn-ghost" id="kbk"><i data-lucide="arrow-left"></i>Voltar</button>`:`<a class="btn btn-ghost" href="#/">Sair</a>`}<button class="btn btn-primary" id="knx">${st===3?"Enviar para análise":"Continuar"}<i data-lucide="arrow-right"></i></button></div>
+    <div class="vfoot">${st?`<button class="btn btn-ghost" id="kbk"><i data-lucide="arrow-left"></i>Voltar</button>`:`<a class="btn btn-ghost" href="${TEST_MODE?"#/app":"#/"}">${TEST_MODE?"Pular (teste)":"Sair"}</a>`}<button class="btn btn-primary" id="knx">${st===3?"Enviar para análise":"Continuar"}<i data-lucide="arrow-right"></i></button></div>
     <p class="pay-demo"><i data-lucide="info"></i>Demonstração: as fotos aparecem só na sua tela e não são salvas nem enviadas. A leitura do documento e a comparação facial reais serão feitas por um serviço especializado.</p>`;
   icons();
   const save0=()=>{if(st!==0)return;["name:kn","cpf:kc","birth:kb","tel:kt","cep:kz","addr:ka","city:ky","en:en","et:et","er:er"].forEach(x=>{const[k,id]=x.split(":");KV.d[k]=$("#"+id).value})};
