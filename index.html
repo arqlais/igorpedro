@@ -1488,7 +1488,7 @@ function vTreinos(){
     <p class="note"><i data-lucide="heart-pulse"></i>Se sentir dor, tontura ou falta de ar, pare e avise sua personal.</p>`;
     document.querySelectorAll("[data-tv]").forEach(b=>b.onclick=()=>{TV=b.dataset.tv;vTreinos();icons()});
     document.querySelectorAll("[data-xf]").forEach(b=>b.onclick=()=>{XF=b.dataset.xf;vTreinos();icons()});
-    document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>exDetail(b.dataset.ex,{role:"cliente",rx:rx.find(x=>x.id===b.dataset.ex)}));
+    document.querySelectorAll(".exc[data-ex]").forEach(b=>b.onclick=()=>exDetail(b.dataset.ex,{role:"cliente",rx:rx.find(x=>x.id===b.dataset.ex)}));
     return}
   $("#view").innerHTML=`<div class="hello"><small>Treinos em casa</small><h2>No seu espaço, no seu ritmo.</h2></div>${tabs}
   ${S.level<2?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="lock"></i><span>Os treinos em vídeo liberam no nível 2, depois da primeira conversa com a sua personal.${TEST_MODE?`<br>${testTag()}`:" Você já pode dar uma olhada."}</span></div>`:""}
@@ -2540,18 +2540,26 @@ const EXS=[
 ];
 const EXCATS=["Força","Mobilidade","Cardio leve","Equilíbrio","Respiração"];
 const exById=id=>EXS.find(e=>e.id===id);
-/* desenha o boneco; com movimento reduzido fica parado na pose final */
-function fig(ex,cls="",speed=1){
-  const segs=[["n","p"],["n","el"],["el","hl"],["n","er"],["er","hr"],["p","kl"],["kl","fl"],["p","kr"],["kr","fr"]];
-  const still=matchMedia("(prefers-reduced-motion: reduce)").matches,ps=ex.poses,seq=ps.length>2?[...ps,ps[0]]:[ps[0],ps[1],ps[0]];
-  const kt=seq.map((_,i)=>(i/(seq.length-1)).toFixed(3)).join(";"),ks=seq.slice(1).map(()=>".45 0 .55 1").join(";");
-  const an=(attr,vals)=>still?"":`<animate attributeName="${attr}" values="${vals.join(";")}" keyTimes="${kt}" calcMode="spline" keySplines="${ks}" dur="${ex.dur*speed}s" repeatCount="indefinite"/>`;
-  const P=ps[still?ps.length-1:0];
-  const props={chair:`<path class="prop" d="M30 92H60M32 92V127M58 92V127M30 92V58"/>`,wall:`<path class="prop" d="M106 20V127"/>`,wallL:`<path class="prop" d="M16 20V127"/>`,mat:`<path class="prop" d="M6 129H112" stroke-width="4"/>`,band:""}[ex.prop]||"";
-  const band=ex.prop==="band"?`<line class="band" x1="${P.hl[0]}" y1="${P.hl[1]}" x2="${P.hr[0]}" y2="${P.hr[1]}">${an("x1",seq.map(q=>q.hl[0]))}${an("y1",seq.map(q=>q.hl[1]))}${an("x2",seq.map(q=>q.hr[0]))}${an("y2",seq.map(q=>q.hr[1]))}</line>`:"";
-  return`<svg class="fig ${cls}" viewBox="0 0 120 136" role="img" aria-label="Demonstração animada: ${esc(ex.n)}"><line class="ground" x1="4" y1="130" x2="116" y2="130"/>${props}
-    ${segs.map(([a,b])=>`<line class="limb" x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}">${an("x1",seq.map(q=>q[a][0]))}${an("y1",seq.map(q=>q[a][1]))}${an("x2",seq.map(q=>q[b][0]))}${an("y2",seq.map(q=>q[b][1]))}</line>`).join("")}${band}
-    <circle class="head" cx="${P.h[0]}" cy="${P.h[1]}" r="9">${an("cx",seq.map(q=>q.h[0]))}${an("cy",seq.map(q=>q.h[1]))}</circle></svg>`}
+/* desenha o boneco na pose inicial; o laço abaixo anima todos os bonecos da tela.
+   O movimento é o próprio conteúdo (ensina o exercício), então anima sempre e tem botão de pausar. */
+const FSEGS=[["n","p"],["n","el"],["el","hl"],["n","er"],["er","hr"],["p","kl"],["kl","fl"],["p","kr"],["kr","fr"]];
+const figSeq=ex=>ex.poses.length>2?[...ex.poses,ex.poses[0]]:[ex.poses[0],ex.poses[1],ex.poses[0]];
+function fig(ex,cls="",speed=1){const P=ex.poses[0];
+  const props={chair:`<path class="prop" d="M30 92H60M32 92V127M58 92V127M30 92V58"/>`,wall:`<path class="prop" d="M106 20V127"/>`,wallL:`<path class="prop" d="M16 20V127"/>`,mat:`<path class="prop" d="M6 129H112" stroke-width="4"/>`}[ex.prop]||"";
+  return`<svg class="fig ${cls}" data-ex="${ex.id}" data-speed="${speed}" viewBox="0 0 120 136" role="img" aria-label="Demonstração animada: ${esc(ex.n)}"><line class="ground" x1="4" y1="130" x2="116" y2="130"/>${props}
+    ${FSEGS.map(([a,b])=>`<line class="limb" data-s="${a} ${b}" x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}"/>`).join("")}${ex.prop==="band"?`<line class="band" data-s="hl hr" x1="${P.hl[0]}" y1="${P.hl[1]}" x2="${P.hr[0]}" y2="${P.hr[1]}"/>`:""}
+    <circle class="head" cx="${P.h[0]}" cy="${P.h[1]}" r="9"/></svg>`}
+const easeIO=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+function figTick(now){
+  document.querySelectorAll("svg.fig[data-ex]").forEach(sv=>{if(sv.dataset.paused==="1")return;
+    const ex=exById(sv.dataset.ex);if(!ex)return;if(sv._t0==null)sv._t0=now;
+    const seq=figSeq(ex),n=seq.length-1,D=ex.dur*(+sv.dataset.speed||1)*1000,f=((Math.max(0,now-sv._t0)%D)/D)*n,i=Math.max(0,Math.min(n-1,Math.floor(f))),t=easeIO(f-i),A=seq[i],B=seq[i+1];
+    sv._seg=i;const pt=k=>[A[k][0]+(B[k][0]-A[k][0])*t,A[k][1]+(B[k][1]-A[k][1])*t];
+    sv.querySelectorAll("line[data-s]").forEach(l=>{const[a,b]=l.dataset.s.split(" "),p1=pt(a),p2=pt(b);l.setAttribute("x1",p1[0].toFixed(1));l.setAttribute("y1",p1[1].toFixed(1));l.setAttribute("x2",p2[0].toFixed(1));l.setAttribute("y2",p2[1].toFixed(1))});
+    const h=pt("h"),c=sv.querySelector(".head");c.setAttribute("cx",h[0].toFixed(1));c.setAttribute("cy",h[1].toFixed(1))});
+  requestAnimationFrame(figTick)}
+requestAnimationFrame(figTick);
+function figPause(sv,on){const now=performance.now();if(on){sv.dataset.paused="1";sv._pa=now}else{if(sv._pa!=null&&sv._t0!=null)sv._t0+=now-sv._pa;sv.dataset.paused="0"}}
 
 /* prescrições: cliente deste aparelho (S.rx) ou cliente de exemplo (c.rx) */
 const rxOf=cid=>cid==="me"?(S.rx||[]):((DB.clients.find(c=>c.id===cid)||{}).rx||[]);
@@ -2575,10 +2583,12 @@ function exDetail(id,opts={}){
   </div>`;icons();
   $("#exx").onclick=close;
   /* legenda acompanha o boneco: posição inicial → movimento → volta */
-  const phases=[0,1,ex.steps.length>2?2:1],show=i=>{const n=phases[i%phases.length];$("#excap").textContent=`${n+1} · ${ex.steps[n]}`;md.querySelectorAll("#exst li").forEach((li,j)=>li.classList.toggle("on",j===n))};
-  let ph=0;const run=()=>{clearInterval(tick);if(paused||matchMedia("(prefers-reduced-motion: reduce)").matches)return;tick=setInterval(()=>{ph++;show(ph)},ex.dur*speed*1000/2)};run();
-  $("#expp").onclick=()=>{const sv=md.querySelector("#exfig svg");paused=!paused;if(paused)sv.pauseAnimations();else sv.unpauseAnimations();$("#expp").innerHTML=paused?'<i data-lucide="play"></i>Continuar':'<i data-lucide="pause"></i>Pausar';icons();run()};
-  $("#exsl").onclick=()=>{speed=speed===1?1.8:1;$("#exsl").setAttribute("aria-pressed",speed>1);$("#exfig").innerHTML=fig(ex,"lg",speed);paused=false;$("#expp").innerHTML='<i data-lucide="pause"></i>Pausar';ph=0;show(0);icons();run()};
+  /* legenda acompanha o boneco: indo = passo 2 (o movimento), voltando = passo 3 */
+  let last=-1;const show=()=>{const sv=md.querySelector("#exfig svg");if(!sv||sv._seg==null)return;const nseg=figSeq(ex).length-1,step=nseg>2?1:(sv._seg===0?1:Math.min(2,ex.steps.length-1));if(step===last)return;last=step;
+    $("#excap").textContent=`${step+1} · ${ex.steps[step]}`;md.querySelectorAll("#exst li").forEach((li,j)=>li.classList.toggle("on",j===step))};
+  tick=setInterval(show,120);
+  $("#expp").onclick=()=>{const sv=md.querySelector("#exfig svg");paused=!paused;figPause(sv,paused);$("#expp").innerHTML=paused?'<i data-lucide="play"></i>Continuar':'<i data-lucide="pause"></i>Pausar';icons()};
+  $("#exsl").onclick=()=>{speed=speed===1?1.8:1;$("#exsl").setAttribute("aria-pressed",speed>1);const sv=md.querySelector("#exfig svg");sv.dataset.speed=speed;sv._t0=performance.now();paused=false;figPause(sv,false);$("#expp").innerHTML='<i data-lucide="pause"></i>Pausar';icons()};
   const d=$("#exdo");if(d)d.onclick=()=>{S.exlog=S.exlog||[];S.exlog.push({id,at:Date.now()});save();close();toast("Registrado! Cada movimento conta.")};
   const r=$("#exrx");if(r)r.onclick=()=>{const cid=$("#exto").value,l=rxOf(cid).filter(x=>x.id!==id);l.push({id,dose:ex.dose,note:"",at:Date.now()});setRx(cid,l);pushMsg(cid,`Indiquei um exercício novo para você: ${ex.n}. Tem demonstração em Treinos → Indicados. 💪`);close();toast("Exercício indicado")};
 }
@@ -2608,7 +2618,7 @@ function pExs(p){
   <div class="exgrid">${L.map(e=>exCard(e)).join("")}</div>
   <div class="info mt"><i data-lucide="info"></i><span>Toque num exercício para ver a demonstração e indicar para um aluno. Para montar a lista completa, abra a ficha do aluno e use “Indicar exercícios”.</span></div>`;
   document.querySelectorAll("[data-pxf]").forEach(b=>b.onclick=()=>{PXF=b.dataset.pxf;route(true)});
-  document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>exDetail(b.dataset.ex,{role:"personal"}));
+  document.querySelectorAll(".exc[data-ex]").forEach(b=>b.onclick=()=>exDetail(b.dataset.ex,{role:"personal"}));
 }
 
 /* formulários do site → contatos da empresa */
