@@ -83,10 +83,18 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .phone .ph small{color:#C9D8EA;font-size:12px}
 .phone .ph b{display:block;font-family:var(--display);font-size:22px;margin-top:2px}
 .phone .pbar{height:7px;background:rgba(255,255,255,.2);border-radius:99px;margin-top:14px;overflow:hidden}
-.phone .pbar i{display:block;height:100%;width:38%;background:#E0A93B;border-radius:99px;animation:grow 1.6s .4s cubic-bezier(.2,.8,.2,1) both}
+.phone .pbar i{display:block;height:100%;width:0;background:#E0A93B;border-radius:99px}
 @keyframes grow{from{width:0}}
 .phone .pb{padding:14px;display:grid;gap:10px}
-.phone .pc{border:1px solid #DCE3EC;border-radius:16px;padding:12px;display:flex;gap:10px;align-items:center;font-size:13px}
+.phone .pc{border:1px solid #DCE3EC;border-radius:16px;padding:12px;display:flex;gap:10px;align-items:center;font-size:13px;width:100%;text-align:left;background:#fff;color:#1E2733;transition:background .25s,transform .15s}
+.phone .pc:active{transform:scale(.98)}
+.phone .pc.done b{text-decoration:line-through;text-decoration-color:#9AA7B6}
+.phone .pc.pop{animation:pop .45s ease}
+@keyframes pop{40%{transform:scale(1.04)}}
+.phone-wrap{justify-self:center;display:grid;justify-items:center;gap:10px}
+.phone-hint{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:13px;font-weight:600}
+.phone-hint svg{width:15px;height:15px}
+.phone .pbar i{transition:width .5s cubic-bezier(.2,.8,.2,1)}
 .phone .pc .ic{width:36px;height:36px;border-radius:11px;background:#FBF1DC;display:grid;place-items:center;color:#1B3A5C}
 .phone .pc b{display:block;font-size:14px}
 .phone .pc small{color:#5F6B7A}
@@ -720,7 +728,6 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 
 .om-btn{display:none}
 @media (max-width:640px){
-  .phone{display:none}
   .hero{padding:28px 0 32px}
   .hero .wrap{gap:0}
   .om-btn{display:flex;width:100%}
@@ -1060,6 +1067,19 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .lg-new{color:var(--muted);font-size:14.5px;margin:0}
 .lg-new a{color:var(--blue);font-weight:700;text-decoration:none}
 
+.hero .lead{border:0;padding:0;background:none;display:block;border-radius:0}
+@media (max-width:640px){
+  .hero .phone{width:min(240px,72vw);border-radius:32px;padding:9px}
+  .phone .scr{border-radius:24px}
+  .phone .ph{padding:16px 14px 14px}
+  .phone .ph b{font-size:18px}
+  .phone .pb{padding:10px;gap:7px}
+  .phone .pc{padding:9px;border-radius:13px;gap:8px}
+  .phone .pc b{font-size:12.5px}
+  .phone .pc small{font-size:11px}
+  .phone .pc .ic{width:30px;height:30px;border-radius:9px}
+  .phone-wrap{margin-top:26px}
+}
 @media (min-width:1181px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -1241,15 +1261,15 @@ function site(){
     </div>
     <div class="assure"><span><i data-lucide="check"></i>Sem câmera, se preferir</span><span><i data-lucide="check"></i>Personal com CREF</span><span><i data-lucide="check"></i>Primeira conversa gratuita</span><span><i data-lucide="check"></i>Em todo o Brasil</span></div>
   </div>
-  <div class="phone" aria-hidden="true"><div class="scr">
-    <div class="ph"><small>Olá, Ana</small><b>Nível 2 · Em casa</b><div class="pbar"><i></i></div></div>
+  <div class="phone-wrap"><div class="phone" role="group" aria-label="Prévia do app. Toque nas tarefas para experimentar."><div class="scr">
+    <div class="ph"><small>Olá, Ana</small><b id="phT">Nível 2 · Em casa</b><div class="pbar"><i id="phB"></i></div></div>
     <div class="pb">
-      <div class="pc done"><span class="ic"><i data-lucide="check"></i></span><div><b>Conversa com a Camila</b><small>Plano pronto</small></div></div>
-      <div class="pc done"><span class="ic"><i data-lucide="check"></i></span><div><b>Força na cadeira</b><small>12 min · feito ontem</small></div></div>
-      <div class="pc"><span class="ic"><i data-lucide="play"></i></span><div><b>Despertar suave</b><small>8 min · hoje</small></div></div>
-      <div class="pc"><span class="ic"><i data-lucide="message-circle"></i></span><div><b>“Como você se sentiu?”</b><small>Camila · personal</small></div></div>
+      <button class="pc done" data-pt><span class="ic"><i data-lucide="check"></i></span><span><b>Conversa com a Camila</b><small>Plano pronto</small></span></button>
+      <button class="pc" data-pt><span class="ic"><i data-lucide="play"></i></span><span><b>Força na cadeira</b><small>12 min · toque quando fizer</small></span></button>
+      <button class="pc" data-pt><span class="ic"><i data-lucide="play"></i></span><span><b>Despertar suave</b><small>8 min · toque quando fizer</small></span></button>
+      <button class="pc msg" id="phM"><span class="ic"><i data-lucide="message-circle"></i></span><span><b id="phMt">“Como você se sentiu hoje?”</b><small>Camila · personal</small></span></button>
     </div>
-  </div></div>
+  </div></div><p class="phone-hint"><i data-lucide="pointer"></i>Toque nas tarefas para experimentar</p></div>
 </div></section>
 
 <div class="wrap"><div class="facts">
@@ -1375,6 +1395,14 @@ function site(){
   $("#theme").onclick=toggleTheme;
   bindSiteForms();
   renderPlans();
+  /* prévia interativa do app no topo */
+  {const ts=[...document.querySelectorAll("[data-pt]")],bar=$("#phB"),tt=$("#phT"),msgs=["“Como você se sentiu hoje?”","“Que orgulho de você! 💛”","“Amanhã a gente continua, no seu ritmo.”","“Lembra de beber água!”"];let mi=0;
+   const upd=()=>{const n=ts.filter(t=>t.classList.contains("done")).length,pct=Math.round(n/ts.length*100);bar.style.width=pct+"%";tt.textContent=pct===100?"Pronta para o nível 3! 🎉":"Nível 2 · Em casa"};
+   ts.forEach(t=>t.onclick=()=>{const d=!t.classList.contains("done");t.classList.toggle("done",d);t.classList.remove("pop");void t.offsetWidth;t.classList.add("pop");
+     t.querySelector(".ic").innerHTML=`<i data-lucide="${d?"check":"play"}"></i>`;const sm=t.querySelector("small");if(t!==ts[0])sm.textContent=d?"Feito agora · muito bem!":sm.textContent.replace("Feito agora · muito bem!","toque quando fizer");icons();upd();
+     if(d&&ts.every(x=>x.classList.contains("done"))){$("#phMt").textContent="“Você completou tudo! 🎉”";}});
+   $("#phM").onclick=()=>{mi=(mi+1)%msgs.length;$("#phMt").textContent=msgs[mi];$("#phM").classList.remove("pop");void $("#phM").offsetWidth;$("#phM").classList.add("pop")};
+   upd()}
   {const ab=$("#accb"),am=$("#accm"),setA=o=>{am.hidden=!o;ab.setAttribute("aria-expanded",o)};
    ab.onclick=e=>{e.stopPropagation();setA(am.hidden)};
    document.addEventListener("click",e=>{if(!am.hidden&&!e.target.closest(".acc"))setA(false)});
