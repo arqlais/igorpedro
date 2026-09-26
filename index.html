@@ -401,6 +401,205 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .sheet .acts{display:grid;gap:10px}
 .btn-danger{background:var(--red);color:#fff}
 
+/* ---------- SITE: faixa de números, formulários, rodapé ---------- */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line)}
+.facts div{padding:22px 20px;border-right:1px solid var(--line)}
+.facts div:last-child{border-right:0}
+.facts b{display:block;font-family:var(--display);font-weight:800;font-size:34px;color:var(--navy);line-height:1}
+.facts span{color:var(--muted);font-size:14.5px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.split ul{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:12px}
+.split li{display:flex;gap:10px}
+.split li svg{color:var(--green);margin-top:2px}
+.form{border:1.5px solid var(--line);border-radius:24px;padding:24px;background:var(--surface);display:grid;gap:4px}
+.form h3{font-size:22px;margin-bottom:10px}
+.form .field{margin-bottom:12px}
+.form .field input,.form .field textarea,.form .field select{font-size:16px;padding:12px 14px}
+.form textarea{min-height:96px;resize:vertical}
+.form .fine{color:var(--muted);font-size:13px;margin-top:8px}
+.foot-links{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px}
+.foot-links a{color:var(--blue);font-weight:600;text-decoration:none}
+
+/* ---------- ENTRAR ---------- */
+.login-main{max-width:1000px;margin:0 auto;padding:48px 22px 70px}
+.login-main h1{font-size:clamp(34px,5vw,52px);font-weight:800}
+.login-main > p{color:var(--muted);font-size:18px;margin-top:10px}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.role{border:1.5px solid var(--line);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.role .ri{width:52px;height:52px;border-radius:16px;background:var(--gold-soft);color:var(--navy);display:grid;place-items:center}
+.role .ri svg{width:26px;height:26px}
+.role h2{font-size:24px}
+.role p{color:var(--muted);font-size:15px;flex:1}
+.role select{border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--surface);width:100%}
+.role .btn{width:100%}
+
+/* ---------- PAINÉIS ---------- */
+.pn{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+.pn-side{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;border-right:1px solid var(--line);background:var(--mist);padding:20px 14px;display:flex;flex-direction:column;gap:4px}
+.pn-side .brand{padding:0 6px 4px}
+.pn-role{display:inline-flex;align-self:flex-start;margin:6px 6px 16px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:4px 10px}
+.pn-side .nv{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;color:var(--muted);font-weight:600;text-decoration:none;font-size:15px}
+.pn-side .nv:hover{color:var(--navy)}
+.pn-side .nv.on{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(15,23,32,.08)}
+.pn-side .nv .cnt{margin-left:auto;background:var(--red);color:#fff;border-radius:99px;font-size:11.5px;padding:1px 7px;font-weight:700}
+.pn-me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 8px 0;border-top:1px solid var(--line)}
+.pn-me b{display:block;font-size:14px;line-height:1.2}
+.pn-me small{color:var(--muted);font-size:12.5px}
+.pn-me .rbtn{margin-left:auto;width:36px;height:36px}
+.pn-main{padding:28px 34px 70px;min-width:0}
+.pn-mtop{display:none}
+.pn-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.pn-head small{color:var(--muted);font-weight:600}
+.pn-head h1{font-size:clamp(26px,3.4vw,36px);font-weight:800;margin-top:2px}
+.pn-head .acts{display:flex;gap:8px;align-items:center}
+.pn-tabbar{display:none}
+.btn-sm{min-height:38px;padding:8px 14px;font-size:14px}
+.btn-sm svg{width:16px;height:16px}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.kpi{border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;background:var(--surface)}
+.kpi small{color:var(--muted);font-weight:600;font-size:13.5px;display:flex;align-items:center;gap:6px}
+.kpi small svg{width:16px;height:16px;color:var(--blue)}
+.kpi b{display:block;white-space:nowrap;font-family:var(--display);font-weight:800;font-size:clamp(22px,2.3vw,28px);color:var(--navy);line-height:1.15;margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.grid2 > *{min-width:0}
+.card{border:1.5px solid var(--line);border-radius:20px;padding:18px;background:var(--surface);min-width:0}
+.card-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.card-h h3{font-size:18px}
+.card-h a,.card-h button.link{color:var(--blue);font-weight:700;font-size:14px;text-decoration:none}
+.mt{margin-top:14px}
+
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:3px 10px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.pill svg{width:13px;height:13px}
+.pill.ok{background:var(--green-soft);color:var(--green)}
+.pill.warn{background:var(--gold-soft);color:#8A6212}
+.pill.bad{background:var(--red-soft);color:var(--red)}
+.pill.info{background:var(--sky);color:var(--navy)}
+.pill.mute{background:var(--mist);color:var(--muted)}
+:root[data-theme="dark"] .pill.warn{color:var(--gold)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pill.warn{color:var(--gold)}}
+.lv{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--navy);color:var(--on-navy);font-family:var(--display);font-weight:800;font-size:14px}
+.av{width:38px;height:38px;border-radius:50%;background:var(--sky);color:var(--navy);display:grid;place-items:center;font-weight:800;font-size:14px;flex:none;font-family:var(--display)}
+.av.me{background:var(--gold);color:#1B3A5C}
+
+.rows{display:grid}
+.rw{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);text-align:left;width:100%;color:inherit;text-decoration:none}
+.rw:last-child{border-bottom:0}
+.rw b{display:block;font-size:15px;line-height:1.25}
+.rw small{color:var(--muted);font-size:13px}
+.rw .end{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.rw .time{font-family:var(--display);font-weight:800;color:var(--navy);min-width:52px;font-variant-numeric:tabular-nums}
+.empty-s{color:var(--muted);font-size:14.5px;padding:10px 0}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
+.toolbar input,.toolbar select{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface);font-size:15px;min-height:42px}
+.toolbar input{flex:1;min-width:180px}
+.tbl{overflow-x:auto;border:1.5px solid var(--line);border-radius:18px;background:var(--surface)}
+.tbl table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:680px}
+.tbl th{text-align:left;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle;font-variant-numeric:tabular-nums}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr{cursor:pointer}
+.tbl tbody tr:hover{background:var(--mist)}
+.tbl .nm{display:flex;align-items:center;gap:10px}
+.tbl .nm b{white-space:nowrap}
+.tbl .num{text-align:right}
+.prog{height:7px;border-radius:99px;background:var(--mist);overflow:hidden;min-width:70px}
+.prog i{display:block;height:100%;background:var(--blue);border-radius:99px}
+
+/* gráficos */
+.chart svg{width:100%;height:auto;display:block;max-width:100%}
+.chart .gl{stroke:var(--line);stroke-width:1}
+.chart .ax{fill:var(--muted);font-size:12px;font-family:var(--body)}
+.chart .vl{fill:var(--ink);font-size:12.5px;font-weight:700;font-family:var(--body)}
+.chart .bar{fill:var(--blue)}
+.chart .hit{fill:transparent}
+.chart g:hover .bar{fill:var(--navy)}
+.hb{display:grid;gap:10px}
+.hb div{display:grid;grid-template-columns:120px 1fr 44px;gap:10px;align-items:center;font-size:14px}
+.hb span{color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb i{display:block;height:14px;border-radius:0 4px 4px 0;background:var(--blue);min-width:2px}
+.hb b{text-align:right;font-variant-numeric:tabular-nums}
+.tip{position:fixed;z-index:95;pointer-events:none;background:var(--ink);color:var(--bg);padding:7px 10px;border-radius:10px;font-size:13px;font-weight:600;transform:translate(-50%,calc(-100% - 10px));white-space:nowrap}
+
+/* gaveta de detalhe */
+.drawer{position:fixed;inset:0;z-index:70;background:rgba(15,23,32,.5);display:flex;justify-content:flex-end}
+.drawer .dp{width:min(560px,100%);height:100%;overflow:auto;background:var(--bg);padding:22px 22px calc(40px + env(safe-area-inset-bottom,0px));animation:slide .25s ease}
+@keyframes slide{from{transform:translateX(30px);opacity:0}}
+.dp-h{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+.dp-h .av{width:56px;height:56px;font-size:20px}
+.dp-h h2{font-size:24px}
+.dp-h .rbtn{margin-left:auto;align-self:flex-start}
+.dp .sec2{margin-top:20px}
+.dp .sec2 > h3{font-size:16px;margin-bottom:10px}
+.dp .acts{display:flex;flex-wrap:wrap;gap:8px}
+.minis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.minis div{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px}
+.minis b{display:block;font-family:var(--display);font-size:20px;color:var(--navy)}
+.minis small{color:var(--muted);font-size:12.5px}
+.chk{display:grid;gap:8px}
+.chk div{display:flex;gap:10px;align-items:center;font-size:15px}
+.chk svg{width:18px;height:18px;color:var(--muted)}
+.chk .y svg{color:var(--green)}
+
+/* mensagens do painel */
+.convs{display:grid;grid-template-columns:300px minmax(0,1fr);border:1.5px solid var(--line);border-radius:20px;overflow:hidden;height:calc(100vh - 170px);min-height:460px;background:var(--surface)}
+.cl{border-right:1px solid var(--line);overflow-y:auto}
+.cl button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:12px 14px;border-bottom:1px solid var(--line)}
+.cl button.on{background:var(--mist)}
+.cl b{display:block;font-size:14.5px}
+.cl small{color:var(--muted);font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.cl .dot{width:9px;height:9px;border-radius:50%;background:var(--red);margin-left:auto;flex:none}
+.thr{display:flex;flex-direction:column;min-width:0}
+.thr-h{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.thr .msgs{padding:16px}
+.thr .quick,.thr .composer{padding-inline:16px}
+.thr .composer{padding-bottom:14px}
+
+.pcard{border:1.5px solid var(--line);border-radius:20px;padding:18px;background:var(--surface);display:grid;gap:12px;align-content:start}
+.pcard .top{display:flex;gap:12px;align-items:center}
+.pcard .top .av{width:48px;height:48px;font-size:17px}
+.pcard h3{font-size:19px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.lead{border:1.5px solid var(--line);border-radius:18px;padding:16px;background:var(--surface);display:grid;gap:8px}
+.lead .top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.lead p{font-size:15px}
+.lead small{color:var(--muted)}
+.info{display:flex;gap:10px;align-items:flex-start;background:var(--mist);border-radius:16px;padding:14px 16px;font-size:14.5px;color:var(--muted)}
+.info svg{color:var(--blue);margin-top:1px}
+.set{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+
+@media (max-width:900px){
+  .facts{grid-template-columns:1fr 1fr}
+  .facts div:nth-child(2){border-right:0}
+  .facts div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .split,.roles{grid-template-columns:1fr}
+  .pn{grid-template-columns:1fr}
+  .pn-side{display:none}
+  .pn-mtop{display:flex;align-items:center;gap:10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 18px;margin:0 -18px 18px}
+  .pn-mtop .pn-role{margin:0}
+  .pn-mtop .rbtn:first-of-type{margin-left:auto}
+  .pn-head [data-theme]{display:none}
+  .pn-main{padding:0 18px calc(96px + env(safe-area-inset-bottom,0px))}
+  .pn-tabbar{display:block}
+  .pn-tabbar a{font-size:11px}
+  .grid2{grid-template-columns:1fr}
+  .convs{grid-template-columns:1fr;height:calc(100vh - 230px)}
+  .convs.open .cl{display:none}
+  .convs:not(.open) .thr{display:none}
+  .cl small{max-width:60vw}
+}
+@media (max-width:560px){
+  .facts b{font-size:28px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi b{font-size:21px}
+  .tbl table.fit{min-width:0}
+  .tbl .hm{display:none}
+  .tbl td,.tbl th{padding-inline:10px}
+  .hb div{grid-template-columns:92px 1fr 36px}
+}
+
 @media (min-width:901px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -476,7 +675,8 @@ const BARRIERS=[["Vergonha do corpo","eye-off"],["Medo de ser julgado","users"],
 const GOALS=[["Me sentir melhor comigo","smile"],["Ter mais disposição","zap"],["Perder peso com saúde","scale"],["Cuidar da saúde mental","brain"],["Ganhar força e mobilidade","activity"],["Conseguir ir à academia","dumbbell"]];
 const CONTACT=[["Só mensagem","message-square","Sem câmera e sem áudio"],["Áudio","mic","Conversa por voz"],["Vídeo-chamada","video","Com câmera"]];
 const PARQ=["Algum médico já disse que você tem problema no coração e só deve fazer atividade física com orientação?","Você sente dor no peito quando faz atividade física?","No último mês, sentiu dor no peito sem estar fazendo atividade física?","Você perde o equilíbrio por tontura ou já desmaiou?","Tem algum problema nos ossos ou articulações que pode piorar com exercício?","Toma remédio para pressão arterial ou para o coração?","Sabe de algum outro motivo pelo qual não deveria fazer atividade física?"];
-const PERSONAL={name:"Camila Rocha",cref:"CREF 000000-G/SP",bio:"Especialista em atividade física adaptada e em iniciantes. Atende no ABC paulista.",initials:"CR"};
+const myP=()=>DB.personals.find(p=>p.id===(S.pid||"p1"))||DB.personals[0];
+const PERSONAL={get name(){return myP().name},get cref(){return myP().cref},get bio(){return myP().bio||""},get initials(){return initials(myP().name)}};
 const BADGES=[["Primeiro passo","footprints","Criou seu plano"],["Primeira conversa","message-circle","Conversou com o personal"],["1º treino","flame","Concluiu o primeiro treino"],["Semana firme","calendar-check","3 treinos em uma semana"],["Nível 2","house","Chegou aos treinos em casa"],["8 treinos","award","Completou 8 treinos"],["Nível 3","trees","Primeiro encontro ao ar livre"],["Nível 4","dumbbell","Chegou à academia"]];
 
 /* ================== STATE ================== */
@@ -526,6 +726,9 @@ function route(keep){
   if(keep!==true)window.scrollTo(0,0);
   setTimeout(()=>{if(keep===true)scrollTo(0,y)},0);
   if(h.startsWith("#/comecar"))return onboarding();
+  if(h.startsWith("#/entrar"))return login();
+  if(h.startsWith("#/personal"))return panelPersonal(h.split("/")[2]||"hoje");
+  if(h.startsWith("#/admin"))return panelAdmin(h.split("/")[2]||"geral");
   if(h.startsWith("#/app")){if(!S.profile){location.hash="#/comecar";return}return app(h.split("/")[2]||"inicio")}
   site();
 }
@@ -537,11 +740,11 @@ function site(){
   $("#root").innerHTML=`
 <header class="topbar"><div class="wrap">
   <a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
-  <nav class="topnav" aria-label="Seções"><a href="#como" data-scroll>Como funciona</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#duvidas" data-scroll>Dúvidas</a></nav>
+  <nav class="topnav" aria-label="Seções"><a href="#como" data-scroll>Como funciona</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#duvidas" data-scroll>Dúvidas</a><a href="#/entrar">Entrar</a></nav>
   <a class="btn btn-primary" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Começar"}</a>
   <button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button>
   <button class="rbtn menu-btn" id="menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="mnav"><i data-lucide="menu"></i></button>
-</div><nav class="mnav wrap" id="mnav" aria-label="Seções" hidden><a href="#como" data-scroll>Como funciona</a><a href="#combinados" data-scroll>Nossos combinados</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#duvidas" data-scroll>Dúvidas</a></nav></header>
+</div><nav class="mnav wrap" id="mnav" aria-label="Seções" hidden><a href="#como" data-scroll>Como funciona</a><a href="#combinados" data-scroll>Nossos combinados</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#parceiros" data-scroll>Seja parceiro</a><a href="#duvidas" data-scroll>Dúvidas</a><a href="#contato" data-scroll>Contato</a><a href="#/entrar">Entrar (cliente, personal ou empresa)</a></nav></header>
 
 <section class="hero"><div class="wrap">
   <div>
@@ -565,7 +768,14 @@ function site(){
   </div></div>
 </div></section>
 
-<section class="sec" id="como"><div class="wrap">
+<div class="wrap"><div class="facts">
+  <div><b>4</b><span>níveis, do online até a academia</span></div>
+  <div><b>15 min</b><span>de primeira conversa, grátis</span></div>
+  <div><b>0</b><span>fidelidade ou multa para sair</span></div>
+  <div><b>100%</b><span>dos personais com registro no CREF</span></div>
+</div></div>
+
+<section class="sec" id="como" style="border-top:0"><div class="wrap">
   <div class="sec-h"><span class="kicker">Como funciona</span><h2>Quatro níveis. Você só sobe quando se sentir pronto.</h2><p>O mesmo personal acompanha você do começo ao fim. Nada de pular etapas.</p></div>
   <div class="steps">${LEVELS.map(l=>`<div class="stp"><div class="bar"></div><span class="n">Nível ${l.n}</span><h3><i data-lucide="${l.icon}"></i>${l.t}</h3><p>${l.desc}</p><p class="when"><i data-lucide="arrow-up-right"></i>Avança quando: ${l.when.toLowerCase()}</p></div>`).join("")}</div>
 </div></section>
@@ -613,6 +823,19 @@ function site(){
   <p class="note"><i data-lucide="gift"></i>A primeira conversa de 15 minutos é gratuita e sem compromisso.</p>
 </div></section>
 
+<section class="sec" id="parceiros"><div class="wrap split">
+  <div class="sec-h" style="margin:0"><span class="kicker">Para profissionais</span><h2>É personal e gosta de começar do zero com as pessoas?</h2>
+    <p>Procuramos profissionais de educação física que tenham paciência, escutem sem julgar e queiram trabalhar com iniciantes.</p>
+    <ul><li><i data-lucide="check"></i><span>Alunos chegam já com questionário de saúde e objetivos respondidos</span></li><li><i data-lucide="check"></i><span>Painel próprio com alertas, agenda, mensagens e ganhos</span></li><li><i data-lucide="check"></i><span>Repasse de ${DB.split}% de cada mensalidade paga</span></li><li><i data-lucide="check"></i><span>Formação em comunicação sem julgamento e atividade física adaptada</span></li></ul></div>
+  <form class="form" id="fp"><h3>Quero ser parceiro</h3>
+    <div class="field"><label for="fpn">Nome</label><input id="fpn" required autocomplete="name"></div>
+    <div class="field"><label for="fpr">Número do CREF</label><input id="fpr" required placeholder="000000-G/SP"></div>
+    <div class="field"><label for="fpa">Região onde atende</label><input id="fpa" required placeholder="Ex.: Santo André"></div>
+    <div class="field"><label for="fpc">WhatsApp ou e-mail</label><input id="fpc" required></div>
+    <button class="btn btn-primary"><i data-lucide="send"></i>Enviar cadastro</button>
+    <p class="fine">Demonstração: o cadastro fica salvo neste navegador e aparece no painel da empresa, em Contatos.</p></form>
+</div></section>
+
 <section class="sec" id="duvidas"><div class="wrap">
   <div class="sec-h"><span class="kicker">Dúvidas</span><h2>Perguntas que todo mundo faz (e tem vergonha de perguntar).</h2></div>
   <div class="faq">
@@ -631,14 +854,27 @@ function site(){
   <a class="btn btn-gold" href="${has?"#/app":"#/comecar"}"><i data-lucide="footprints"></i>${has?"Abrir meu app":"Começar agora"}</a>
 </div></div></section>
 
+<section class="sec" id="contato"><div class="wrap split">
+  <div class="sec-h" style="margin:0"><span class="kicker">Fale com a gente</span><h2>Ficou alguma dúvida? Pode perguntar.</h2>
+    <p>Responde uma pessoa da equipe, não um robô. Se preferir, conte só o primeiro nome.</p>
+    <ul><li><i data-lucide="clock"></i><span>Resposta em até 1 dia útil</span></li><li><i data-lucide="message-square"></i><span>Por mensagem, do jeito que você escolher</span></li><li><i data-lucide="lock"></i><span>Seus dados não são compartilhados</span></li></ul></div>
+  <form class="form" id="fc"><h3>Mandar mensagem</h3>
+    <div class="field"><label for="fcn">Como quer ser chamado</label><input id="fcn" required autocomplete="given-name"></div>
+    <div class="field"><label for="fcc">WhatsApp ou e-mail</label><input id="fcc" required></div>
+    <div class="field"><label for="fcm">Sua dúvida</label><textarea id="fcm" placeholder="Ex.: dá para começar se eu tenho dor no joelho?"></textarea></div>
+    <button class="btn btn-primary"><i data-lucide="send"></i>Enviar</button>
+    <p class="fine">Demonstração: a mensagem fica salva neste navegador e aparece no painel da empresa, em Contatos.</p></form>
+</div></section>
+
 <footer class="foot"><div class="wrap">
-  <div><b style="color:var(--navy)">Primeiro Passo</b><br>Acompanhamento físico humanizado.</div>
+  <div><b style="color:var(--navy)">Primeiro Passo</b><br>Acompanhamento físico humanizado.<div class="foot-links"><a href="${has?"#/app":"#/comecar"}">Área do cliente</a><a href="#/entrar">Área do personal</a><a href="#/entrar">Área da empresa</a></div></div>
   <p class="care"><i data-lucide="heart"></i><span>Se você estiver passando por um momento muito difícil, não precisa enfrentar sozinho. O CVV atende 24 horas pelo telefone 188 ou pelo site cvv.org.br.</span></p>
 </div></footer>`;
   const mn=$("#mnav"),mb=$("#menu");
   const setMenu=o=>{mn.hidden=!o;mb.setAttribute("aria-expanded",o);mb.innerHTML=`<i data-lucide="${o?"x":"menu"}"></i>`;icons()};
   mb.onclick=()=>setMenu(mn.hidden);
   $("#theme").onclick=toggleTheme;
+  bindSiteForms();
   document.querySelectorAll("[data-scroll]").forEach(a=>a.onclick=e=>{e.preventDefault();setMenu(false);document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})});
   icons();
 }
@@ -809,7 +1045,7 @@ function vTreinos(){
   const list=WORKOUTS.filter(TFILTERS[TF]);
   $("#view").innerHTML=`<div class="hello"><small>Treinos em casa</small><h2>No seu espaço, no seu ritmo.</h2></div>
   ${S.level<2?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="lock"></i><span>Os treinos em vídeo liberam no nível 2, depois da primeira conversa com a sua personal. Você já pode dar uma olhada.</span></div>`:""}
-  ${S.profile.medical?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="stethoscope"></i><span>Lembre de enviar a liberação médica para a sua personal antes de treinar.</span></div>`:""}
+  ${S.profile.medical&&!S.profile.medOk?`<div class="alert warn" style="margin:0 0 16px"><i data-lucide="stethoscope"></i><span>Lembre de enviar a liberação médica para a sua personal antes de treinar.</span></div>`:""}
   <div class="filters" role="group" aria-label="Filtrar treinos">${Object.keys(TFILTERS).map(k=>`<button aria-pressed="${TF===k}" data-tf="${k}">${k}</button>`).join("")}</div>
   <div class="wk">${list.length?list.map(wcard).join(""):`<div class="empty">Você já fez todos os treinos pelo menos uma vez. Pode repetir o que mais gostou!</div>`}</div>
   <button class="task" id="brt" style="margin-top:10px"><span class="ti"><i data-lucide="wind"></i></span><span><b>Pausa para respirar</b><small>2 min · liberado em todos os níveis</small></span><i class="go" data-lucide="chevron-right"></i></button>
@@ -932,8 +1168,9 @@ function vPerfil(){
   <div class="block"><div class="block-h"><h3>Sua jornada</h3></div>
     <div class="tasks">${LEVELS.map(l=>`<div class="task ${l.n<S.level?"done":""}" style="${l.n>S.level?"opacity:.55":""}"><span class="ti"><i data-lucide="${l.n<S.level?"check":l.icon}"></i></span><span><b>Nível ${l.n} · ${l.t}</b><small>${l.price} ${l.per}</small></span>${l.n===S.level?`<span class="chip ok" style="margin-left:auto">Atual</span>`:""}</div>`).join("")}</div></div>
   <div class="block"><div class="block-h"><h3>Suas respostas</h3></div>
-    <div class="plist"><div><span>Objetivos</span><b>${p.goals.join(", ")}</b></div><div><span>O que te trava</span><b>${p.barriers.join(", ")}</b></div><div><span>Disponibilidade</span><b>${p.days.join(", ")} · ${p.period}</b></div><div><span>Contato preferido</span><b>${p.contact}</b></div><div><span>Liberação médica</span><b>${p.medical?"Necessária":"Não necessária"}</b></div></div></div>
+    <div class="plist"><div><span>Objetivos</span><b>${p.goals.join(", ")}</b></div><div><span>O que te trava</span><b>${p.barriers.join(", ")}</b></div><div><span>Disponibilidade</span><b>${p.days.join(", ")} · ${p.period}</b></div><div><span>Contato preferido</span><b>${p.contact}</b></div><div><span>Liberação médica</span><b>${p.medical?(p.medOk?"Recebida pela personal":"Pendente"):"Não necessária"}</b></div></div></div>
   <div class="block"><div class="block-h"><h3>Como você tem se sentido</h3></div>${feelHist()}</div>
+  <div class="block"><div class="block-h"><h3>Pagamentos</h3></div>${myBills()}</div>
   <div class="block" style="display:grid;gap:10px"><div class="block-h" style="margin-bottom:2px"><h3>Preferências</h3></div>
     <button class="toggle-row" role="switch" aria-checked="${isDark()}" id="tg-theme"><i data-lucide="moon"></i><span><b>Tema escuro</b></span><span class="sw"></span></button>
     <button class="toggle-row" role="switch" aria-checked="${!!S.sound}" id="tg-sound"><i data-lucide="volume-2"></i><span><b>Aviso sonoro nos treinos</b><br><small style="color:var(--muted)">Toca ao trocar de exercício e vibra no celular</small></span><span class="sw"></span></button>
@@ -944,9 +1181,14 @@ function vPerfil(){
   </div>
   <p class="note"><i data-lucide="heart"></i>Se estiver passando por um momento difícil, o CVV atende 24 horas pelo 188.</p>`;
   $("#tg-theme").onclick=toggleTheme;
+  document.querySelectorAll("[data-mypay]").forEach(b=>b.onclick=()=>{DB.paid[b.dataset.mypay]=true;saveDB();toast("Pagamento confirmado. Obrigado!");vPerfil();icons()});
   $("#tg-sound").onclick=()=>{S.sound=!S.sound;save();if(S.sound)beep(880);vPerfil();icons()};
   $("#reset").onclick=()=>sheet("rotate-ccw","Recomeçar do zero?","Isso apaga suas respostas, treinos, agendamentos e conversas deste aparelho. Não dá para desfazer.","Apagar e recomeçar",{danger:true,cancel:"Manter meu progresso",onOk:()=>{S=fresh();save();OB={step:0,name:"",goals:[],barriers:[],days:[],period:"",contact:"",parq:Array(PARQ.length).fill(null),notes:""};location.hash="#/"}});
 }
+function myBills(){const bl=bills().filter(b=>b.cid==="me").reverse();
+  if(!bl.length)return`<div class="empty">Nenhuma cobrança ainda.</div>`;
+  return`<div class="hist">${bl.map(b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><i data-lucide="receipt"></i><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}<br><small style="margin:0">Nível ${b.lv} · vence dia 10</small></span><small style="display:flex;gap:8px;align-items:center">${b.paid?pill(k,ic,t):`${pill(k,ic,t)}<button class="btn btn-primary btn-sm" data-mypay="${b.key}">Pagar</button>`}</small></div>`}).join("")}</div>
+  <p class="note" style="margin-top:10px"><i data-lucide="info"></i>Demonstração: o botão Pagar só marca como pago. Numa versão real, abriria o Pix.</p>`}
 function feelHist(){
   const FI={"Leve":"smile","Bom":"thumbs-up","Cansativo":"wind","Difícil":"frown"};
   const items=[...S.workouts.map(w=>({at:w.at,t:(WORKOUTS.find(x=>x.id===w.id)||{}).t,f:w.feel})),...(S.breaths||[]).map(b=>({at:b,t:"Pausa para respirar",f:null}))].sort((a,b)=>b.at-a.at).slice(0,6);
@@ -970,6 +1212,430 @@ function bindDemo(){document.querySelectorAll("[data-demo]").forEach(x=>x.onclic
   if(k==="gym"){S.gymsessions++;const b=S.bookings.find(b=>b.type==="Academia"&&!b.done);if(b)b.done=true}
   if(k==="wk"){const w=WORKOUTS[S.workouts.length%WORKOUTS.length];S.workouts.push({id:w.id,at:Date.now(),feel:"Bom"})}
   save();toast("Registrado!");route()})}
+
+/* ================== BASE DA EMPRESA ==================
+   Demonstração: tudo fica neste navegador. O cliente deste aparelho (S) aparece
+   nos painéis como o aluno de id "me", e as ações dos painéis alteram S de verdade. */
+const DBKEY="primeiropasso:db:v1",SKEY="primeiropasso:sessao",D1=864e5;
+const mkey=ts=>{const d=new Date(ts);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
+const monthsBack=n=>[...Array(n)].map((_,i)=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-(n-1-i));return mkey(d)});
+const mlabel=(k,long)=>{const [y,m]=k.split("-");return new Date(+y,+m-1,1).toLocaleDateString("pt-BR",{month:long?"long":"short"}).replace(".","")};
+const money=v=>"R$ "+Math.round(v).toLocaleString("pt-BR");
+const initials=n=>n.split(" ").filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase();
+const daysAgo=ts=>Math.max(0,Math.floor((Date.now()-ts)/D1));
+const rel=ts=>{const d=daysAgo(ts);return d===0?"hoje":d===1?"ontem":`há ${d} dias`};
+const sod=(o=0)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+o);return d.getTime()};
+const hm=ts=>new Date(ts).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+const dlabel=ts=>{const t=sod();return ts>=t&&ts<t+D1?"Hoje":ts>=t+D1&&ts<t+2*D1?"Amanhã":new Date(ts).toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"short"}).replace(".","")};
+const FEELS=["Leve","Bom","Cansativo","Difícil"];
+const FEEL_IC={"Leve":"smile","Bom":"thumbs-up","Cansativo":"wind","Difícil":"frown"};
+const BTYPES=[["Primeira conversa","message-circle"],["Check-in online","video"],["Ao ar livre","trees"],["Academia","dumbbell"]];
+
+function seedDB(){
+  let r=11;const rnd=()=>(r=(r*9301+49297)%233280)/233280,pick=a=>a[Math.floor(rnd()*a.length)];
+  const now=Date.now();
+  const personals=[
+    {id:"p1",name:"Camila Rocha",cref:"CREF 000000-G/SP",area:"Santo André e São Bernardo",bio:"Especialista em atividade física adaptada e em iniciantes. Atende no ABC paulista.",spec:["Atividade física adaptada","Iniciantes"],status:"ativo",cap:20,rating:4.9,since:now-420*D1},
+    {id:"p2",name:"Rafael Nunes",cref:"CREF 000001-G/SP",area:"São Caetano e Mauá",bio:"Trabalha com saúde mental e emagrecimento sem dietas radicais.",spec:["Saúde mental","Emagrecimento"],status:"ativo",cap:15,rating:4.8,since:now-230*D1},
+    {id:"p3",name:"Júlia Martins",cref:"CREF 000002-G/SP",area:"Diadema",bio:"Pós-graduada em envelhecimento ativo. Foco em mobilidade e equilíbrio.",spec:["Idosos","Mobilidade"],status:"pendente",cap:12,rating:null,since:now-3*D1}];
+  // nome, nível, personal, cliente há (dias), última atividade (dias), treinos, saúde (0 ok, 1 aguardando liberação, 2 liberado), última sensação, situação
+  const CL=[["Marina Alves",2,"p1",40,1,6,0,"Bom"],["João Pedro Lima",1,"p1",5,2,0,1,""],["Beatriz Souza",3,"p1",130,0,24,0,"Leve"],["Carlos Eduardo Santos",2,"p2",33,9,3,1,"Difícil"],
+    ["Fernanda Reis",4,"p2",210,1,41,0,"Bom"],["Luana Costa",2,"p1",26,3,4,0,"Cansativo"],["Roberto Dias",1,"p2",2,1,0,0,""],["Patrícia Gomes",3,"p2",96,12,18,2,"Bom"],
+    ["Thiago Martins",2,"p1",19,0,7,0,"Leve"],["Sônia Ferreira",2,"p2",64,23,5,0,"Difícil","pausado"],["André Oliveira",4,"p1",265,2,57,0,"Bom"],["Helena Prado",2,"p2",12,1,2,2,"Leve"]];
+  const clients=CL.map(([name,level,pid,since,last,n,med,feel,st],i)=>{
+    const s0=now-since*D1,l0=now-last*D1-3600e3*(2+i%5),ws=[];
+    for(let k=0;k<n;k++){const at=k===n-1?l0:s0+(l0-s0)*(k+1)/n;ws.push({id:"w"+(1+Math.floor(rnd()*6)),at,feel:k===n-1?feel:pick(["Leve","Bom","Bom","Cansativo"])})}
+    const first=name.split(" ")[0];
+    const msgs=[{from:"them",text:`Oi, ${first}! Como foi a semana?`,t:"09:10",at:l0-D1}];
+    if(name.startsWith("Carlos"))msgs.push({from:"me",text:"Essa semana foi puxada. Travei no circuito e fiquei meio desanimado.",t:"21:42",at:now-5*3600e3});
+    else if(name.startsWith("Luana"))msgs.push({from:"me",text:"Posso trocar o horário de quinta para a noite?",t:"12:03",at:now-2*3600e3});
+    else if(name.startsWith("João"))msgs.push({from:"me",text:"Oi! Pode ser só por mensagem mesmo? Fico nervoso com vídeo.",t:"18:20",at:now-20*3600e3});
+    else msgs.push({from:"me",text:pick(["Foi bem! Fiz os treinos certinho.","Consegui treinar 3 vezes 🙌","Um pouco cansada, mas fiz."]),t:"19:30",at:l0},{from:"them",text:"Que orgulho! Segue no seu ritmo. 💛",t:"19:45",at:l0+900e3});
+    return {id:"c"+(i+1),name,level,pid,since:s0,goals:[pick(GOALS)[0],pick(GOALS)[0]].filter((x,j,a)=>a.indexOf(x)===j),barriers:[pick(BARRIERS)[0],pick(BARRIERS)[0]].filter((x,j,a)=>a.indexOf(x)===j),
+      contact:pick(["Só mensagem","Áudio","Vídeo-chamada"]),period:pick(["Manhã","Tarde","Noite"]),days:["Seg","Qua","Sex"],medical:med>0,medOk:med===2,
+      workouts:ws,talked:level>1,outdoor:level===3?2:level>3?4:0,gym:level===4?(name.startsWith("André")?4:1):0,status:st||"ativo",msgs,phone:"(11) 9"+String(1000+i*731).slice(0,4)+"-"+String(2000+i*377).slice(0,4)}});
+  const at=(d,h,m=0)=>sod(d)+(h*60+m)*6e4;
+  const B=[["c3","p1",at(0,8),"Ao ar livre","feito"],["c11","p1",at(0,18),"Academia","agendado"],["c9","p1",at(0,19,30),"Check-in online","agendado"],["c5","p2",at(1,7),"Academia","agendado"],["c2","p1",at(1,19),"Primeira conversa","agendado"],
+    ["c8","p2",at(2,9),"Ao ar livre","agendado"],["c1","p1",at(3,10),"Check-in online","agendado"],["c3","p1",at(3,8),"Ao ar livre","agendado"],["c11","p1",at(4,18),"Academia","agendado"],["c12","p2",at(2,20),"Check-in online","agendado"],
+    ["c3","p1",at(-4,8),"Ao ar livre","feito"],["c5","p2",at(-2,7),"Academia","feito"],["c6","p1",at(-3,14),"Check-in online","feito"]];
+  const bookings=B.map(([cid,pid,ts,type,status],i)=>({id:"b"+i,cid,pid,ts,type,mode:type==="Ao ar livre"?"presencial":type==="Academia"?"na academia":"online",status}));
+  const leads=[{id:"l1",type:"cliente",name:"Cláudia M.",contact:"(11) 90000-1234",msg:"Tenho 58 anos e nunca treinei. Dá para começar sentada?",at:now-5*3600e3,status:"novo"},
+    {id:"l2",type:"personal",name:"Diego Santana",contact:"diego@exemplo.com",cref:"CREF 000003-G/SP",area:"Santo André",msg:"Trabalho com reabilitação e queria ser parceiro.",at:now-D1-3*3600e3,status:"novo"},
+    {id:"l3",type:"cliente",name:"Marcos T.",contact:"(11) 90000-5678",msg:"Tenho ansiedade social. Preciso ir em academia em algum momento?",at:now-3*D1,status:"contatado"},
+    {id:"l4",type:"cliente",name:"Rita L.",contact:"rita@exemplo.com",msg:"Quero para minha mãe, de 70 anos.",at:now-9*D1,status:"convertido"}];
+  const db={v:1,personals,clients,bookings,leads,prices:[100,180,480,560],split:70,paid:{}};
+  const cur=mkey(now),prev=monthsBack(2)[0];
+  billsOf(db,clients).forEach(b=>{db.paid[b.key]=b.m<cur?!(b.cid==="c10"&&b.m>=prev):rnd()<.6});
+  return db;
+}
+let DB=loadDB();
+function loadDB(){try{const r=localStorage.getItem(DBKEY);if(r)return JSON.parse(r)}catch(e){}return seedDB()}
+function saveDB(){try{localStorage.setItem(DBKEY,JSON.stringify(DB))}catch(e){}}
+function syncPrices(){LEVELS.forEach((l,i)=>{const v=DB.prices[i];l.price=money(v);l.per=i===0?"pagamento único":i===1?"por mês":`por mês · ${money(v/8)}/aula`})}
+syncPrices();
+
+/* o cliente deste aparelho visto pelos painéis */
+function meC(){if(!S.profile)return null;const p=S.profile;
+  return{id:"me",you:true,name:p.name,level:S.level,pid:S.pid||"p1",since:p.since,goals:p.goals,barriers:p.barriers,contact:p.contact,period:p.period,days:p.days,
+    medical:p.medical,medOk:!!p.medOk,workouts:S.workouts,talked:S.talked,outdoor:S.outdoor,gym:S.gymsessions,status:S.status||"ativo",msgs:S.messages,phone:"este aparelho"}}
+const allClients=()=>DB.clients.concat(S.profile?[meC()]:[]);
+const findC=id=>allClients().find(c=>c.id===id);
+const findP=id=>DB.personals.find(p=>p.id===id);
+function bookingsAll(){return DB.bookings.concat(S.profile?S.bookings.map(b=>({id:"me-"+b.ts,cid:"me",pid:S.pid||"p1",ts:b.ts,type:b.type,mode:b.mode,status:b.done?"feito":"agendado"})):[])}
+function updC(id,patch){
+  if(id==="me"){const map={level:"level",talked:"talked",outdoor:"outdoor",gym:"gymsessions",status:"status",pid:"pid"};
+    for(const k in patch){if(k==="medOk")S.profile.medOk=patch[k];else S[map[k]||k]=patch[k]}save()}
+  else{Object.assign(DB.clients.find(c=>c.id===id),patch);saveDB()}}
+function pushMsg(id,text){const m={from:"them",text,t:nowT(),at:Date.now()};
+  if(id==="me"){S.messages.push(m);S.unread++;save()}else{DB.clients.find(c=>c.id===id).msgs.push(m);saveDB()}}
+function lastAct(c){const w=c.workouts[c.workouts.length-1];return w?w.at:c.since}
+const lastMsg=c=>c.msgs[c.msgs.length-1];
+const needsReply=c=>{const m=lastMsg(c);return !!m&&m.from==="me"};
+function critFor(c){const n=c.workouts.length,bk=bookingsAll().filter(b=>b.cid===c.id&&b.status!=="cancelado"),wk=c.workouts.filter(w=>w.at>Date.now()-7*D1).length;
+  if(c.level===1)return[["Questionário respondido",true],["Primeira conversa agendada",bk.length>0],["Conversa realizada",c.talked]];
+  if(c.level===2)return[["Primeiro treino em casa",n>=1],["3 treinos em uma semana",wk>=3||n>=3],[`8 treinos (${Math.min(n,8)}/8)`,n>=8]];
+  if(c.level===3)return[["Encontro ao ar livre agendado",bk.some(b=>b.type==="Ao ar livre")],[`4 encontros (${Math.min(c.outdoor,4)}/4)`,c.outdoor>=4]];
+  return[["Aula na academia agendada",bk.some(b=>b.type==="Academia")],[`4 aulas na academia (${Math.min(c.gym,4)}/4)`,c.gym>=4]]}
+const pctFor=c=>{const k=critFor(c);return Math.round(k.filter(x=>x[1]).length/k.length*100)};
+function alertsFor(c){const a=[];if(c.status==="pausado")return a;
+  if(c.medical&&!c.medOk)a.push(["stethoscope","Aguardando liberação médica","warn"]);
+  const d=daysAgo(lastAct(c));if(c.level>=2&&d>=7)a.push(["clock",`Sem atividade há ${d} dias`,"bad"]);
+  const lw=c.workouts[c.workouts.length-1];if(lw&&lw.feel==="Difícil"&&daysAgo(lw.at)<=10)a.push(["frown","Achou o último treino difícil","warn"]);
+  if(needsReply(c))a.push(["message-circle","Mensagem esperando resposta","info"]);
+  if(c.level<4&&critFor(c).every(x=>x[1]))a.push(["party-popper","Pronto para o próximo nível","ok"]);
+  return a}
+
+/* mensalidades: nível 1 é pago uma vez; depois, uma por mês pelo nível em que o aluno estava */
+function billsOf(db,list){const out=[],ms=monthsBack(6),cur=mkey(Date.now());
+  list.forEach(c=>ms.forEach((m,idx)=>{const sm=mkey(c.since);if(m<sm)return;if(c.status==="pausado"&&m===cur)return;
+    const ago=5-idx;let lv=c.id==="me"?c.level:Math.max(1,c.level-Math.floor(ago/2));
+    if(lv===1&&m!==sm){if(c.level===1)return;lv=2}
+    out.push({key:c.id+"|"+m,cid:c.id,pid:c.pid,m,lv,amount:db.prices[lv-1]})}));return out}
+function bills(){const cur=mkey(Date.now()),late=new Date().getDate()>10;
+  return billsOf(DB,allClients()).map(b=>{const paid=!!DB.paid[b.key];return{...b,paid,status:paid?"pago":b.m<cur||late?"atrasado":"pendente"}})}
+const BILL_PILL={pago:["ok","circle-check","Pago"],pendente:["mute","clock","Pendente"],atrasado:["bad","circle-alert","Atrasado"]};
+
+/* ================== PEÇAS DE INTERFACE ================== */
+const pill=(k,ic,t)=>`<span class="pill ${k}">${ic?`<i data-lucide="${ic}"></i>`:""}${esc(t)}</span>`;
+const avatar=c=>`<span class="av ${c.you?"me":""}">${esc(initials(c.name))}</span>`;
+const lvb=n=>`<span class="lv" title="Nível ${n}: ${LEVELS[n-1].t}">${n}</span>`;
+const kpi=(ic,label,val,sub)=>`<div class="kpi"><small><i data-lucide="${ic}"></i>${label}</small><b>${val}</b>${sub?`<span>${sub}</span>`:""}</div>`;
+const niceMax=v=>{const p=10**Math.floor(Math.log10(v||1)),n=v/p;return(n<=1?1:n<=2?2:n<=5?5:10)*p};
+const rtop=(x,y,w,h,r)=>{r=Math.min(r,h,w/2);return`M${x},${y+h}V${y+r}Q${x},${y} ${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h}Z`};
+/* barras verticais de uma série: rótulo só no último valor, o resto no toque/hover */
+function vbars(data,fmt=money){const W=560,H=210,pl=52,pr=8,pt=26,pb=28,iw=W-pl-pr,ih=H-pt-pb,max=niceMax(Math.max(...data.map(d=>d.v),1)),cw=iw/data.length,bw=Math.min(46,cw*.55);
+  const y=v=>pt+ih-(v/max)*ih;
+  const grid=[0,.5,1].map(f=>`<line class="gl" x1="${pl}" x2="${W-pr}" y1="${y(max*f)}" y2="${y(max*f)}"/><text class="ax" x="${pl-8}" y="${y(max*f)+4}" text-anchor="end">${fmt(max*f).replace("R$ ","")}</text>`).join("");
+  const bars=data.map((d,i)=>{const x=pl+cw*i+(cw-bw)/2,h=Math.max(0,ih*d.v/max);
+    return`<g data-tip="${esc(d.label)}: ${esc(fmt(d.v))}"><rect class="hit" x="${pl+cw*i}" y="${pt}" width="${cw}" height="${ih}"/>${h?`<path class="bar" d="${rtop(x,y(d.v),bw,h,4)}"/>`:""}<text class="ax" x="${x+bw/2}" y="${H-8}" text-anchor="middle">${esc(d.short||d.label)}</text>${i===data.length-1?`<text class="vl" x="${x+bw/2}" y="${y(d.v)-8}" text-anchor="middle">${esc(fmt(d.v))}</text>`:""}</g>`}).join("");
+  return`<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(data.map(d=>d.label+": "+fmt(d.v)).join("; "))}">${grid}${bars}</svg></div>`}
+function hbars(data){const max=Math.max(...data.map(d=>d.v),1);return`<div class="hb">${data.map(d=>`<div data-tip="${esc(d.label)}: ${d.v}"><span>${esc(d.label)}</span><i style="width:${d.v/max*100}%"></i><b>${d.v}</b></div>`).join("")}</div>`}
+/* dica flutuante para gráficos */
+(()=>{let tip=null;const hide=()=>{if(tip){tip.remove();tip=null}};
+  const show=(el,x,y)=>{if(!tip){tip=document.createElement("div");tip.className="tip";document.body.appendChild(tip)}tip.textContent=el.dataset.tip;tip.style.left=x+"px";tip.style.top=y+"px"};
+  addEventListener("mousemove",e=>{const el=e.target.closest&&e.target.closest("[data-tip]");el?show(el,e.clientX,e.clientY):hide()});
+  addEventListener("touchstart",e=>{const el=e.target.closest&&e.target.closest("[data-tip]");if(el){const r=el.getBoundingClientRect();show(el,r.left+r.width/2,r.top)}else hide()},{passive:true});
+  addEventListener("scroll",hide,{passive:true});addEventListener("hashchange",hide)})();
+
+/* ================== SESSÃO / ENTRAR ================== */
+let SESS=(()=>{try{return JSON.parse(localStorage.getItem(SKEY))||{}}catch(e){return{}}})();
+function setSess(x){SESS=x;try{localStorage.setItem(SKEY,JSON.stringify(x))}catch(e){}}
+function login(){
+  const has=!!S.profile,act=DB.personals.filter(p=>p.status==="ativo");
+  $("#root").innerHTML=`<header class="topbar"><div class="wrap"><a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
+    <a class="btn btn-ghost" href="#/" style="margin-left:auto"><i data-lucide="arrow-left"></i>Voltar ao site</a><button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button></div></header>
+  <main class="login-main"><h1>Entrar</h1><p>Escolha o seu lado da jornada.</p>
+  <div class="roles">
+    <div class="role"><span class="ri"><i data-lucide="footprints"></i></span><h2>Sou cliente</h2><p>Seus treinos, sua agenda, conversa com a personal e suas conquistas.</p><a class="btn btn-primary" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Criar meu plano"}<i data-lucide="arrow-right"></i></a></div>
+    <div class="role"><span class="ri"><i data-lucide="dumbbell"></i></span><h2>Sou personal</h2><p>Alunos, alertas do dia, agenda, mensagens e seus ganhos.</p>
+      <label class="sr" for="lp" style="font-weight:700;font-size:14px">Entrar como</label><select id="lp">${act.map(p=>`<option value="${p.id}" ${SESS.pid===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select>
+      <button class="btn btn-primary" id="gop">Entrar no painel<i data-lucide="arrow-right"></i></button></div>
+    <div class="role"><span class="ri"><i data-lucide="building-2"></i></span><h2>Sou da empresa</h2><p>Visão geral do negócio, clientes, personais, financeiro, leads e preços.</p><button class="btn btn-primary" id="goa">Entrar no painel<i data-lucide="arrow-right"></i></button></div>
+  </div>
+  <div class="info" style="margin-top:22px"><i data-lucide="info"></i><span><b style="color:var(--ink)">Versão de demonstração.</b> Não há senha: os três lados usam os mesmos dados, salvos só neste navegador. O que a personal faz no painel aparece no app do cliente, e os preços definidos pela empresa aparecem no site.</span></div>
+  </main>`;
+  $("#theme").onclick=toggleTheme;
+  $("#gop").onclick=()=>{setSess({role:"personal",pid:$("#lp").value});location.hash="#/personal"};
+  $("#goa").onclick=()=>{setSess({role:"admin"});location.hash="#/admin"};
+  icons();
+}
+function logout(){setSess({});location.hash="#/entrar"}
+
+/* ================== MOLDURA DOS PAINÉIS ================== */
+function shell({role,tabs,tab,base,me,title,kick,acts=""}){
+  const badge=(k)=>k.cnt?`<span class="cnt">${k.cnt}</span>`:"";
+  $("#root").innerHTML=`<div class="pn">
+  <aside class="pn-side"><a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a><span class="pn-role">${role}</span>
+    <nav aria-label="${role}">${tabs.map(t=>`<a class="nv ${t.k===tab?"on":""}" href="${base}/${t.k}"><i data-lucide="${t.ic}"></i>${t.l}${badge(t)}</a>`).join("")}</nav>
+    <div class="pn-me"><span class="av">${esc(initials(me.name))}</span><div><b>${esc(me.name)}</b><small>${esc(me.sub)}</small></div><button class="rbtn" data-out aria-label="Sair"><i data-lucide="log-out"></i></button></div></aside>
+  <div class="pn-main">
+    <div class="pn-mtop"><a class="brand" href="#/" aria-label="Site"><span class="mk"><i data-lucide="footprints"></i></span></a><span class="pn-role">${role}</span><button class="rbtn" data-theme aria-label="Alternar tema"><i data-lucide="${themeIcon()}"></i></button><button class="rbtn" data-out aria-label="Sair"><i data-lucide="log-out"></i></button></div>
+    <header class="pn-head"><div><small>${kick}</small><h1>${title}</h1></div><div class="acts">${acts}<button class="rbtn" data-theme aria-label="Alternar tema" style="${""}"><i data-lucide="${themeIcon()}"></i></button></div></header>
+    <div id="pv"></div>
+  </div>
+  <nav class="tabbar pn-tabbar" aria-label="${role}"><div class="in" style="grid-template-columns:repeat(${tabs.length},1fr);max-width:none">${tabs.map(t=>`<a href="${base}/${t.k}" class="${t.k===tab?"on":""}"><i data-lucide="${t.ic}"></i>${t.s||t.l}</a>`).join("")}</div></nav>
+  </div>`;
+  document.querySelectorAll("[data-out]").forEach(b=>b.onclick=logout);
+  document.querySelectorAll("[data-theme]").forEach(b=>b.onclick=toggleTheme);
+}
+function bindOpen(role){document.querySelectorAll("[data-open]").forEach(b=>b.onclick=e=>{if(e.target.closest("[data-stop]"))return;openClient(b.dataset.open,role)})}
+
+/* gaveta com a ficha do aluno (personal e empresa usam a mesma) */
+function openClient(id,role){
+  const old=document.querySelector(".drawer");if(old)old.remove();
+  const m=document.createElement("div");m.className="drawer";document.body.appendChild(m);document.body.style.overflow="hidden";
+  const close=()=>{removeEventListener("keydown",k);m.remove();document.body.style.overflow="";route(true)};
+  const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);
+  m.onclick=e=>{if(e.target===m)close()};
+  const render=()=>{const c=findC(id);if(!c){close();return}
+    const L=LEVELS[c.level-1],al=alertsFor(c),cr=critFor(c),ready=cr.every(x=>x[1]),p=findP(c.pid);
+    const cb=bills().filter(b=>b.cid===c.id).reverse();
+    const acts=[];
+    if(c.level===1&&!c.talked)acts.push(["talk","message-circle-heart","Confirmar primeira conversa"]);
+    if(c.level===3)acts.push(["out","trees","Registrar encontro ao ar livre"]);
+    if(c.level===4)acts.push(["gym","dumbbell","Registrar aula na academia"]);
+    if(c.medical&&!c.medOk)acts.push(["med","stethoscope","Registrar liberação médica"]);
+    if(ready&&c.level<4)acts.push(["up","party-popper",`Subir para o nível ${c.level+1}`]);
+    acts.push(["msg","send","Mandar mensagem"]);
+    acts.push(["pause",c.status==="pausado"?"play":"pause",c.status==="pausado"?"Reativar":"Pausar acompanhamento"]);
+    m.innerHTML=`<div class="dp" role="dialog" aria-modal="true" aria-labelledby="dph">
+      <div class="dp-h">${avatar(c)}<div><h2 id="dph">${esc(c.name)}</h2><small style="color:var(--muted)">Nível ${c.level} · ${L.t}${c.you?" · cliente deste aparelho":""}</small></div><button class="rbtn" id="dpx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${c.status==="pausado"?pill("mute","pause","Pausado"):pill("ok","circle-check","Ativo")}${al.map(a=>pill(a[2],a[0],a[1])).join("")}</div>
+      <div class="minis mt"><div><b>${c.workouts.length}</b><small>treinos em casa</small></div><div><b>${rel(lastAct(c))}</b><small>última atividade</small></div><div><b>${daysAgo(c.since)}d</b><small>de acompanhamento</small></div></div>
+      <div class="sec2"><h3>Ações</h3><div class="acts">${acts.map(([k,ic,t])=>`<button class="btn ${k==="up"?"btn-gold":"btn-ghost"} btn-sm" data-a="${k}"><i data-lucide="${ic}"></i>${t}</button>`).join("")}</div></div>
+      ${role==="admin"?`<div class="sec2"><h3>Personal responsável</h3><div class="toolbar" style="margin:0"><select id="dpp" aria-label="Personal responsável">${DB.personals.filter(x=>x.status==="ativo").map(x=>`<option value="${x.id}" ${x.id===c.pid?"selected":""}>${esc(x.name)}</option>`).join("")}</select></div></div>`:""}
+      <div class="sec2"><h3>Para subir de nível</h3><div class="chk">${cr.map(([t,d])=>`<div class="${d?"y":""}"><i data-lucide="${d?"circle-check":"circle-dashed"}"></i>${esc(t)}</div>`).join("")}</div><div class="prog mt"><i style="width:${pctFor(c)}%"></i></div></div>
+      <div class="sec2"><h3>Questionário</h3><div class="plist"><div><span>Objetivos</span><b>${esc(c.goals.join(", "))}</b></div><div><span>O que trava</span><b>${esc(c.barriers.join(", "))}</b></div><div><span>Contato preferido</span><b>${esc(c.contact)}</b></div><div><span>Disponibilidade</span><b>${esc((c.days||[]).join(", "))} · ${esc(c.period)}</b></div><div><span>Liberação médica</span><b>${c.medical?(c.medOk?"Recebida":"Pendente"):"Não necessária"}</b></div>${role==="admin"?`<div><span>Contato</span><b>${esc(c.phone)}</b></div><div><span>Personal</span><b>${esc(p?p.name:"-")}</b></div>`:""}</div></div>
+      <div class="sec2"><h3>Últimos treinos</h3>${c.workouts.length?`<div class="hist">${c.workouts.slice(-5).reverse().map(w=>{const W=WORKOUTS.find(x=>x.id===w.id)||WORKOUTS[0];return`<div><i data-lucide="${FEEL_IC[w.feel]||"circle"}"></i><span><b>${W.t}</b> · ${(w.feel||"").toLowerCase()}</span><small>${rel(w.at)}</small></div>`}).join("")}</div>`:`<p class="empty-s">Nenhum treino ainda.</p>`}</div>
+      ${role==="admin"?`<div class="sec2"><h3>Pagamentos</h3>${cb.length?`<div class="hist">${cb.map(b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}</span><small>${pill(k,ic,t)}</small></div>`}).join("")}</div>`:`<p class="empty-s">Sem cobranças.</p>`}</div>`:""}
+    </div>`;
+    icons();
+    $("#dpx").onclick=close;
+    const dpp=$("#dpp");if(dpp)dpp.onchange=()=>{updC(c.id,{pid:dpp.value});toast("Personal alterada");render()};
+    m.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{const a=b.dataset.a,first=c.name.split(" ")[0];
+      if(a==="talk"){updC(c.id,{talked:true});bookingsAll().filter(x=>x.cid===c.id&&x.type==="Primeira conversa").forEach(x=>setBk(x,"feito"));pushMsg(c.id,`Adorei nossa conversa, ${first}! Seu plano está pronto. 💛`);toast("Conversa confirmada")}
+      if(a==="out"){updC(c.id,{outdoor:c.outdoor+1});const x=bookingsAll().find(x=>x.cid===c.id&&x.type==="Ao ar livre"&&x.status==="agendado");if(x)setBk(x,"feito",true);toast("Encontro registrado")}
+      if(a==="gym"){updC(c.id,{gym:c.gym+1});const x=bookingsAll().find(x=>x.cid===c.id&&x.type==="Academia"&&x.status==="agendado");if(x)setBk(x,"feito",true);toast("Aula registrada")}
+      if(a==="med"){updC(c.id,{medOk:true});pushMsg(c.id,"Recebi sua liberação médica. Tudo certo para treinar com segurança! 🩺");toast("Liberação registrada")}
+      if(a==="up"){updC(c.id,{level:c.level+1});pushMsg(c.id,`Parabéns, ${first}! Combinamos e você subiu para o nível ${c.level+1}: ${LEVELS[c.level].t}. 🎉`);confetti();toast(`${first} subiu de nível`)}
+      if(a==="pause"){updC(c.id,{status:c.status==="pausado"?"ativo":"pausado"});toast(c.status==="pausado"?"Acompanhamento reativado":"Acompanhamento pausado")}
+      if(a==="msg"){PM.cid=c.id;close();location.hash=role==="admin"?"#/personal/mensagens":"#/personal/mensagens";if(role==="admin")setSess({role:"personal",pid:c.pid,back:"admin"});return}
+      render()});
+  };
+  render();
+}
+/* muda o estado de um agendamento; skipCount evita contar duas vezes quando a ficha já contou */
+function setBk(b,status,skipCount){
+  if(b.cid==="me"){const x=S.bookings.find(y=>"me-"+y.ts===b.id);if(!x)return;
+    if(status==="cancelado"){S.bookings=S.bookings.filter(y=>y!==x);S.messages.push({from:"them",text:`Precisei cancelar nosso horário de ${dlabel(b.ts).toLowerCase()} às ${hm(b.ts)}. Vamos remarcar? 🙏`,t:nowT()});S.unread++}
+    else{x.done=true;if(!skipCount){if(b.type==="Ao ar livre")S.outdoor++;if(b.type==="Academia")S.gymsessions++}if(b.type==="Primeira conversa")S.talked=true}
+    save();return}
+  const x=DB.bookings.find(y=>y.id===b.id);x.status=status;
+  if(status==="feito"&&!skipCount){const c=DB.clients.find(y=>y.id===b.cid);if(c){if(b.type==="Ao ar livre")c.outdoor++;if(b.type==="Academia")c.gym++;if(b.type==="Primeira conversa")c.talked=true}}
+  saveDB()}
+
+/* ================== PAINEL DA PERSONAL ================== */
+let PM={cid:null};
+function curP(){let p=findP(SESS.pid);if(!p||p.status!=="ativo")p=DB.personals.find(x=>x.status==="ativo");return p}
+const myClients=p=>allClients().filter(c=>c.pid===p.id);
+function panelPersonal(tab){
+  if(SESS.role!=="personal"&&SESS.role!=="admin"){location.hash="#/entrar";return}
+  const p=curP(),cs=myClients(p),unr=cs.filter(needsReply).length;
+  const tabs=[{k:"hoje",ic:"layout-dashboard",l:"Hoje"},{k:"alunos",ic:"users",l:"Alunos"},{k:"agenda",ic:"calendar-days",l:"Agenda"},{k:"mensagens",ic:"message-circle",l:"Mensagens",s:"Conversas",cnt:unr},{k:"ganhos",ic:"wallet",l:"Ganhos"}];
+  const T={hoje:["Painel da personal",`${greet()}, ${p.name.split(" ")[0]}`],alunos:["Seus alunos","Alunos"],agenda:["Encontros e check-ins","Agenda"],mensagens:["Conversas com alunos","Mensagens"],ganhos:["Mensalidades e repasses","Ganhos"]}[tab]||["",""];
+  shell({role:"Personal",tabs,tab,base:"#/personal",me:{name:p.name,sub:p.cref},title:T[1],kick:T[0],acts:SESS.back==="admin"?`<a class="btn btn-ghost btn-sm" href="#/admin" id="bk2"><i data-lucide="arrow-left"></i>Voltar à empresa</a>`:""});
+  const b2=$("#bk2");if(b2)b2.onclick=()=>setSess({role:"admin"});
+  ({hoje:pHoje,alunos:pAlunos,agenda:pAgenda,mensagens:pMsgs,ganhos:pGanhos}[tab]||pHoje)(p,cs);
+  bindOpen("personal");icons();
+}
+function pHoje(p,cs){
+  const act=cs.filter(c=>c.status==="ativo"),t0=sod();
+  const bk=bookingsAll().filter(b=>b.pid===p.id&&b.status!=="cancelado"&&b.ts>=t0&&b.ts<t0+2*D1).sort((a,b)=>a.ts-b.ts);
+  const att=act.flatMap(c=>alertsFor(c).map(a=>({c,a}))).sort((x,y)=>["bad","warn","info","ok"].indexOf(x.a[2])-["bad","warn","info","ok"].indexOf(y.a[2]));
+  const wk=act.reduce((s,c)=>s+c.workouts.filter(w=>w.at>Date.now()-7*D1).length,0);
+  $("#pv").innerHTML=`<div class="kpis">${kpi("users","Alunos ativos",act.length,`de ${p.cap} vagas`)}${kpi("calendar-check","Encontros hoje",bk.filter(b=>b.ts<t0+D1).length,`${bk.filter(b=>b.ts>=t0+D1).length} amanhã`)}${kpi("message-circle","Para responder",cs.filter(needsReply).length,"mensagens de alunos")}${kpi("flame","Treinos na semana",wk,"feitos pelos seus alunos")}</div>
+  <div class="grid2">
+    <section class="card"><div class="card-h"><h3>Precisa da sua atenção</h3><span class="pill mute">${att.length}</span></div><div class="rows">${att.length?att.slice(0,8).map(({c,a})=>`<button class="rw" data-open="${c.id}">${avatar(c)}<span><b>${esc(c.name)}</b><small>Nível ${c.level} · ${LEVELS[c.level-1].t}</small></span><span class="end">${pill(a[2],a[0],a[1])}</span></button>`).join(""):`<p class="empty-s">Tudo em dia com seus alunos.</p>`}</div></section>
+    <section class="card"><div class="card-h"><h3>Hoje e amanhã</h3><a href="#/personal/agenda">Agenda completa</a></div><div class="rows">${bk.length?bk.map(b=>{const c=findC(b.cid);return c?`<button class="rw" data-open="${c.id}"><span class="time">${hm(b.ts)}</span><span><b>${esc(c.name)}</b><small>${dlabel(b.ts)} · ${b.type} · ${b.mode}</small></span><span class="end">${b.status==="feito"?pill("ok","check","Feito"):""}</span></button>`:""}).join(""):`<p class="empty-s">Nenhum encontro marcado para hoje e amanhã.</p>`}</div></section>
+  </div>
+  <section class="card mt"><div class="card-h"><h3>Seus alunos por nível</h3></div>${hbars(LEVELS.map(l=>({label:`${l.n} · ${l.t}`,v:act.filter(c=>c.level===l.n).length})))}</section>`;
+}
+let PF={q:"",lv:"0",st:"ativo"};
+function clientTable(list,role){
+  if(!list.length)return`<div class="empty">Nenhum aluno encontrado com esses filtros.</div>`;
+  const bl=bills(),cur=mkey(Date.now());
+  return`<div class="tbl"><table class="fit"><thead><tr><th>Aluno</th><th>Nível</th><th class="hm">Progresso</th><th>Última atividade</th><th class="hm">Último treino</th>${role==="admin"?`<th class="hm">Personal</th><th class="hm">Mensalidade</th>`:""}<th>Situação</th></tr></thead><tbody>${list.map(c=>{const lw=c.workouts[c.workouts.length-1],al=alertsFor(c),b=bl.find(x=>x.cid===c.id&&x.m===cur);
+    return`<tr data-open="${c.id}"><td><span class="nm">${avatar(c)}<span><b>${esc(c.name)}</b>${c.you?`<br><small style="color:var(--muted)">neste aparelho</small>`:""}</span></span></td><td>${lvb(c.level)}</td><td class="hm"><div class="prog" title="${pctFor(c)}%"><i style="width:${pctFor(c)}%"></i></div></td><td>${rel(lastAct(c))}</td><td class="hm">${lw?`${pill("mute",FEEL_IC[lw.feel],lw.feel)}`:"—"}</td>${role==="admin"?`<td class="hm">${esc((findP(c.pid)||{}).name||"—")}</td><td class="hm">${b?pill(...BILL_PILL[b.status]):"—"}</td>`:""}<td>${c.status==="pausado"?pill("mute","pause","Pausado"):al.length?pill(al[0][2],al[0][0],al[0][1]):pill("ok","check","Em dia")}</td></tr>`}).join("")}</tbody></table></div>`}
+function filterClients(list){const q=PF.q.trim().toLowerCase();return list.filter(c=>(PF.lv==="0"||c.level===+PF.lv)&&(PF.st==="todos"||c.status===PF.st)&&(!q||c.name.toLowerCase().includes(q))).sort((a,b)=>(b.you?1:0)-(a.you?1:0)||alertsFor(b).length-alertsFor(a).length)}
+function clientFilters(extra=""){return`<div class="toolbar"><input id="fq" type="search" placeholder="Buscar pelo nome" value="${esc(PF.q)}" aria-label="Buscar aluno">
+  <select id="flv" aria-label="Nível"><option value="0">Todos os níveis</option>${LEVELS.map(l=>`<option value="${l.n}" ${PF.lv==l.n?"selected":""}>Nível ${l.n} · ${l.t}</option>`).join("")}</select>
+  <select id="fst" aria-label="Situação">${[["ativo","Ativos"],["pausado","Pausados"],["todos","Todos"]].map(([v,t])=>`<option value="${v}" ${PF.st===v?"selected":""}>${t}</option>`).join("")}</select>${extra}</div>`}
+function bindFilters(redraw){const q=$("#fq");q.oninput=()=>{PF.q=q.value;redraw()};$("#flv").onchange=e=>{PF.lv=e.target.value;redraw()};$("#fst").onchange=e=>{PF.st=e.target.value;redraw()}}
+function pAlunos(p,cs){
+  $("#pv").innerHTML=`${clientFilters()}<div id="tb"></div>`;
+  const draw=()=>{$("#tb").innerHTML=clientTable(filterClients(cs),"personal");bindOpen("personal");icons()};
+  bindFilters(draw);draw();
+}
+function bookingForm(clients){const d=new Date(Date.now()+D1);const ds=d.toISOString().slice(0,10);
+  return`<form class="card" id="nbk"><div class="card-h"><h3>Marcar horário</h3></div><div class="set">
+    <div class="field" style="margin:0"><label for="nbc">Aluno</label><select id="nbc" required>${clients.filter(c=>c.status==="ativo").map(c=>`<option value="${c.id}">${esc(c.name)}${c.you?" (este aparelho)":""}</option>`).join("")}</select></div>
+    <div class="field" style="margin:0"><label for="nbt">Tipo</label><select id="nbt">${BTYPES.map(([t])=>`<option>${t}</option>`).join("")}</select></div>
+    <div class="field" style="margin:0"><label for="nbd">Dia</label><input id="nbd" type="date" value="${ds}" required></div>
+    <div class="field" style="margin:0"><label for="nbh">Horário</label><input id="nbh" type="time" value="09:00" required></div></div>
+    <button class="btn btn-primary mt"><i data-lucide="calendar-plus"></i>Marcar e avisar o aluno</button></form>`}
+function bindBookingForm(pid,after){$("#nbk").onsubmit=e=>{e.preventDefault();const cid=$("#nbc").value,type=$("#nbt").value,[y,mo,da]=$("#nbd").value.split("-"),[h,mi]=$("#nbh").value.split(":");
+  const ts=new Date(+y,+mo-1,+da,+h,+mi).getTime(),mode=type==="Ao ar livre"?"presencial":type==="Academia"?"na academia":"online";
+  if(cid==="me"){S.bookings.push({ts,time:$("#nbh").value,type,mode:mode==="online"?S.profile.contact.toLowerCase():mode,done:false})}else DB.bookings.push({id:"b"+Date.now(),cid,pid,ts,type,mode,status:"agendado"});
+  pushMsg(cid,`Marquei nosso ${type.toLowerCase()} para ${dlabel(ts).toLowerCase()} às ${hm(ts)}. Se não puder, é só me avisar. 😊`);saveDB();toast("Horário marcado e aluno avisado");after()}}
+function pAgenda(p,cs){
+  const t0=sod(),all=bookingsAll().filter(b=>b.pid===p.id&&b.status!=="cancelado");
+  const up=all.filter(b=>b.ts>=t0).sort((a,b)=>a.ts-b.ts),past=all.filter(b=>b.ts<t0).sort((a,b)=>b.ts-a.ts).slice(0,6);
+  const groups={};up.forEach(b=>{const k=dlabel(b.ts);(groups[k]=groups[k]||[]).push(b)});
+  const row=b=>{const c=findC(b.cid);if(!c)return"";return`<div class="rw"><span class="time">${hm(b.ts)}</span>${avatar(c)}<span><b>${esc(c.name)}</b><small>${b.type} · ${b.mode}</small></span><span class="end">${b.status==="feito"?pill("ok","check","Feito"):`<button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="feito"><i data-lucide="check"></i>Concluir</button><button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="cancelado" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</span></div>`};
+  $("#pv").innerHTML=`<div class="grid2" style="margin-top:0;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)">
+    <section class="card"><div class="card-h"><h3>Próximos encontros</h3><span class="pill mute">${up.length}</span></div>${up.length?Object.entries(groups).map(([k,l])=>`<p style="font-weight:700;margin:10px 0 2px;text-transform:capitalize">${k}</p><div class="rows">${l.map(row).join("")}</div>`).join(""):`<p class="empty-s">Nada marcado. Use o formulário ao lado.</p>`}</section>
+    <div style="display:grid;gap:14px;align-content:start">${bookingForm(cs)}<section class="card"><div class="card-h"><h3>Realizados recentemente</h3></div><div class="rows">${past.length?past.map(row).join(""):`<p class="empty-s">Nenhum ainda.</p>`}</div></section></div>
+  </div>`;
+  document.querySelectorAll("[data-bk]").forEach(x=>x.onclick=()=>{const b=bookingsAll().find(y=>y.id===x.dataset.bk);setBk(b,x.dataset.s);if(x.dataset.s==="cancelado"&&b.cid!=="me")pushMsg(b.cid,`Precisei cancelar nosso horário de ${dlabel(b.ts).toLowerCase()}. Vamos remarcar? 🙏`);toast(x.dataset.s==="feito"?"Encontro concluído":"Horário cancelado e aluno avisado");route(true)});
+  bindBookingForm(p.id,()=>route(true));
+}
+const TEMPLATES=["Como você está hoje?","Lembrete: nosso horário é amanhã.","Liberei um treino novo para você.","Tudo bem pular hoje. Amanhã a gente retoma. 💛"];
+function pMsgs(p,cs){
+  const list=[...cs].sort((a,b)=>((lastMsg(b)||{}).at||0)-((lastMsg(a)||{}).at||0));
+  if(PM.cid&&!list.some(c=>c.id===PM.cid))PM.cid=null;
+  const wide=matchMedia("(min-width:901px)").matches;if(!PM.cid&&wide&&list[0])PM.cid=list[0].id;
+  const c=PM.cid&&findC(PM.cid);
+  $("#pv").innerHTML=`<div class="convs ${c?"open":""}">
+    <div class="cl">${list.map(x=>{const lm=lastMsg(x);return`<button class="${x.id===PM.cid?"on":""}" data-cv="${x.id}">${avatar(x)}<span style="min-width:0"><b>${esc(x.name)}</b><small>${lm?(lm.from==="them"?"Você: ":"")+esc(lm.text):"Sem mensagens"}</small></span>${needsReply(x)?`<span class="dot" aria-label="Esperando resposta"></span>`:""}</button>`}).join("")}</div>
+    <div class="thr">${c?`<div class="thr-h"><button class="rbtn" id="cvb" aria-label="Voltar" style="${wide?"display:none":""}"><i data-lucide="arrow-left"></i></button>${avatar(c)}<div><b>${esc(c.name)}</b><br><small style="color:var(--muted)">Nível ${c.level} · prefere ${esc(c.contact.toLowerCase())}</small></div><button class="btn btn-ghost btn-sm" data-open="${c.id}" style="margin-left:auto">Ver ficha</button></div>
+      <div class="msgs" id="pmsgs">${c.msgs.map(m=>`<div class="msg ${m.from==="them"?"me":"them"}">${esc(m.text)}<time>${m.t||""}</time></div>`).join("")}</div>
+      <div class="quick">${TEMPLATES.map(t=>`<button data-tq="${esc(t)}">${esc(t)}</button>`).join("")}</div>
+      <form class="composer" id="pcf"><input id="pci" placeholder="Escreva para ${esc(c.name.split(" ")[0])}" autocomplete="off" aria-label="Mensagem"><button aria-label="Enviar"><i data-lucide="send"></i></button></form>`:""}</div>
+  </div>`;
+  document.querySelectorAll("[data-cv]").forEach(b=>b.onclick=()=>{PM.cid=b.dataset.cv;route(true)});
+  if(!c)return;
+  const box=$("#pmsgs");box.scrollTop=box.scrollHeight;
+  const cvb=$("#cvb");if(cvb)cvb.onclick=()=>{PM.cid=null;route(true)};
+  const send=t=>{if(!t.trim())return;pushMsg(c.id,t.trim());route(true);
+    if(!c.you)setTimeout(()=>{const x=DB.clients.find(y=>y.id===c.id);if(!x)return;x.msgs.push({from:"me",text:["Obrigado! 😊","Combinado!","Vou tentar hoje à noite.","Valeu pelo cuidado 💛"][x.msgs.length%4],t:nowT(),at:Date.now()});saveDB();if(location.hash.includes("personal/mensagens")&&!document.querySelector(".drawer"))route(true)},1800)};
+  $("#pcf").onsubmit=e=>{e.preventDefault();send($("#pci").value)};
+  document.querySelectorAll("[data-tq]").forEach(b=>b.onclick=()=>send(b.dataset.tq));
+  if(wide)$("#pci").focus({preventScroll:true});
+}
+function pGanhos(p){
+  const bl=bills().filter(b=>b.pid===p.id),ms=monthsBack(6),cur=mkey(Date.now()),sp=DB.split/100;
+  const mine=bl.filter(b=>b.m===cur),rec=mine.filter(b=>b.paid).reduce((s,b)=>s+b.amount*sp,0),pend=mine.filter(b=>!b.paid).reduce((s,b)=>s+b.amount*sp,0);
+  $("#pv").innerHTML=`<div class="kpis">${kpi("banknote","Recebido em "+mlabel(cur,1),money(rec),`${DB.split}% das mensalidades pagas`)}${kpi("clock","A receber",money(pend),`${mine.filter(b=>!b.paid).length} mensalidades em aberto`)}${kpi("users","Alunos pagantes",mine.length,"neste mês")}${kpi("star","Avaliação",p.rating?p.rating.toLocaleString("pt-BR"):"—","média dos alunos")}</div>
+  <section class="card mt"><div class="card-h"><h3>Seus ganhos recebidos por mês</h3></div>${vbars(ms.map(m=>({label:mlabel(m,1),short:mlabel(m),v:bl.filter(b=>b.m===m&&b.paid).reduce((s,b)=>s+b.amount*sp,0)})))}</section>
+  <section class="mt"><div class="card-h"><h3>Mensalidades de ${mlabel(cur,1)}</h3></div><div class="tbl"><table><thead><tr><th>Aluno</th><th>Nível</th><th class="num">Mensalidade</th><th class="num">Sua parte</th><th>Situação</th></tr></thead><tbody>${mine.map(b=>{const c=findC(b.cid);return`<tr data-open="${b.cid}"><td><span class="nm">${avatar(c)}<b>${esc(c.name)}</b></span></td><td>${lvb(b.lv)}</td><td class="num">${money(b.amount)}</td><td class="num"><b>${money(b.amount*sp)}</b></td><td>${pill(...BILL_PILL[b.status])}</td></tr>`}).join("")}</tbody></table></div></section>`;
+}
+
+/* ================== PAINEL DA EMPRESA ================== */
+function panelAdmin(tab){
+  if(SESS.role!=="admin"){location.hash="#/entrar";return}
+  const bl=bills(),late=bl.filter(b=>b.status==="atrasado").length,nl=DB.leads.filter(l=>l.status==="novo").length,pp=DB.personals.filter(p=>p.status==="pendente").length;
+  const tabs=[{k:"geral",ic:"layout-dashboard",l:"Visão geral",s:"Geral"},{k:"clientes",ic:"users",l:"Clientes"},{k:"personais",ic:"badge-check",l:"Personais",cnt:pp},{k:"financeiro",ic:"wallet",l:"Financeiro",s:"Finanças",cnt:late},{k:"leads",ic:"inbox",l:"Contatos",cnt:nl},{k:"ajustes",ic:"settings",l:"Ajustes"}];
+  const T={geral:["Painel da empresa","Visão geral"],clientes:["Todos os clientes","Clientes"],personais:["Equipe e novos parceiros","Personais"],financeiro:["Mensalidades e repasses","Financeiro"],leads:["Mensagens do site","Contatos"],ajustes:["Preços e dados","Ajustes"]}[tab]||["",""];
+  shell({role:"Empresa",tabs,tab,base:"#/admin",me:{name:"Administração",sub:"Primeiro Passo"},title:T[1],kick:T[0]});
+  ({geral:aGeral,clientes:aClientes,personais:aPersonais,financeiro:aFin,leads:aLeads,ajustes:aAjustes}[tab]||aGeral)(bl);
+  bindOpen("admin");icons();
+}
+function aGeral(bl){
+  const cs=allClients(),act=cs.filter(c=>c.status==="ativo"),cur=mkey(Date.now()),ms=monthsBack(6);
+  const mb=bl.filter(b=>b.m===cur),fat=mb.reduce((s,b)=>s+b.amount,0),rec=mb.filter(b=>b.paid).reduce((s,b)=>s+b.amount,0),late=bl.filter(b=>b.status==="atrasado");
+  const novos=cs.filter(c=>mkey(c.since)===cur).length,idle=act.filter(c=>c.level>=2&&daysAgo(lastAct(c))>=14);
+  const pend=[...DB.personals.filter(p=>p.status==="pendente").map(p=>["badge-check",`${p.name} quer ser personal parceira`,"#/admin/personais","warn","Analisar"]),
+    ...(late.length?[["circle-alert",`${late.length} mensalidades atrasadas (${money(late.reduce((s,b)=>s+b.amount,0))})`,"#/admin/financeiro","bad","Ver"]]:[]),
+    ...DB.leads.filter(l=>l.status==="novo").map(l=>["inbox",`${l.name} mandou mensagem pelo site`,"#/admin/leads","info","Responder"]),
+    ...idle.map(c=>["clock",`${c.name} está sem atividade há ${daysAgo(lastAct(c))} dias`,null,"mute","Ver ficha",c.id])];
+  const byP=DB.personals.filter(p=>p.status==="ativo").map(p=>{const pc=act.filter(c=>c.pid===p.id);return{p,n:pc.length,rev:mb.filter(b=>b.pid===p.id).reduce((s,b)=>s+b.amount,0),idle:pc.filter(c=>alertsFor(c).length).length}});
+  const up=act.filter(c=>c.level>=2).length;
+  $("#pv").innerHTML=`<div class="kpis">${kpi("users","Clientes ativos",act.length,`${novos} novos em ${mlabel(cur,1)}`)}${kpi("banknote","Faturamento do mês",money(fat),`${money(rec)} já recebidos`)}${kpi("receipt","Ticket médio",money(mb.length?fat/mb.length:0),"por cliente no mês")}${kpi("circle-alert","Inadimplência",late.length,money(late.reduce((s,b)=>s+b.amount,0))+" em atraso")}${kpi("trending-up","Passaram do nível 1",act.length?Math.round(up/act.length*100)+"%":"—","dos clientes ativos")}</div>
+  <div class="grid2">
+    <section class="card"><div class="card-h"><h3>Faturamento por mês</h3><a href="#/admin/financeiro">Detalhes</a></div>${vbars(ms.map(m=>({label:mlabel(m,1),short:mlabel(m),v:bl.filter(b=>b.m===m).reduce((s,b)=>s+b.amount,0)})))}</section>
+    <section class="card"><div class="card-h"><h3>Clientes ativos por nível</h3><a href="#/admin/clientes">Ver todos</a></div>${hbars(LEVELS.map(l=>({label:`${l.n} · ${l.t}`,v:act.filter(c=>c.level===l.n).length})))}<p class="week-note">Cada nível é uma etapa da jornada: o funil mostra quantos clientes estão em cada uma.</p></section>
+  </div>
+  <div class="grid2">
+    <section class="card"><div class="card-h"><h3>Pendências</h3><span class="pill mute">${pend.length}</span></div><div class="rows">${pend.length?pend.slice(0,8).map(([ic,t,href,k,btn,cid])=>`<div class="rw"><span class="pill ${k}" style="padding:7px"><i data-lucide="${ic}"></i></span><span><b style="font-weight:600">${esc(t)}</b></span><span class="end">${href?`<a class="btn btn-ghost btn-sm" href="${href}">${btn}</a>`:`<button class="btn btn-ghost btn-sm" data-open="${cid}">${btn}</button>`}</span></div>`).join(""):`<p class="empty-s">Nenhuma pendência.</p>`}</div></section>
+    <section class="card"><div class="card-h"><h3>Personais</h3><a href="#/admin/personais">Equipe</a></div><div class="rows">${byP.map(x=>`<div class="rw"><span class="av">${esc(initials(x.p.name))}</span><span><b>${esc(x.p.name)}</b><small>${x.n} de ${x.p.cap} vagas · ${x.idle} com alerta</small></span><span class="end"><b style="font-variant-numeric:tabular-nums">${money(x.rev)}</b></span></div>`).join("")}</div></section>
+  </div>`;
+}
+function aClientes(){
+  const pf=`<select id="fpp" aria-label="Personal"><option value="">Todas as personais</option>${DB.personals.filter(p=>p.status==="ativo").map(p=>`<option value="${p.id}" ${PF.pid===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select>`;
+  $("#pv").innerHTML=`${clientFilters(pf)}<div id="tb"></div>`;
+  const draw=()=>{$("#tb").innerHTML=clientTable(filterClients(allClients()).filter(c=>!PF.pid||c.pid===PF.pid),"admin");bindOpen("admin");icons()};
+  bindFilters(draw);$("#fpp").onchange=e=>{PF.pid=e.target.value;draw()};draw();
+}
+function aPersonais(bl){
+  const cur=mkey(Date.now()),act=allClients().filter(c=>c.status==="ativo");
+  $("#pv").innerHTML=`<div class="pgrid">${DB.personals.map(p=>{const n=act.filter(c=>c.pid===p.id).length,rev=bl.filter(b=>b.m===cur&&b.pid===p.id).reduce((s,b)=>s+b.amount,0);
+    return`<article class="pcard"><div class="top"><span class="av">${esc(initials(p.name))}</span><div><h3>${esc(p.name)}</h3><small style="color:var(--muted)">${esc(p.cref)} · ${esc(p.area)}</small></div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${p.status==="ativo"?pill("ok","circle-check","Ativa"):p.status==="pendente"?pill("warn","hourglass","Aguardando análise"):pill("mute","pause","Inativa")}${p.spec.map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div>
+      <p style="color:var(--muted);font-size:14.5px">${esc(p.bio||"")}</p>
+      ${p.status==="ativo"?`<div><div style="display:flex;justify-content:space-between;font-size:14px"><span>Alunos</span><b>${n} de ${p.cap}</b></div><div class="prog mt" style="margin-top:6px"><i style="width:${Math.min(100,n/p.cap*100)}%"></i></div></div>
+      <div class="minis"><div><b>${money(rev)}</b><small>faturado no mês</small></div><div><b>${money(rev*DB.split/100)}</b><small>repasse</small></div><div><b>${p.rating?p.rating.toLocaleString("pt-BR"):"—"}</b><small>avaliação</small></div></div>
+      <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" data-asp="${p.id}"><i data-lucide="log-in"></i>Ver o painel dela</button><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="inativo"><i data-lucide="pause"></i>Desativar</button></div>`
+      :p.status==="pendente"?`<div class="acts" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" data-pst="${p.id}" data-v="ativo"><i data-lucide="check"></i>Aprovar</button><button class="btn btn-ghost btn-sm" data-pdel="${p.id}"><i data-lucide="x"></i>Recusar</button></div>`
+      :`<button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="ativo" style="justify-self:start"><i data-lucide="play"></i>Reativar</button>`}</article>`}).join("")}</div>
+  <form class="form mt" id="np" style="max-width:720px"><h3>Cadastrar personal</h3><div class="set">
+    <div class="field"><label for="npn">Nome</label><input id="npn" required placeholder="Nome completo"></div>
+    <div class="field"><label for="npc">CREF</label><input id="npc" required placeholder="000000-G/SP"></div>
+    <div class="field"><label for="npa">Região</label><input id="npa" required placeholder="Ex.: Santo André"></div>
+    <div class="field"><label for="nps">Especialidade</label><input id="nps" placeholder="Ex.: Iniciantes"></div></div>
+    <button class="btn btn-primary" style="justify-self:start"><i data-lucide="user-plus"></i>Cadastrar</button></form>`;
+  document.querySelectorAll("[data-pst]").forEach(b=>b.onclick=()=>{const p=findP(b.dataset.pst),v=b.dataset.v;
+    if(v==="inativo"&&allClients().some(c=>c.pid===p.id&&c.status==="ativo")){toast("Transfira os alunos dela antes de desativar");return}
+    p.status=v;if(v==="ativo"&&!p.rating)p.rating=null;saveDB();toast(v==="ativo"?`${p.name.split(" ")[0]} está ativa`:"Personal desativada");route(true)});
+  document.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>{DB.personals=DB.personals.filter(p=>p.id!==b.dataset.pdel);saveDB();toast("Cadastro recusado");route(true)});
+  document.querySelectorAll("[data-asp]").forEach(b=>b.onclick=()=>{setSess({role:"personal",pid:b.dataset.asp,back:"admin"});location.hash="#/personal"});
+  $("#np").onsubmit=e=>{e.preventDefault();const name=$("#npn").value.trim();DB.personals.push({id:"p"+Date.now(),name,cref:"CREF "+$("#npc").value.trim(),area:$("#npa").value.trim(),bio:"",spec:[$("#nps").value.trim()||"Iniciantes"],status:"ativo",cap:15,rating:null,since:Date.now()});saveDB();toast(`${name.split(" ")[0]} cadastrada`);route(true)};
+}
+let FM=null;
+function aFin(bl){
+  const ms=monthsBack(6);FM=FM&&ms.includes(FM)?FM:ms[5];
+  const mb=bl.filter(b=>b.m===FM).sort((a,b)=>["atrasado","pendente","pago"].indexOf(a.status)-["atrasado","pendente","pago"].indexOf(b.status));
+  const sum=f=>mb.filter(f).reduce((s,b)=>s+b.amount,0),sp=DB.split/100;
+  const rep=DB.personals.map(p=>{const x=mb.filter(b=>b.pid===p.id);return{p,n:x.length,paid:x.filter(b=>b.paid).reduce((s,b)=>s+b.amount,0)}}).filter(x=>x.n);
+  $("#pv").innerHTML=`<div class="toolbar"><select id="fm" aria-label="Mês">${ms.map(m=>`<option value="${m}" ${m===FM?"selected":""}>${mlabel(m,1)} de ${m.slice(0,4)}</option>`).join("")}</select></div>
+  <div class="kpis">${kpi("receipt","Faturado",money(sum(()=>true)),`${mb.length} mensalidades`)}${kpi("circle-check","Recebido",money(sum(b=>b.paid)),`${mb.filter(b=>b.paid).length} pagas`)}${kpi("clock","Pendente",money(sum(b=>b.status==="pendente")),"vence dia 10")}${kpi("circle-alert","Atrasado",money(sum(b=>b.status==="atrasado")),`${mb.filter(b=>b.status==="atrasado").length} clientes`)}</div>
+  <section class="mt"><div class="card-h"><h3>Mensalidades</h3></div><div class="tbl"><table><thead><tr><th>Cliente</th><th>Personal</th><th>Nível</th><th class="num">Valor</th><th>Vencimento</th><th>Situação</th><th></th></tr></thead><tbody>${mb.map(b=>{const c=findC(b.cid),p=findP(b.pid);return`<tr data-open="${b.cid}"><td><span class="nm">${avatar(c)}<b>${esc(c.name)}</b></span></td><td>${esc(p?p.name:"—")}</td><td>${lvb(b.lv)}</td><td class="num">${money(b.amount)}</td><td>10/${b.m.slice(5)}</td><td>${pill(...BILL_PILL[b.status])}</td><td data-stop style="white-space:nowrap;text-align:right">${b.paid?`<button class="btn btn-ghost btn-sm" data-pay="${b.key}" data-v="0">Desfazer</button>`:`<button class="btn btn-ghost btn-sm" data-remind="${b.cid}" aria-label="Lembrar ${esc(c.name)}"><i data-lucide="bell"></i></button> <button class="btn btn-primary btn-sm" data-pay="${b.key}" data-v="1">Marcar pago</button>`}</td></tr>`}).join("")}</tbody></table></div></section>
+  <section class="mt"><div class="card-h"><h3>Repasse às personais (${DB.split}% do recebido)</h3></div><div class="tbl"><table style="min-width:520px"><thead><tr><th>Personal</th><th class="num">Mensalidades</th><th class="num">Recebido</th><th class="num">Repasse</th><th class="num">Fica com a empresa</th></tr></thead><tbody>${rep.map(x=>`<tr style="cursor:default"><td><b>${esc(x.p.name)}</b></td><td class="num">${x.n}</td><td class="num">${money(x.paid)}</td><td class="num"><b>${money(x.paid*sp)}</b></td><td class="num">${money(x.paid*(1-sp))}</td></tr>`).join("")}</tbody></table></div></section>`;
+  $("#fm").onchange=e=>{FM=e.target.value;route(true)};
+  document.querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{DB.paid[b.dataset.pay]=b.dataset.v==="1";saveDB();toast(b.dataset.v==="1"?"Pagamento registrado":"Pagamento desfeito");route(true)});
+  document.querySelectorAll("[data-remind]").forEach(b=>b.onclick=()=>{pushMsg(b.dataset.remind,"Oi! Passando para lembrar da mensalidade deste mês. Se precisar de mais prazo, é só falar. 💛");toast("Lembrete enviado no app do cliente")});
+}
+let LF="novo";
+function aLeads(){
+  const L=DB.leads.filter(l=>LF==="todos"||l.status===LF).sort((a,b)=>b.at-a.at);
+  const ST={novo:["info","sparkles","Novo"],contatado:["warn","phone","Em contato"],convertido:["ok","circle-check","Convertido"],arquivado:["mute","archive","Arquivado"]};
+  $("#pv").innerHTML=`<div class="filters" role="group" aria-label="Filtrar contatos">${[["novo","Novos"],["contatado","Em contato"],["convertido","Convertidos"],["todos","Todos"]].map(([k,t])=>`<button aria-pressed="${LF===k}" data-lf="${k}">${t} (${k==="todos"?DB.leads.length:DB.leads.filter(l=>l.status===k).length})</button>`).join("")}</div>
+  <div class="pgrid">${L.length?L.map(l=>`<article class="lead"><div class="top">${pill(...ST[l.status])}${pill(l.type==="personal"?"warn":"mute",l.type==="personal"?"dumbbell":"user-round",l.type==="personal"?"Quer ser personal":"Quer começar")}<small style="margin-left:auto">${rel(l.at)}</small></div>
+    <b style="font-size:17px">${esc(l.name)}</b><small>${esc(l.contact)}${l.cref?" · "+esc(l.cref):""}${l.area?" · "+esc(l.area):""}</small><p>“${esc(l.msg)}”</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">${l.status==="novo"?`<button class="btn btn-ghost btn-sm" data-ls="${l.id}" data-v="contatado"><i data-lucide="phone"></i>Marcar em contato</button>`:""}${l.status!=="convertido"&&l.status!=="arquivado"?`<button class="btn btn-primary btn-sm" data-conv="${l.id}"><i data-lucide="${l.type==="personal"?"badge-check":"user-plus"}"></i>${l.type==="personal"?"Enviar para análise":"Virar cliente"}</button><button class="btn btn-ghost btn-sm" data-ls="${l.id}" data-v="arquivado" aria-label="Arquivar"><i data-lucide="archive"></i></button>`:""}</div></article>`).join(""):`<div class="empty">Nenhum contato aqui.</div>`}</div>
+  <div class="info mt"><i data-lucide="info"></i><span>Os contatos chegam pelos formulários do site (“Fale com a gente” e “Seja personal parceiro”).</span></div>`;
+  document.querySelectorAll("[data-lf]").forEach(b=>b.onclick=()=>{LF=b.dataset.lf;route(true)});
+  document.querySelectorAll("[data-ls]").forEach(b=>b.onclick=()=>{DB.leads.find(l=>l.id===b.dataset.ls).status=b.dataset.v;saveDB();toast(b.dataset.v==="arquivado"?"Arquivado":"Marcado como em contato");route(true)});
+  document.querySelectorAll("[data-conv]").forEach(b=>b.onclick=()=>{const l=DB.leads.find(x=>x.id===b.dataset.conv);l.status="convertido";
+    if(l.type==="personal"){DB.personals.push({id:"p"+Date.now(),name:l.name,cref:l.cref||"CREF a confirmar",area:l.area||"A definir",bio:l.msg,spec:["A definir"],status:"pendente",cap:15,rating:null,since:Date.now()});toast("Enviado para análise em Personais")}
+    else{const pid=DB.personals.find(p=>p.status==="ativo").id;DB.clients.push({id:"c"+Date.now(),name:l.name,level:1,pid,since:Date.now(),goals:["Me sentir melhor comigo"],barriers:["Não sei por onde começar"],contact:"Só mensagem",period:"Noite",days:["Seg","Qua"],medical:false,medOk:false,workouts:[],talked:false,outdoor:0,gym:0,status:"ativo",msgs:[{from:"me",text:l.msg,t:"",at:l.at}],phone:l.contact});toast("Cliente criado no nível 1")}
+    saveDB();route(true)});
+}
+function aAjustes(){
+  $("#pv").innerHTML=`<form class="card" id="pr" style="max-width:760px"><div class="card-h"><h3>Preços por nível</h3></div><p style="color:var(--muted);margin-bottom:14px">Os valores aparecem no site, no app do cliente e nas cobranças do mês.</p>
+    <div class="set">${LEVELS.map((l,i)=>`<div class="field" style="margin:0"><label for="pr${i}">Nível ${l.n} · ${l.t}</label><input id="pr${i}" type="number" min="0" step="1" value="${DB.prices[i]}" inputmode="numeric"><small style="color:var(--muted)">${i===0?"pagamento único":"por mês"}</small></div>`).join("")}</div>
+    <div class="field mt" style="max-width:260px"><label for="spl">Repasse para a personal (%)</label><input id="spl" type="number" min="0" max="100" value="${DB.split}"></div>
+    <button class="btn btn-primary"><i data-lucide="save"></i>Salvar preços</button></form>
+  <section class="card mt" style="max-width:760px"><div class="card-h"><h3>Dados de demonstração</h3></div><p style="color:var(--muted)">Volta os clientes, personais, agenda, pagamentos e contatos de exemplo ao estado inicial. O app do cliente deste aparelho não é apagado.</p><button class="btn btn-ghost mt" id="rs" style="color:var(--red)"><i data-lucide="rotate-ccw"></i>Restaurar dados de exemplo</button></section>
+  <div class="info mt" style="max-width:760px"><i data-lucide="server"></i><span><b style="color:var(--ink)">Para usar com clientes reais</b>, este site precisa de um servidor com login, banco de dados e pagamento online (por exemplo Pix). Hoje tudo fica salvo só no navegador de quem usa.</span></div>`;
+  $("#pr").onsubmit=e=>{e.preventDefault();DB.prices=LEVELS.map((_,i)=>Math.max(0,Math.round(+$("#pr"+i).value||0)));DB.split=Math.min(100,Math.max(0,+$("#spl").value||0));saveDB();syncPrices();toast("Preços salvos. O site já mostra os novos valores.");route(true)};
+  $("#rs").onclick=()=>sheet("rotate-ccw","Restaurar dados de exemplo?","Todas as alterações feitas nos painéis serão perdidas.","Restaurar",{danger:true,cancel:"Cancelar",onOk:()=>{DB=seedDB();saveDB();syncPrices();toast("Dados de exemplo restaurados");route(true)}});
+}
+
+/* formulários do site → contatos da empresa */
+function bindSiteForms(){
+  const f1=$("#fc");if(f1)f1.onsubmit=e=>{e.preventDefault();DB.leads.push({id:"l"+Date.now(),type:"cliente",name:$("#fcn").value.trim(),contact:$("#fcc").value.trim(),msg:$("#fcm").value.trim()||"Quero saber mais.",at:Date.now(),status:"novo"});saveDB();f1.reset();toast("Mensagem enviada! Vamos responder em até 1 dia útil.")};
+  const f2=$("#fp");if(f2)f2.onsubmit=e=>{e.preventDefault();DB.leads.push({id:"l"+Date.now(),type:"personal",name:$("#fpn").value.trim(),contact:$("#fpc").value.trim(),cref:"CREF "+$("#fpr").value.trim(),area:$("#fpa").value.trim(),msg:"Quero ser personal parceiro.",at:Date.now(),status:"novo"});saveDB();f2.reset();toast("Cadastro recebido! Vamos analisar seu CREF e entrar em contato.")};
+}
 
 applyTheme();
 route();
