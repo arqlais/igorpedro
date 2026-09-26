@@ -1057,6 +1057,9 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .uf-row select{border:1.5px solid var(--line);border-radius:14px;padding:14px 12px;background:var(--surface);font-size:16px;width:100%;color:var(--ink)}
 .form .uf-row select{padding:12px}
 
+.lg-new{color:var(--muted);font-size:14.5px;margin:0}
+.lg-new a{color:var(--blue);font-weight:700;text-decoration:none}
+
 @media (min-width:1181px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -1151,6 +1154,7 @@ const TEST_MODE=true;
 const testTag=(t="Obrigatório")=>`<span class="tmode"><i data-lucide="flask-conical"></i>${t} · liberado no modo de teste</span>`;
 const UFS=["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
 const ufSelect=(id,val,req)=>`<select id="${id}" ${req?"required":""}><option value="">Estado</option>${UFS.map(u=>`<option ${u===val?"selected":""}>${u}</option>`).join("")}</select>`;
+async function hashPw(t){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("pp:"+t));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){let h=5381;for(const c of "pp:"+t)h=((h<<5)+h+c.charCodeAt(0))>>>0;return"d"+h.toString(16)}}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function clipLists(){document.querySelectorAll(".rows.clip").forEach(r=>{if(r.nextElementSibling&&r.nextElementSibling.matches("[data-more]"))return;const n=r.children.length;if(n<=4)return;
   const b=document.createElement("button");b.className="btn btn-ghost btn-sm more";b.dataset.more="";b.textContent=`Ver mais ${n-4}`;b.onclick=()=>{r.classList.remove("clip");b.remove()};r.after(b)})}
@@ -1197,7 +1201,8 @@ function route(keep){
   if(h.startsWith("#/entrar"))return login();
   if(h.startsWith("#/personal"))return panelPersonal(h.split("/")[2]||"hoje");
   if(h.startsWith("#/admin"))return panelAdmin(h.split("/")[2]||"geral");
-  if(h.startsWith("#/app")){if(!S.profile){location.hash="#/comecar";return}
+  if(h.startsWith("#/app")){if(!S.profile){location.hash="#/entrar/aluno";return}
+    if(S.loggedOut){location.hash="#/entrar/aluno";return}
     /* sem identidade verificada o app não avança */
     if(!TEST_MODE&&kycOf("me").status!=="verificado"&&h.split("/")[2]!=="verificacao"){location.hash="#/app/verificacao";return}
     return app(h.split("/")[2]||"inicio")}
@@ -1215,12 +1220,12 @@ function site(){
   <div class="acc">
     <button class="btn btn-ghost acc-btn" id="accb" aria-haspopup="true" aria-expanded="false" aria-controls="accm"><i data-lucide="circle-user-round"></i><span>Entrar</span><i data-lucide="chevron-down" class="acc-ch"></i></button>
     <div class="acc-menu" id="accm" hidden>
-      <a href="${has?"#/app":"#/comecar"}"><span class="ai"><i data-lucide="footprints"></i></span><span><b>Área do aluno</b><small>${has?"Abrir meu app":"Criar meu plano"}</small></span></a>
+      <a href="${has&&!S.loggedOut?"#/app":"#/entrar/aluno"}"><span class="ai"><i data-lucide="footprints"></i></span><span><b>Área do aluno</b><small>${has&&!S.loggedOut?"Abrir meu app":"Entrar ou criar conta"}</small></span></a>
       <a href="#/entrar/personal"><span class="ai"><i data-lucide="dumbbell"></i></span><span><b>Área da personal</b><small>Alunos, agenda e ganhos</small></span></a>
       <a href="#/entrar/empresa"><span class="ai"><i data-lucide="building-2"></i></span><span><b>Área da empresa</b><small>Gestão completa</small></span></a>
     </div>
   </div>
-  <a class="btn btn-primary tb-cta" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Começar"}</a>
+  <a class="btn btn-primary tb-cta" href="${has&&!S.loggedOut?"#/app":"#/comecar"}">${has&&!S.loggedOut?"Meu app":"Começar"}</a>
   <button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button>
   <button class="rbtn menu-btn" id="menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="mnav"><i data-lucide="menu"></i></button>
 </div><nav class="mnav wrap" id="mnav" aria-label="Seções" hidden><a href="#como" data-scroll>Como funciona</a><a href="#combinados" data-scroll>Nossos combinados</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#seguranca" data-scroll>Segurança</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#parceiros" data-scroll>Seja parceiro</a><a href="#duvidas" data-scroll>Dúvidas</a><a href="#contato" data-scroll>Contato</a><a href="#/entrar">Entrar (cliente, personal ou empresa)</a></nav></header>
@@ -1382,7 +1387,7 @@ function site(){
 
 /* ================== ONBOARDING ================== */
 let OB={step:0,name:"",goals:[],barriers:[],days:[],period:"",contact:"",parq:Array(PARQ.length).fill(null),notes:""};
-const OB_STEPS=["nome","objetivo","barreiras","rotina","contato","saude","resultado"];
+const OB_STEPS=["nome","objetivo","barreiras","rotina","contato","saude","acesso","resultado"];
 function onboarding(){
   const st=OB_STEPS[OB.step], total=OB_STEPS.length-1;
   let body="",canNext=true,nextLabel="Continuar";
@@ -1404,7 +1409,14 @@ function onboarding(){
   if(st==="saude"){const any=OB.parq.some(x=>x===true);body=`<h2>Algumas perguntas sobre sua saúde</h2><p class="sub">É o questionário PAR-Q, usado por profissionais de educação física antes de qualquer treino.</p>
     <div class="parq">${PARQ.map((q,i)=>`<div class="pq"><p>${i+1}. ${q}</p><div class="yn"><button data-pq="${i}" data-a="1" aria-pressed="${OB.parq[i]===true}">Sim</button><button data-pq="${i}" data-a="0" aria-pressed="${OB.parq[i]===false}">Não</button></div></div>`).join("")}</div>
     ${any?`<div class="alert warn"><i data-lucide="stethoscope"></i><span>Tudo bem! Você pode continuar. Antes dos treinos, o personal vai pedir uma liberação do seu médico, para você treinar com segurança.</span></div>`:""}`;
-    canNext=OB.parq.every(x=>x!==null);nextLabel="Ver meu plano"}
+    canNext=OB.parq.every(x=>x!==null)}
+  if(st==="acesso"){body=`<h2>Crie seu acesso</h2><p class="sub">Com ele você entra no app de qualquer celular ou computador.</p>
+    <div class="field"><label for="obe">E-mail</label><input id="obe" type="email" autocomplete="email" inputmode="email" value="${esc(OB.email||"")}" placeholder="voce@exemplo.com"></div>
+    <div class="field"><label for="obp">Senha</label><input id="obp" type="password" autocomplete="new-password" value="${esc(OB.pw||"")}" placeholder="Pelo menos 6 caracteres"></div>
+    <div class="field"><label for="obp2">Repita a senha</label><input id="obp2" type="password" autocomplete="new-password" value="${esc(OB.pw2||"")}"></div>
+    <small class="err" id="obe-err"></small>
+    <div class="alert ok"><i data-lucide="lock"></i><span>Sua senha é guardada protegida (criptografada). Nem a equipe consegue vê-la.</span></div>`;
+    canNext=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(OB.email||"")&&(OB.pw||"").length>=6&&OB.pw===OB.pw2;nextLabel="Ver meu plano"}
   if(st==="resultado"){const any=OB.parq.some(x=>x===true);body=`<h2>Pronto, ${esc(OB.name.split(" ")[0])}! Seu caminho começa aqui.</h2><p class="sub">Com base nas suas respostas, preparamos seu começo.</p>
     <div class="result"><div class="rh"><small>Você começa no</small><b>Nível 1 · Conhecer</b></div><div class="rb">
       <div class="rr"><i data-lucide="user-round-check"></i><span>Personal sugerida: <b>${PERSONAL.name}</b>, ${PERSONAL.bio.toLowerCase()}</span></div>
@@ -1422,13 +1434,16 @@ function onboarding(){
   OB._last=OB.step;
   const nm=$("#nm");if(nm){nm.focus();nm.oninput=()=>{OB.name=nm.value;$("#next").disabled=OB.name.trim().length<2};nm.onkeydown=e=>{if(e.key==="Enter"&&OB.name.trim().length>1)next()}}
   document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const k=b.dataset.k,v=b.dataset.v;if(b.dataset.m==="1"){OB[k]=OB[k].includes(v)?OB[k].filter(x=>x!==v):[...OB[k],v]}else OB[k]=v;onboarding()});
+  const obe=$("#obe");if(obe){const chk=()=>{OB.email=$("#obe").value.trim();OB.pw=$("#obp").value;OB.pw2=$("#obp2").value;const okE=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(OB.email),okP=OB.pw.length>=6,okM=OB.pw===OB.pw2;
+    $("#obe-err").textContent=OB.email&&!okE?"Confira o e-mail.":OB.pw&&!okP?"A senha precisa de pelo menos 6 caracteres.":OB.pw2&&!okM?"As senhas não são iguais.":"";$("#next").disabled=!(okE&&okP&&okM)};["#obe","#obp","#obp2"].forEach(id=>$(id).oninput=chk)}
   const obu=$("#obu"),obc=$("#obc");if(obu){const upd=()=>{$("#next").disabled=!(OB.days.length>0&&!!OB.period&&!!OB.uf&&(OB.city||"").trim().length>1)};obu.onchange=()=>{OB.uf=obu.value;upd()};obc.oninput=()=>{OB.city=obc.value;upd()}}
   document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{const d=b.dataset.day;OB.days=OB.days.includes(d)?OB.days.filter(x=>x!==d):[...OB.days,d];onboarding()});
   document.querySelectorAll("[data-pq]").forEach(b=>b.onclick=()=>{OB.parq[+b.dataset.pq]=b.dataset.a==="1";const y=scrollY;onboarding();scrollTo(0,y)});
   const bk=$("#back");if(bk)bk.onclick=()=>{OB.step--;onboarding();scrollTo(0,0)};
   $("#next").onclick=next;icons();
-  function next(){if(OB.step<OB_STEPS.length-1){OB.step++;onboarding();scrollTo(0,0);return}
-    S=fresh();S.plan=OB.plan||null;S.profile={uf:OB.uf,city:(OB.city||"").trim(),name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
+  async function next(){if(OB.step<OB_STEPS.length-1){OB.step++;onboarding();scrollTo(0,0);return}
+    const acc={email:(OB.email||"").toLowerCase(),h:await hashPw(OB.pw||"")};
+    S=fresh();S.account=acc;S.info={name:OB.name.trim(),email:acc.email};S.plan=OB.plan||null;S.profile={uf:OB.uf,city:(OB.city||"").trim(),name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
     S.messages=[{from:"them",text:`Oi, ${OB.name.trim().split(" ")[0]}! Eu sou a ${PERSONAL.name.split(" ")[0]}, sua personal. Li suas respostas e fico feliz que você esteja aqui. 💛`,t:nowT()},{from:"them",text:"Quando quiser, agende nossa primeira conversa na aba Agenda. Pode ser só por mensagem, sem pressa nenhuma.",t:nowT()}];
     S.unread=2;save();OB.step=0;location.hash=TEST_MODE?"#/app":"#/app/verificacao";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
 }
@@ -1723,6 +1738,7 @@ function vPerfil(){
   </div>
   <div class="block" style="display:grid;gap:10px">
     <a class="btn btn-ghost" href="#/"><i data-lucide="globe"></i>Ver o site</a>
+    <button class="btn btn-ghost" id="logout"><i data-lucide="log-out"></i>Sair da conta</button>
     <button class="btn btn-ghost" id="reset" style="color:var(--red)"><i data-lucide="rotate-ccw"></i>Recomeçar do zero</button>
   </div>
   <p class="note"><i data-lucide="heart"></i>Se estiver passando por um momento difícil, o CVV atende 24 horas pelo 188.</p>`;
@@ -1732,6 +1748,7 @@ function vPerfil(){
   document.querySelectorAll("[data-mypay]").forEach(b=>b.onclick=()=>openCheckout(b.dataset.mypay));
   const rt=$("#rate");if(rt)rt.onclick=openRating;
   $("#tg-sound").onclick=()=>{S.sound=!S.sound;save();if(S.sound)beep(880);vPerfil();icons()};
+  $("#logout").onclick=()=>{S.loggedOut=true;save();toast("Você saiu. Até logo!");location.hash="#/"};
   $("#reset").onclick=()=>sheet("rotate-ccw","Recomeçar do zero?","Isso apaga suas respostas, treinos, agendamentos e conversas deste aparelho. Não dá para desfazer.","Apagar e recomeçar",{danger:true,cancel:"Manter meu progresso",onOk:()=>{S=fresh();save();OB={step:0,name:"",goals:[],barriers:[],days:[],period:"",contact:"",parq:Array(PARQ.length).fill(null),notes:""};location.hash="#/"}});
 }
 function myBills(){const all=bills().filter(b=>b.cid==="me").reverse();
@@ -1910,7 +1927,7 @@ DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
 function login(){
   DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
   const has=!!S.profile,who=(location.hash.split("/")[2]||"");
-  const R={personal:{ic:"dumbbell",t:"Entrar como personal",d:"Seus alunos, alertas do dia, agenda, mensagens e ganhos.",u:"E-mail ou CREF",um:"email"},
+  const R={aluno:{ic:"footprints",t:"Entrar como aluno",d:"Seu caminho, treinos, agenda e conversa com a sua personal.",u:"E-mail",um:"email"},personal:{ic:"dumbbell",t:"Entrar como personal",d:"Seus alunos, alertas do dia, agenda, mensagens e ganhos.",u:"E-mail ou CREF",um:"email"},
            empresa:{ic:"building-2",t:"Entrar como empresa",d:"Visão geral, clientes, personais, financeiro, segurança e preços.",u:"E-mail",um:"email"}}[who];
   const top=`<header class="topbar"><div class="wrap"><a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
     <a class="btn btn-ghost" href="#/" style="margin-left:auto" aria-label="Voltar ao site"><i data-lucide="arrow-left"></i><span class="dm">Voltar ao site</span></a><button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button></div></header>`;
@@ -1918,7 +1935,7 @@ function login(){
     $("#root").innerHTML=`${top}<main class="login-main lg-center">
       <span class="kicker">Área de acesso</span><h1>Que bom ter você aqui.</h1><p class="lg-lead">Escolha como você faz parte do Primeiro Passo.</p>
       <div class="roles">
-        <div class="role"><span class="ri"><i data-lucide="footprints"></i></span><h2>Sou aluno</h2><p>Seu caminho passo a passo, treinos, agenda e conversa com a sua personal.</p><a class="btn btn-primary" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Criar meu plano"}<i data-lucide="arrow-right"></i></a></div>
+        <div class="role"><span class="ri"><i data-lucide="footprints"></i></span><h2>Sou aluno</h2><p>Seu caminho passo a passo, treinos, agenda e conversa com a sua personal.</p><a class="btn btn-primary" href="${has&&!S.loggedOut?"#/app":"#/entrar/aluno"}">${has&&!S.loggedOut?"Abrir meu app":"Entrar no app"}<i data-lucide="arrow-right"></i></a></div>
         <div class="role"><span class="ri"><i data-lucide="dumbbell"></i></span><h2>Sou personal</h2><p>Seus alunos, alertas do dia, agenda, mensagens e seus ganhos.</p><a class="btn btn-primary" href="#/entrar/personal">Entrar no painel<i data-lucide="arrow-right"></i></a></div>
         <div class="role"><span class="ri"><i data-lucide="building-2"></i></span><h2>Sou da empresa</h2><p>Gestão completa: clientes, personais, financeiro e segurança.</p><a class="btn btn-primary" href="#/entrar/empresa">Entrar no painel<i data-lucide="arrow-right"></i></a></div>
       </div>
@@ -1933,6 +1950,7 @@ function login(){
       <small class="err" id="lge" role="alert"></small>
       <button class="btn btn-primary">Entrar<i data-lucide="arrow-right"></i></button>
       <a href="#" data-forgot class="lg-forgot">Esqueci minha senha</a>
+      ${who==="aluno"?`<p class="lg-new">Ainda não tem conta? <a href="#/comecar">Criar meu plano</a></p>`:""}
       ${TEST_MODE?`<div class="lg-testbox"><button type="button" class="lg-test" id="lgt"><i data-lucide="flask-conical"></i>Usar conta de teste</button><small>O login de verdade, com senha protegida e recuperação por e-mail, entra junto com o servidor.</small></div>`:""}
     </form>
     <a class="lg-back" href="#/entrar"><i data-lucide="arrow-left"></i>Escolher outro acesso</a>
@@ -1941,12 +1959,20 @@ function login(){
   const norm=v=>String(v).trim().toLowerCase(),dig=v=>String(v).replace(/\D/g,""),err=t=>{$("#lge").textContent=t};
   $("#lgf").onsubmit=e=>{e.preventDefault();const u=norm($("#lgu").value),w=$("#lgw").value;
     if(!u||!w)return err(`Preencha ${R.u.toLowerCase()} e senha.`);
+    if(who==="aluno"){if(!S.profile||!S.account)return err("Não encontramos uma conta com esse e-mail neste aparelho. Nesta versão de teste, a conta fica salva no navegador onde foi criada.");
+      hashPw(w).then(h=>{if(u!==S.account.email||h!==S.account.h)return err("E-mail ou senha incorretos.");S.loggedOut=false;save();location.hash="#/app"});return}
     if(who==="empresa"){if(u!==ADMIN_EMAIL||w!==TEST_PASS)return err("E-mail ou senha incorretos.");setSess({role:"admin"});location.hash="#/admin";return}
     const p=DB.personals.find(x=>norm(x.email)===u||(dig(u).length>=6&&dig(x.cref)===dig(u)));
     if(!p||w!==TEST_PASS)return err("E-mail, CREF ou senha incorretos.");
     if(p.status!=="ativo")return err(p.status==="pendente"?"Seu cadastro ainda está em análise. Avisamos por e-mail quando for aprovado.":"Este acesso está desativado. Fale com a empresa.");
     setSess({role:"personal",pid:p.id});location.hash="#/personal"};
-  const t=$("#lgt");if(t)t.onclick=()=>{$("#lgu").value=who==="empresa"?ADMIN_EMAIL:DB.personals.find(x=>x.status==="ativo").email;$("#lgw").value=TEST_PASS;$("#lgf").requestSubmit()};
+  const t=$("#lgt");if(t&&who==="aluno")t.onclick=async()=>{if(!S.profile||!S.account||S.account.demo){
+      S=fresh();S.account={email:"aluno@teste.com",h:await hashPw(TEST_PASS),demo:true};S.profile={name:"Ana Teste",uf:"SP",city:"São Paulo",goals:["Me sentir melhor comigo","Ter mais disposição"],barriers:["Vergonha do corpo","Falta de energia"],days:["Seg","Qua","Sex"],period:"Manhã",contact:"Só mensagem",medical:false,since:Date.now()-45*D1};
+      S.info={name:"Ana Teste",email:"aluno@teste.com",tel:"(11) 90000-1111",city:"São Paulo"};S.kyc={status:"verificado",at:Date.now()-40*D1,cpf:"***.123.456-**",city:"São Paulo",emerg:"Contato de teste (Família)"};S.termsAt=Date.now()-40*D1;
+      S.level=2;S.talked=true;S.workouts=[1,3,5,8,10].map((d,i)=>({id:["w1","w2","w3","w4","w5"][i],at:Date.now()-d*D1,feel:["Bom","Leve","Cansativo","Bom","Leve"][i]}));S.bookings=[{ts:Date.now()-38*D1,time:"09:00",type:"Primeira conversa",mode:"só mensagem",done:true},{ts:Date.now()+2*D1,time:"09:00",type:"Check-in online",mode:"só mensagem",done:false}];
+      S.messages=[{from:"them",text:"Oi, Ana! Que bom ter você aqui. 💛",t:"09:00"},{from:"me",text:"Oi! Estou gostando dos treinos.",t:"09:10"}];autoRx();save()}
+    $("#lgu").value=S.account.email;$("#lgw").value=TEST_PASS;if(!S.account.demo){err("Conta de teste indisponível: há uma conta criada neste aparelho. Use o seu e-mail e senha.");return}$("#lgf").requestSubmit()};
+  else if(t)t.onclick=()=>{$("#lgu").value=who==="empresa"?ADMIN_EMAIL:DB.personals.find(x=>x.status==="ativo").email;$("#lgw").value=TEST_PASS;$("#lgf").requestSubmit()};
   document.querySelectorAll("[data-forgot]").forEach(a=>a.onclick=e=>{e.preventDefault();toast("Na versão final, enviamos um link de recuperação para o seu e-mail.")});
 }
 function logout(){setSess({});location.hash="#/entrar"}
@@ -2841,7 +2867,7 @@ function vDados(){
   <section class="card mt"><div class="card-h"><h3>Documentos</h3></div><div class="plist">${dline("Identidade",KYC_PILL[k.status][2])}${dline("Documento enviado",k.doc||(k.status==="pendente"?"—":"RG"))}${dline("Selfie",k.status==="pendente"?"—":"Comparada ao documento")}${dline("Liberação médica",p.medical?(p.medOk?"Recebida pela personal":"Pendente"):"Não necessária")}</div>
     ${k.status==="pendente"?`<a class="btn btn-primary mt" href="#/app/verificacao"><i data-lucide="shield-check"></i>Verificar identidade</a>`:""}</section>
   ${privacyBlock()}`;
-  $("#dfm").onsubmit=e=>{e.preventDefault();readInfo($("#dfm"),inf);if(inf.name){p.name=inf.name}save();toast("Dados salvos")};
+  $("#dfm").onsubmit=e=>{e.preventDefault();readInfo($("#dfm"),inf);if(inf.name){p.name=inf.name}if(inf.email&&S.account)S.account.email=inf.email.toLowerCase();save();toast("Dados salvos")};
   $("[data-termsc]").onclick=()=>openTerms("cliente");
   $("[data-copyme]").onclick=()=>copyText(JSON.stringify({dados:Object.assign({},inf,{cpf:k.cpf}),questionario:{objetivos:p.goals,travas:p.barriers,disponibilidade:[p.days,p.period],contato:p.contact},plano:plan,treinos:S.workouts.length,exercicios:(S.exlog||[]).length},null,2),"Seus dados foram copiados");
   $("[data-delme]").onclick=()=>sheet("trash-2","Pedir exclusão dos dados?","A equipe confirma por e-mail em até 15 dias e apaga seus dados pessoais. Registros financeiros ficam guardados pelo prazo que a lei exige.","Enviar pedido",{danger:true,cancel:"Cancelar",onOk:()=>{DB.leads.push({id:"l"+Date.now(),type:"cliente",name:p.name,contact:inf.email||inf.tel||"app",msg:"Pedido de exclusão de dados (LGPD).",at:Date.now(),status:"novo"});saveDB();toast("Pedido enviado. A empresa foi avisada.");route(true)}});
