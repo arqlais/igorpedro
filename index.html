@@ -777,6 +777,156 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 .tbl th{white-space:normal;line-height:1.3}
 @media (max-width:1360px){.tbl .hx{display:none}.tbl .nm b{white-space:normal}}
 @media (min-width:901px) and (max-width:1180px){.pn{grid-template-columns:210px minmax(0,1fr)}.pn-main{padding:24px 22px 60px}}
+/* ---------- pagamentos, avaliações e segurança ---------- */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.sheet.pay{text-align:left;display:grid;gap:14px;max-height:92vh;overflow:auto;overscroll-behavior:contain}
+.pay-h{display:flex;align-items:flex-start;gap:12px}
+.pay-h small{color:var(--muted);font-weight:600}
+.pay-h h3{font-size:26px;margin-top:2px}
+.pay-h .rbtn{margin-left:auto}
+.pay-b{display:grid;gap:12px;justify-items:stretch}
+.qr{width:170px;height:170px;justify-self:center;border:1px solid var(--line);border-radius:14px;padding:8px;background:#fff}
+.qr svg{width:100%;height:100%;display:block}
+.copy{display:flex;gap:8px;align-items:center;border:1.5px dashed var(--line);border-radius:12px;padding:8px 8px 8px 12px;min-width:0}
+.copy code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:var(--muted)}
+.card-test{display:flex;gap:12px;align-items:center;border:1.5px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(135deg,var(--mist),var(--surface))}
+.card-test b{display:block}.card-test small{color:var(--muted);font-size:13px}
+.chkline{display:flex;gap:10px;align-items:flex-start;font-size:15px;cursor:pointer}
+.chkline input{width:20px;height:20px;margin-top:1px;flex:none;accent-color:var(--navy)}
+.chkline.big{border:1.5px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;background:var(--surface)}
+.pay-demo{display:flex;gap:8px;align-items:flex-start;color:var(--muted);font-size:13px;margin:0}
+.pay-demo svg{width:16px;height:16px;flex:none;margin-top:1px}
+.rate{display:flex;justify-content:center;gap:6px}
+.rate button{font-size:38px;line-height:1;color:var(--line);width:52px;height:52px;border-radius:12px}
+.rate button.on{color:var(--gold)}
+.quick.wrapq{flex-wrap:wrap;overflow:visible}
+.quick button.on{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.stars{color:var(--line);letter-spacing:1px;font-size:16px;white-space:nowrap}
+.stars i{font-style:normal}.stars i.on{color:var(--gold)}
+.code{color:var(--navy)}
+.kyc-cta{display:flex;align-items:center;gap:12px;margin-top:14px;padding:14px 16px;border-radius:18px;background:var(--gold-soft);color:var(--ink);text-decoration:none}
+.kyc-cta b{display:block}.kyc-cta small{color:var(--muted);font-size:13.5px}
+.kyc-cta > svg:last-child{margin-left:auto;color:var(--muted)}
+.vsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:4px 0 20px}
+.vsteps div{display:grid;justify-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--muted);text-align:center}
+.vsteps i{font-style:normal;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);font-weight:800}
+.vsteps .cur i{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.vsteps .done i{background:var(--green-soft);color:var(--green);border-color:transparent}
+.vsteps .cur{color:var(--navy)}
+.vbody .set{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 12px}
+.err{color:var(--red);font-size:13px;min-height:0}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.shots.one{grid-template-columns:minmax(0,320px);justify-content:center}
+.shot{border:1.5px dashed var(--line);border-radius:18px;padding:18px 12px;display:grid;justify-items:center;gap:6px;text-align:center;cursor:pointer;background:var(--surface);min-height:170px;align-content:center}
+.shot svg{width:34px;height:34px;color:var(--blue)}
+.shot small{color:var(--muted);font-size:13px}
+.shot img{width:100%;max-height:150px;object-fit:cover;border-radius:12px}
+.shot.round img{width:150px;height:150px;border-radius:50%}
+.shot.has{border-style:solid;border-color:var(--green)}
+.vfoot{display:flex;gap:10px;margin:20px 0 12px}
+.vfoot .btn-primary{flex:1}
+.verif-done{display:grid;gap:14px;justify-items:start}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.tips div{display:flex;gap:12px;border:1.5px solid var(--line);border-radius:16px;padding:14px;background:var(--surface)}
+.tips svg{color:var(--blue);flex:none}
+.tips b{display:block}
+.tips span{color:var(--muted);font-size:14px}
+.tips span b{color:var(--ink);font-size:15px;margin-bottom:2px}
+.sos-list{display:grid;gap:8px}
+.sos{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:16px;padding:14px;text-align:left;width:100%;color:var(--ink);text-decoration:none;background:var(--surface)}
+.sos svg{color:var(--blue);flex:none}
+.sos b{display:block}.sos small{color:var(--muted);font-size:13px}
+.sos.danger{border-color:var(--red);background:var(--red-soft)}
+.sos.danger svg{color:var(--red)}
+.sos-ic{margin-left:auto}
+.sos-btn{color:var(--red)}
+.pill.tog{border:0;cursor:pointer;min-height:36px;padding:6px 12px}
+.card-h .pill{white-space:normal;text-align:left}
+@media (max-width:380px){.plans.dyn{grid-template-columns:1fr!important}}
+.tcnt{position:absolute;top:4px;left:calc(50% + 6px);background:var(--red);color:#fff;border-radius:99px;font-size:10px;padding:0 5px;line-height:16px;font-weight:700}
+.more-menu{position:fixed;right:10px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:46;background:var(--bg);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px -10px rgba(15,23,32,.35);padding:6px;min-width:210px}
+.more-menu a{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:600}
+.more-menu a.on{background:var(--mist);color:var(--navy)}
+.more-menu .cnt{margin-left:auto;background:var(--red);color:#fff;border-radius:99px;font-size:11.5px;padding:1px 7px}
+@media (min-width:901px){.more-menu{display:none}}
+.safe{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.safe > div{border:1.5px solid var(--line);border-radius:20px;padding:20px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.safe .pi{width:44px;height:44px;border-radius:14px;background:var(--sky);display:grid;place-items:center;color:var(--navy)}
+.safe b{font-size:17px}
+.safe p{color:var(--muted);font-size:15px}
+@media (max-width:900px){.safe{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){
+  .safe{gap:10px}
+  .safe > div{padding:14px;border-radius:16px}
+  .safe p{display:none}
+  .safe b{font-size:15px;line-height:1.25}
+  .safe .pi{width:38px;height:38px}
+  .shots{grid-template-columns:1fr 1fr}
+  .shot{min-height:140px;padding:14px 8px}
+  .sheet.pay{border-radius:22px 22px 0 0;padding:20px 18px calc(18px + env(safe-area-inset-bottom,0px))}
+  .pay-h h3{font-size:22px}
+  .rate button{font-size:32px;width:46px;height:46px}
+}
+
+/* ---------- planos interativos ---------- */
+.pl-top{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.pl-per{display:inline-grid;grid-template-columns:repeat(3,auto);gap:4px;background:var(--mist);padding:5px;border-radius:999px}
+.pl-per button{border-radius:999px;padding:9px 16px;font-weight:700;font-size:14.5px;display:flex;gap:6px;align-items:center;min-height:42px}
+.pl-per button small{background:var(--green-soft);color:var(--green);border-radius:99px;padding:1px 7px;font-size:12px}
+.pl-per button[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.pl-quiz{border:1.5px solid var(--line);border-radius:18px;background:var(--surface);flex:0 1 420px;min-width:0}
+.pl-quiz > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:12px 16px;font-weight:700;color:var(--navy);min-height:44px}
+.pl-quiz > summary::-webkit-details-marker{display:none}
+.pl-quiz > summary svg:first-child{color:var(--gold)}
+.pl-quiz > summary svg:last-child{margin-left:auto;transition:transform .2s}
+.pl-quiz[open] > summary svg:last-child{transform:rotate(180deg)}
+.qz{padding:0 16px 14px;display:grid;gap:8px}
+.qz p{font-weight:600;font-size:14.5px}
+.qz-o{display:flex;flex-wrap:wrap;gap:6px}
+.qz-o button{border:1.5px solid var(--line);border-radius:99px;padding:7px 12px;font-size:14px;font-weight:600;min-height:38px}
+.qz-o button[aria-pressed="true"]{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.qz-r{display:flex;gap:8px;align-items:flex-start;background:var(--green-soft);border-radius:12px;padding:10px 12px;font-weight:500!important}
+.qz-r svg{color:var(--green);flex:none}
+.plans.dyn .plan{transition:transform .2s,box-shadow .2s}
+@media (hover:hover){.plans.dyn .plan:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(27,58,92,.45)}}
+.plan.rec{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
+.badge-r{font-style:normal;background:var(--gold);color:#1B3A5C;border-radius:99px;padding:2px 8px;font-size:11.5px;margin-left:4px;vertical-align:1px}
+.badge-r.soft{background:var(--sky);color:var(--navy)}
+.pl-sub{display:flex;flex-direction:column;gap:2px;font-size:13.5px;color:var(--muted);min-height:38px}
+.pl-sub s{color:var(--muted)}
+.pl-sub .save{color:var(--green)}
+.pv{font-variant-numeric:tabular-nums}
+.freq{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.freq button{border:1.5px solid var(--line);border-radius:10px;min-width:42px;min-height:36px;font-weight:700;font-size:14px}
+.freq button[aria-pressed="true"]{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.freq small{color:var(--muted);font-size:12.5px;flex-basis:100%}
+.pl-cta{margin-top:auto;width:100%;white-space:nowrap}
+.plans.dyn .plan .pr,.plans.dyn .plan .lv,.plans.dyn .plan h3{align-self:auto}
+.badge-r{white-space:nowrap;display:inline-block}
+.plans.dyn .plan{display:flex;flex-direction:column;gap:8px;grid-row:auto}
+.combo{margin-top:16px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;border-radius:22px;padding:22px 24px;background:#1B3A5C;color:#fff}
+.combo h3{color:#fff;font-size:22px;margin:6px 0}
+.combo p{color:#C9D8EA;font-size:15px}
+.combo-p{display:grid;justify-items:end;gap:2px;text-align:right}
+.combo-p s{color:#C9D8EA;font-size:14px}
+.combo-p b{font-family:var(--display);font-size:34px;line-height:1.1}
+.combo-p small{color:#F0BE5A;font-weight:700;margin-bottom:8px}
+@media (max-width:640px){
+  .pl-top{flex-direction:column;align-items:stretch}
+  .pl-per{display:grid;grid-template-columns:repeat(3,1fr);border-radius:16px}
+  .pl-per button{justify-content:center;padding:8px 4px;font-size:13.5px;flex-direction:column;gap:2px;border-radius:12px}
+  .pl-quiz{flex-basis:auto}
+  .combo{grid-template-columns:1fr;padding:18px;gap:12px}
+  .combo p{display:none}
+  .combo-p{justify-items:stretch;text-align:left;grid-template-columns:auto 1fr;align-items:baseline;column-gap:10px}
+  .combo-p b{font-size:28px;grid-row:1;grid-column:1}
+  .combo-p s{grid-row:1;grid-column:2}
+  .combo-p small{grid-column:1/-1}
+  .combo-p .btn{grid-column:1/-1}
+  .plans.dyn .plan .pl-sub{min-height:0}
+  .freq small{display:none}
+}
+
 @media (min-width:901px){.mnav{display:none}}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr;gap:40px}
@@ -921,11 +1071,11 @@ function site(){
   $("#root").innerHTML=`
 <header class="topbar"><div class="wrap">
   <a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
-  <nav class="topnav" aria-label="Seções"><a href="#como" data-scroll>Como funciona</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#duvidas" data-scroll>Dúvidas</a><a href="#/entrar">Entrar</a></nav>
+  <nav class="topnav" aria-label="Seções"><a href="#como" data-scroll>Como funciona</a><a href="#seguranca" data-scroll>Segurança</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#duvidas" data-scroll>Dúvidas</a><a href="#/entrar">Entrar</a></nav>
   <a class="btn btn-primary" href="${has?"#/app":"#/comecar"}">${has?"Abrir meu app":"Começar"}</a>
   <button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button>
   <button class="rbtn menu-btn" id="menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="mnav"><i data-lucide="menu"></i></button>
-</div><nav class="mnav wrap" id="mnav" aria-label="Seções" hidden><a href="#como" data-scroll>Como funciona</a><a href="#combinados" data-scroll>Nossos combinados</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#parceiros" data-scroll>Seja parceiro</a><a href="#duvidas" data-scroll>Dúvidas</a><a href="#contato" data-scroll>Contato</a><a href="#/entrar">Entrar (cliente, personal ou empresa)</a></nav></header>
+</div><nav class="mnav wrap" id="mnav" aria-label="Seções" hidden><a href="#como" data-scroll>Como funciona</a><a href="#combinados" data-scroll>Nossos combinados</a><a href="#pra-quem" data-scroll>Para quem</a><a href="#seguranca" data-scroll>Segurança</a><a href="#personal" data-scroll>A personal</a><a href="#planos" data-scroll>Planos</a><a href="#parceiros" data-scroll>Seja parceiro</a><a href="#duvidas" data-scroll>Dúvidas</a><a href="#contato" data-scroll>Contato</a><a href="#/entrar">Entrar (cliente, personal ou empresa)</a></nav></header>
 
 <section class="hero"><div class="wrap">
   <div>
@@ -973,6 +1123,18 @@ function site(){
   </div>
 </div></section>
 
+<section class="sec" id="seguranca"><div class="wrap">
+  <div class="sec-h"><span class="kicker">Segurança</span><h2>Todo mundo é verificado. Todo encontro é acompanhado.</h2><p class="dm">Clientes e personais passam pela mesma checagem, porque os encontros acontecem em casa, na praça e na academia.</p></div>
+  <div class="safe">
+    <div><span class="pi"><i data-lucide="scan-face"></i></span><b>Identidade verificada</b><p>Documento com foto, selfie comparada ao documento e CPF conferido. Para clientes e personais.</p></div>
+    <div><span class="pi"><i data-lucide="file-check"></i></span><b>Personais checadas</b><p>CREF ativo e certidão de antecedentes criminais antes do primeiro aluno.</p></div>
+    <div><span class="pi"><i data-lucide="key-round"></i></span><b>Código do encontro</b><p>A personal diz um código ao chegar. Sem o código certo, não abra a porta.</p></div>
+    <div><span class="pi"><i data-lucide="map-pin-check"></i></span><b>Check-in e emergência</b><p>A central acompanha chegada e saída. Botão de emergência no app durante o encontro.</p></div>
+    <div><span class="pi"><i data-lucide="message-square-warning"></i></span><b>Relato confidencial</b><p>Qualquer desconforto chega só para a equipe, sem expor quem relatou.</p></div>
+    <div><span class="pi"><i data-lucide="lock"></i></span><b>Dados protegidos (LGPD)</b><p>Usamos seus dados só para a sua segurança e você pode pedir a exclusão quando quiser.</p></div>
+  </div>
+</div></section>
+
 <section class="sec" id="pra-quem"><div class="wrap">
   <div class="sec-h"><span class="kicker">Para quem é</span><h2>Feito para quem acha que academia não é para si.</h2></div>
   <div class="who">
@@ -999,9 +1161,8 @@ function site(){
 </div></section>
 
 <section class="sec" id="planos"><div class="wrap">
-  <div class="sec-h"><span class="kicker">Planos</span><h2>Você paga pelo nível em que está.</h2><p>Sem fidelidade. Quando subir de nível, o plano muda junto.</p></div>
-  <div class="plans">${LEVELS.map((l,i)=>`<div class="plan ${i===1?"hl":""}"><span class="lv">Nível ${l.n}</span><h3>${l.t}</h3><div class="pr">${l.price} <small>${l.per}</small></div><p class="om" style="color:var(--muted);font-size:14px">${l.short}</p><ul class="dm">${l.inc.map(x=>`<li><i data-lucide="check"></i>${x}</li>`).join("")}</ul></div>`).join("")}</div>
-  <p class="note"><i data-lucide="gift"></i>A primeira conversa de 15 minutos é gratuita e sem compromisso.</p>
+  <div class="sec-h"><span class="kicker">Planos</span><h2>Monte o seu plano.</h2><p>Sem fidelidade. Pagando mais meses de uma vez você economiza, e se parar antes, o que sobrar vira crédito.</p></div>
+  <div id="plansBox"></div>
 </div></section>
 
 <section class="sec" id="parceiros"><div class="wrap split">
@@ -1059,6 +1220,7 @@ function site(){
   mb.onclick=()=>setMenu(mn.hidden);
   $("#theme").onclick=toggleTheme;
   bindSiteForms();
+  renderPlans();
   document.querySelectorAll("[data-reveal]").forEach(b=>b.onclick=()=>{const f=$("#"+b.dataset.reveal);f.classList.remove("m-hide");b.remove();const i=f.querySelector("input");if(i)i.focus()});
   const fm=$("#faqmore");if(fm)fm.onclick=()=>{$(".faq").classList.remove("clip");fm.remove()};
   document.querySelectorAll("[data-scroll]").forEach(a=>a.onclick=e=>{e.preventDefault();setMenu(false);document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})});
@@ -1090,6 +1252,7 @@ function onboarding(){
     <div class="result"><div class="rh"><small>Você começa no</small><b>Nível 1 · Conhecer</b></div><div class="rb">
       <div class="rr"><i data-lucide="user-round-check"></i><span>Personal sugerida: <b>${PERSONAL.name}</b>, ${PERSONAL.bio.toLowerCase()}</span></div>
       <div class="rr"><i data-lucide="${OB.contact==="Só mensagem"?"message-square":OB.contact==="Áudio"?"mic":"video"}"></i><span>Primeira conversa por <b>${OB.contact.toLowerCase()}</b>, de 15 minutos e gratuita.</span></div>
+      ${OB.plan?`<div class="rr"><i data-lucide="tag"></i><span>Plano escolhido: <b>${planLabel(OB.plan)}</b>. Você só paga depois da primeira conversa.</span></div>`:""}
       <div class="rr"><i data-lucide="calendar"></i><span>Disponível: <b>${OB.days.join(", ")}</b>, de ${OB.period.toLowerCase()}.</span></div>
       ${any?`<div class="rr"><i data-lucide="stethoscope"></i><span>Antes dos treinos, vamos pedir a <b>liberação do seu médico</b>.</span></div>`:""}
     </div></div>`;nextLabel="Entrar no meu app"}
@@ -1106,7 +1269,7 @@ function onboarding(){
   const bk=$("#back");if(bk)bk.onclick=()=>{OB.step--;onboarding();scrollTo(0,0)};
   $("#next").onclick=next;icons();
   function next(){if(OB.step<OB_STEPS.length-1){OB.step++;onboarding();scrollTo(0,0);return}
-    S=fresh();S.profile={name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
+    S=fresh();S.plan=OB.plan||null;S.profile={name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
     S.messages=[{from:"them",text:`Oi, ${OB.name.trim().split(" ")[0]}! Eu sou a ${PERSONAL.name.split(" ")[0]}, sua personal. Li suas respostas e fico feliz que você esteja aqui. 💛`,t:nowT()},{from:"them",text:"Quando quiser, agende nossa primeira conversa na aba Agenda. Pode ser só por mensagem, sem pressa nenhuma.",t:nowT()}];
     S.unread=2;save();OB.step=0;location.hash="#/app";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
 }
@@ -1114,15 +1277,16 @@ function onboarding(){
 /* ================== APP ================== */
 function app(tab){
   const tabs=[["inicio","house","Início"],["treinos","circle-play","Treinos"],["agenda","calendar-days","Agenda"],["mensagens","message-circle","Conversa"],["perfil","user-round","Perfil"]];
-  const v={inicio:vHome,treinos:vTreinos,agenda:vAgenda,mensagens:vChat,perfil:vPerfil}[tab]||vHome;
+  const v={inicio:vHome,treinos:vTreinos,agenda:vAgenda,mensagens:vChat,perfil:vPerfil,verificacao:vVerif}[tab]||vHome;
   if(tab==="mensagens")S.unread=0,save();
   $("#root").innerHTML=`<div class="app">
     <header class="app-top"><div class="in"><a class="brand" href="#/" aria-label="Site"><span class="mk"><i data-lucide="footprints"></i></span></a><div><small style="color:var(--muted);font-weight:600;font-size:13px">Nível ${S.level}</small><div style="font-weight:700;line-height:1.1">${LEVELS[S.level-1].t}</div></div>
-    <a class="icon-btn" href="#/app/mensagens" aria-label="Mensagens"><i data-lucide="bell"></i>${S.unread?`<span class="dotb"></span>`:""}</a></div></header>
+    <button class="icon-btn sos-ic" data-sos aria-label="Emergência e segurança"><i data-lucide="shield"></i></button><a class="icon-btn" href="#/app/mensagens" aria-label="Mensagens" style="margin-left:0"><i data-lucide="bell"></i>${S.unread?`<span class="dotb"></span>`:""}</a></div></header>
     <main class="view" id="view"></main>
-    <nav class="tabbar" aria-label="App"><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||(tab==="inicio"&&k==="inicio")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
+    <nav class="tabbar" aria-label="App"><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||(tab==="verificacao"&&k==="perfil")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
   </div>`;
   v();icons();
+  document.querySelectorAll("[data-sos]").forEach(b=>b.onclick=()=>openSOS("cliente"));
 }
 
 function vHome(){
@@ -1136,6 +1300,7 @@ function vHome(){
     <div class="meta"><span>${p}% do nível concluído</span><span>${S.level<4?"Próximo: "+LEVELS[S.level].t:"Última etapa"}</span></div>
   </div>
   ${ready?`<button class="btn btn-gold next" id="up" style="width:100%"><i data-lucide="party-popper"></i>${S.level<4?"Me sinto pronto para o nível "+(S.level+1):"Concluir a jornada"}</button>`:nxt?`<a class="btn btn-primary next" style="width:100%" href="${nxt.go}"><i data-lucide="arrow-right"></i>Próximo passo: ${nxt.t.replace(/\s*\(.*\)/,"")}</a>`:""}
+  ${kycOf("me").status!=="verificado"?`<a class="kyc-cta" href="#/app/verificacao"><i data-lucide="${kycOf("me").status==="analise"?"hourglass":"shield-check"}"></i><span><b>${kycOf("me").status==="analise"?"Verificação em análise":"Verifique sua identidade"}</b><small>${kycOf("me").status==="analise"?"A equipe confere em até 1 dia útil.":"Leva 3 minutos e libera os encontros presenciais com segurança."}</small></span><i data-lucide="chevron-right"></i></a>`:""}
   <div class="block">${moodBox()}</div>
   <div class="block"><div class="block-h"><h3>Para subir de nível</h3></div>
     <div class="tasks">${c.map(x=>`<a class="task ${x.d?"done":""}" href="${x.go}" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="${x.d?"check":"circle-dashed"}"></i></span><span><b>${x.t}</b><small>${x.d?"Feito":"Pendente"}</small></span><i class="go" data-lucide="chevron-right"></i></a>`).join("")}</div>
@@ -1300,14 +1465,15 @@ function vAgenda(){
   const slots=S.profile.period==="Manhã"?["07:00","08:00","09:00","10:00","11:00"]:S.profile.period==="Tarde"?["13:00","14:00","15:00","16:00","17:00"]:["18:00","19:00","20:00","21:00"];
   const list=[...S.bookings].sort((a,b)=>a.ts-b.ts);
   $("#view").innerHTML=`<div class="hello"><small>Agenda</small><h2>Marque no horário que for bom para você.</h2></div>
-  ${list.length?`<div class="block" style="margin-top:0"><div class="block-h"><h3>Seus agendamentos</h3></div><div class="tasks">${list.map((b,i)=>{const d=new Date(b.ts);const past=b.done;return `<div class="booking" style="${past?"opacity:.6":""}"><span class="d"><b>${d.getDate()}</b><small>${d.toLocaleDateString("pt-BR",{month:"short"}).replace(".","")}</small></span><span><b>${b.type}</b><br><small style="color:var(--muted)">${d.toLocaleDateString("pt-BR",{weekday:"long"})} · ${b.time} · ${b.mode}</small></span>${past?`<span class="chip ok" style="margin-left:auto"><i data-lucide="check"></i>Feito</span>`:`<button class="x" data-cancel="${b.ts}" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</div>`}).join("")}</div></div>`:""}
+  ${list.length?`<div class="block" style="margin-top:0"><div class="block-h"><h3>Seus agendamentos</h3></div><div class="tasks">${list.map((b,i)=>{const d=new Date(b.ts);const past=b.done;return `<div class="booking" style="${past?"opacity:.6":""}"><span class="d"><b>${d.getDate()}</b><small>${d.toLocaleDateString("pt-BR",{month:"short"}).replace(".","")}</small></span><span><b>${b.type}</b><br><small style="color:var(--muted)">${d.toLocaleDateString("pt-BR",{weekday:"long"})} · ${b.time} · ${b.mode}</small>${PRESENCIAL(b.type)&&!past?`<br><small class="code">Código de segurança: <b>${meetCode({ts:b.ts,cid:"me"})}</b> · a personal diz ao chegar</small>`:""}</span>${past?`<span class="chip ok" style="margin-left:auto"><i data-lucide="check"></i>Feito</span>`:`<button class="x" data-cancel="${b.ts}" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</div>`}).join("")}</div></div>`:""}
   <div class="block"><div class="block-h"><h3>Novo agendamento</h3></div>
     <div class="seg" style="grid-template-columns:repeat(${types.length},1fr)">${types.map(([t,ic,s])=>`<button aria-pressed="${AG.type===t}" data-type="${t}"><i data-lucide="${ic}"></i>${t}<small style="font-size:11px;color:var(--muted);font-weight:500">${s}</small></button>`).join("")}</div>
     <p style="font-weight:700;margin:18px 0 10px">Dia</p>
     <div class="days">${days.map((d,i)=>`<button class="day" aria-pressed="${AG.day===i}" data-d="${i}"><small>${d.toLocaleDateString("pt-BR",{weekday:"short"}).replace(".","")}</small><b>${d.getDate()}</b></button>`).join("")}</div>
     <p style="font-weight:700;margin:18px 0 10px">Horário <span style="color:var(--muted);font-weight:500">(${S.profile.period.toLowerCase()})</span></p>
     <div class="slots">${slots.map(s=>`<button class="slot" aria-pressed="${AG.slot===s}" data-s="${s}">${s}</button>`).join("")}</div>
-    <button class="btn btn-primary" id="book" style="width:100%;margin-top:18px" ${AG.slot?"":"disabled"}><i data-lucide="calendar-check"></i>Confirmar agendamento</button>
+    ${PRESENCIAL(AG.type)&&kycOf("me").status!=="verificado"?`<div class="alert warn"><i data-lucide="shield-alert"></i><span>Encontros presenciais precisam da sua identidade verificada. <a href="#/app/verificacao" style="color:inherit;font-weight:700">Verificar agora</a></span></div>`:""}
+    <button class="btn btn-primary" id="book" style="width:100%;margin-top:18px" ${AG.slot&&!(PRESENCIAL(AG.type)&&kycOf("me").status!=="verificado")?"":"disabled"}><i data-lucide="calendar-check"></i>Confirmar agendamento</button>
   </div>
   ${demoBox()}`;
   document.querySelectorAll("[data-type]").forEach(b=>b.onclick=()=>{AG.type=b.dataset.type;vAgenda();icons()});
@@ -1354,10 +1520,14 @@ function vPerfil(){
   <details class="fold block"><summary><h3>Sua jornada</h3><span class="fs">Nível ${S.level} de 4</span><i data-lucide="chevron-down"></i></summary>
     <div class="tasks">${LEVELS.map(l=>`<div class="task ${l.n<S.level?"done":""}" style="${l.n>S.level?"opacity:.55":""}"><span class="ti"><i data-lucide="${l.n<S.level?"check":l.icon}"></i></span><span><b>Nível ${l.n} · ${l.t}</b><small>${l.price} ${l.per}</small></span>${l.n===S.level?`<span class="chip ok" style="margin-left:auto">Atual</span>`:""}</div>`).join("")}</div></details>
   <details class="fold block"><summary><h3>Suas respostas</h3><span class="fs">Questionário</span><i data-lucide="chevron-down"></i></summary>
-    <div class="plist"><div><span>Objetivos</span><b>${p.goals.join(", ")}</b></div><div><span>O que te trava</span><b>${p.barriers.join(", ")}</b></div><div><span>Disponibilidade</span><b>${p.days.join(", ")} · ${p.period}</b></div><div><span>Contato preferido</span><b>${p.contact}</b></div><div><span>Liberação médica</span><b>${p.medical?(p.medOk?"Recebida pela personal":"Pendente"):"Não necessária"}</b></div></div></details>
+    <div class="plist"><div><span>Objetivos</span><b>${p.goals.join(", ")}</b></div><div><span>O que te trava</span><b>${p.barriers.join(", ")}</b></div><div><span>Disponibilidade</span><b>${p.days.join(", ")} · ${p.period}</b></div>${S.plan?`<div><span>Plano escolhido</span><b>${planLabel(S.plan)}</b></div>`:""}<div><span>Contato preferido</span><b>${p.contact}</b></div><div><span>Liberação médica</span><b>${p.medical?(p.medOk?"Recebida pela personal":"Pendente"):"Não necessária"}</b></div></div></details>
   <div class="block"><div class="block-h"><h3>Treinos por semana</h3></div><div class="card" style="padding:14px">${weeksChart()}</div></div>
   <div class="block"><div class="block-h"><h3>Como você tem se sentido</h3></div>${feelHist()}</div>
   <div class="block"><div class="block-h"><h3>Pagamentos</h3></div>${myBills()}</div>
+  <div class="block"><div class="block-h"><h3>Segurança</h3></div><div class="tasks">
+    <a class="task" href="#/app/verificacao" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="shield-check"></i></span><span><b>Verificação de identidade</b><small>${KYC_PILL[kycOf("me").status][2]}</small></span><i class="go" data-lucide="chevron-right"></i></a>
+    ${rateCard()}
+    <button class="task" data-sos style="text-align:left"><span class="ti"><i data-lucide="siren"></i></span><span><b>Emergência e relato confidencial</b><small>Polícia, SAMU, central e canal de relato</small></span><i class="go" data-lucide="chevron-right"></i></button></div></div>
   <div class="block" style="display:grid;gap:10px"><div class="block-h" style="margin-bottom:2px"><h3>Preferências</h3></div>
     <button class="toggle-row" role="switch" aria-checked="${isDark()}" id="tg-theme"><i data-lucide="moon"></i><span><b>Tema escuro</b></span><span class="sw"></span></button>
     <button class="toggle-row" role="switch" aria-checked="${!!S.sound}" id="tg-sound"><i data-lucide="volume-2"></i><span><b>Aviso sonoro nos treinos</b><br><small style="color:var(--muted)">Toca ao trocar de exercício e vibra no celular</small></span><span class="sw"></span></button>
@@ -1368,7 +1538,9 @@ function vPerfil(){
   </div>
   <p class="note"><i data-lucide="heart"></i>Se estiver passando por um momento difícil, o CVV atende 24 horas pelo 188.</p>`;
   $("#tg-theme").onclick=toggleTheme;
-  document.querySelectorAll("[data-mypay]").forEach(b=>b.onclick=()=>{DB.paid[b.dataset.mypay]=true;saveDB();toast("Pagamento confirmado. Obrigado!");vPerfil();icons()});
+  document.querySelectorAll("#view [data-sos]").forEach(b=>b.onclick=()=>openSOS("cliente"));
+  document.querySelectorAll("[data-mypay]").forEach(b=>b.onclick=()=>openCheckout(b.dataset.mypay));
+  const rt=$("#rate");if(rt)rt.onclick=openRating;
   $("#tg-sound").onclick=()=>{S.sound=!S.sound;save();if(S.sound)beep(880);vPerfil();icons()};
   $("#reset").onclick=()=>sheet("rotate-ccw","Recomeçar do zero?","Isso apaga suas respostas, treinos, agendamentos e conversas deste aparelho. Não dá para desfazer.","Apagar e recomeçar",{danger:true,cancel:"Manter meu progresso",onOk:()=>{S=fresh();save();OB={step:0,name:"",goals:[],barriers:[],days:[],period:"",contact:"",parq:Array(PARQ.length).fill(null),notes:""};location.hash="#/"}});
 }
@@ -1377,7 +1549,7 @@ function myBills(){const all=bills().filter(b=>b.cid==="me").reverse();
   const open=all.filter(b=>!b.paid),bl=open.length?open:all.slice(0,1),rest=all.filter(b=>!bl.includes(b));
   const row=b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><i data-lucide="receipt"></i><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}<br><small style="margin:0">Nível ${b.lv} · vence dia 10</small></span><small style="display:flex;gap:8px;align-items:center">${b.paid?pill(k,ic,t):`${pill(k,ic,t)}<button class="btn btn-primary btn-sm" data-mypay="${b.key}">Pagar</button>`}</small></div>`};
   return`<div class="hist">${bl.map(row).join("")}</div>${rest.length?`<details class="fold" style="margin-top:10px"><summary><span class="fs" style="margin:0">Ver histórico (${rest.length})</span><i data-lucide="chevron-down"></i></summary><div class="hist">${rest.map(row).join("")}</div></details>`:""}
-  <p class="note" style="margin-top:10px"><i data-lucide="info"></i>Demonstração: o botão Pagar só marca como pago. Numa versão real, abriria o Pix.</p>`}
+  <p class="note" style="margin-top:10px"><i data-lucide="${METHODS[S.payMethod||"pix"].ic}"></i>Forma preferida: ${METHODS[S.payMethod||"pix"].l}${S.autopay?" · cobrança automática ligada":""}. Pagamentos ilustrativos por enquanto.</p>`}
 function weeksChart(){const w0=sod()-((new Date().getDay()+6)%7)*D1,data=[];
   for(let i=5;i>=0;i--){const a=w0-i*7*D1,b=a+7*D1,n=S.workouts.filter(x=>x.at>=a&&x.at<b).length+(S.breaths||[]).filter(x=>x>=a&&x<b).length;
     data.push({label:i===0?"Esta semana":i===1?"Semana passada":`Há ${i} semanas`,short:new Date(a).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"}),v:n})}
@@ -1459,7 +1631,7 @@ function seedDB(){
   const db={v:1,personals,clients,bookings,leads,prices:[100,180,480,560],split:70,paid:{}};
   const cur=mkey(now),prev=monthsBack(2)[0];
   billsOf(db,clients).forEach(b=>{db.paid[b.key]=b.m<cur?!(b.cid==="c10"&&b.m>=prev):rnd()<.6});
-  return seedFin(db);
+  return seedSafety(seedPay(seedFin(db)));
 }
 let DB=loadDB();
 function loadDB(){try{const r=localStorage.getItem(DBKEY);if(r)return JSON.parse(r)}catch(e){}return seedDB()}
@@ -1567,9 +1739,12 @@ function shell({role,tabs,tab,base,me,title,kick,acts=""}){
     <header class="pn-head"><div><small>${kick}</small><h1>${title}</h1></div><div class="acts">${acts}<button class="rbtn" data-tgl-theme aria-label="Alternar tema" style="${""}"><i data-lucide="${themeIcon()}"></i></button></div></header>
     <div id="pv"></div>
   </div>
-  <nav class="tabbar pn-tabbar" aria-label="${role}"><div class="in" style="grid-template-columns:repeat(${tabs.length},minmax(0,1fr));max-width:none">${tabs.map(t=>`<a href="${base}/${t.k}" class="${t.k===tab?"on":""}"><i data-lucide="${t.ic}"></i>${t.s||t.l}</a>`).join("")}</div></nav>
+  ${(()=>{const main=tabs.length>5?tabs.slice(0,4):tabs,more=tabs.length>5?tabs.slice(4):[],inMore=more.some(t=>t.k===tab),mc=more.reduce((s,t)=>s+(t.cnt||0),0);
+    return`<nav class="tabbar pn-tabbar" aria-label="${role}"><div class="in" style="grid-template-columns:repeat(${main.length+(more.length?1:0)},minmax(0,1fr));max-width:none">${main.map(t=>`<a href="${base}/${t.k}" class="${t.k===tab?"on":""}"><i data-lucide="${t.ic}"></i>${t.s||t.l}${t.cnt?`<span class="tcnt">${t.cnt}</span>`:""}</a>`).join("")}${more.length?`<a href="#" data-more-tabs class="${inMore?"on":""}"><i data-lucide="menu"></i>Mais${mc?`<span class="tcnt">${mc}</span>`:""}</a>`:""}</div></nav>
+    ${more.length?`<div class="more-menu" id="mmenu" hidden>${more.map(t=>`<a href="${base}/${t.k}" class="${t.k===tab?"on":""}"><i data-lucide="${t.ic}"></i>${t.l}${t.cnt?`<span class="cnt">${t.cnt}</span>`:""}</a>`).join("")}</div>`:""}`})()}
   </div>`;
   document.querySelectorAll("[data-out]").forEach(b=>b.onclick=logout);
+  const mt=document.querySelector("[data-more-tabs]");if(mt)mt.onclick=e=>{e.preventDefault();const m=$("#mmenu");m.hidden=!m.hidden};
   document.querySelectorAll("button[data-tgl-theme]").forEach(b=>b.onclick=toggleTheme);
 }
 function bindOpen(role){document.querySelectorAll("[data-open]").forEach(b=>b.onclick=e=>{if(e.target.closest("[data-stop]"))return;openClient(b.dataset.open,role)})}
@@ -1637,7 +1812,8 @@ function panelPersonal(tab){
   const p=curP(),cs=myClients(p),unr=cs.filter(needsReply).length;
   const tabs=[{k:"hoje",ic:"layout-dashboard",l:"Hoje"},{k:"alunos",ic:"users",l:"Alunos"},{k:"agenda",ic:"calendar-days",l:"Agenda"},{k:"mensagens",ic:"message-circle",l:"Mensagens",s:"Conversas",cnt:unr},{k:"ganhos",ic:"wallet",l:"Ganhos"}];
   const T={hoje:["Painel da personal",`${greet()}, ${p.name.split(" ")[0]}`],alunos:["Seus alunos","Alunos"],agenda:["Encontros e check-ins","Agenda"],mensagens:["Conversas com alunos","Mensagens"],ganhos:["Mensalidades e repasses","Ganhos"]}[tab]||["",""];
-  shell({role:"Personal",tabs,tab,base:"#/personal",me:{name:p.name,sub:p.cref},title:T[1],kick:T[0],acts:SESS.back==="admin"?`<a class="btn btn-ghost btn-sm" href="#/admin" id="bk2"><i data-lucide="arrow-left"></i>Voltar à empresa</a>`:""});
+  shell({role:"Personal",tabs,tab,base:"#/personal",me:{name:p.name,sub:p.cref},title:T[1],kick:T[0],acts:(SESS.back==="admin"?`<a class="btn btn-ghost btn-sm" href="#/admin" id="bk2"><i data-lucide="arrow-left"></i>Voltar à empresa</a>`:"")+`<button class="btn btn-ghost btn-sm sos-btn" data-sos><i data-lucide="siren"></i>Emergência</button>`});
+  document.querySelectorAll("[data-sos]").forEach(b=>b.onclick=()=>openSOS("personal"));
   const b2=$("#bk2");if(b2)b2.onclick=()=>setSess({role:"admin"});
   ({hoje:pHoje,alunos:pAlunos,agenda:pAgenda,mensagens:pMsgs,ganhos:pGanhos}[tab]||pHoje)(p,cs);
   bindOpen("personal");icons();
@@ -1652,7 +1828,9 @@ function pHoje(p,cs){
     <section class="card"><div class="card-h"><h3>Precisa da sua atenção</h3><span class="pill mute">${att.length}</span></div><div class="rows clip">${att.length?att.slice(0,8).map(({c,a})=>`<button class="rw" data-open="${c.id}">${avatar(c)}<span><b>${esc(c.name)}</b><small>Nível ${c.level} · ${LEVELS[c.level-1].t}</small></span><span class="end">${pill(a[2],a[0],a[1])}</span></button>`).join(""):`<p class="empty-s">Tudo em dia com seus alunos.</p>`}</div></section>
     <section class="card"><div class="card-h"><h3>Hoje e amanhã</h3><a href="#/personal/agenda">Agenda completa</a></div><div class="rows">${bk.length?bk.map(b=>{const c=findC(b.cid);return c?`<button class="rw" data-open="${c.id}"><span class="time">${hm(b.ts)}</span><span><b>${esc(c.name)}</b><small>${dlabel(b.ts)} · ${b.type} · ${b.mode}</small></span><span class="end">${b.status==="feito"?pill("ok","check","Feito"):""}</span></button>`:""}).join(""):`<p class="empty-s">Nenhum encontro marcado para hoje e amanhã.</p>`}</div></section>
   </div>
-  <section class="card mt"><div class="card-h"><h3>Seus alunos por nível</h3></div>${hbars(LEVELS.map(l=>({label:`${l.n} · ${l.t}`,v:act.filter(c=>c.level===l.n).length})))}</section>`;
+  <div class="grid2"><section class="card"><div class="card-h"><h3>Seus alunos por nível</h3></div>${hbars(LEVELS.map(l=>({label:`${l.n} · ${l.t}`,v:act.filter(c=>c.level===l.n).length})))}</section>
+  <section class="card"><div class="card-h"><h3>Sua verificação</h3>${pSafe(p)?pill("ok","shield-check","Completa"):pill("warn","shield-alert","Incompleta")}</div><div class="chk">${[["doc","Documento com foto"],["selfie","Selfie comparada ao documento"],["cref","CREF ativo no conselho"],["crim","Certidão de antecedentes criminais"]].map(([k,t])=>`<div class="${(p.safety||{})[k]?"y":""}"><i data-lucide="${(p.safety||{})[k]?"circle-check":"circle-dashed"}"></i>${t}</div>`).join("")}</div>
+    <p class="week-note">${pSafe(p)?"Tudo em dia. Você pode fazer encontros presenciais.":"Encontros presenciais ficam bloqueados até a empresa conferir todos os itens."} Cada encontro presencial tem um código: diga ao aluno quando chegar.</p></section></div>`;
 }
 let PF={q:"",lv:"0",st:"ativo"};
 function clientTable(list,role){
@@ -1685,11 +1863,14 @@ function pAgenda(p,cs){
   const t0=sod(),all=bookingsAll().filter(b=>b.pid===p.id&&b.status!=="cancelado");
   const up=all.filter(b=>b.ts>=t0).sort((a,b)=>a.ts-b.ts),past=all.filter(b=>b.ts<t0).sort((a,b)=>b.ts-a.ts).slice(0,6);
   const groups={};up.forEach(b=>{const k=dlabel(b.ts);(groups[k]=groups[k]||[]).push(b)});
-  const row=b=>{const c=findC(b.cid);if(!c)return"";return`<div class="rw"><span class="time">${hm(b.ts)}</span>${avatar(c)}<span><b>${esc(c.name)}</b><small>${b.type} · ${b.mode}</small></span><span class="end">${b.status==="feito"?pill("ok","check","Feito"):`<button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="feito"><i data-lucide="check"></i>Concluir</button><button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="cancelado" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</span></div>`};
+  const row=b=>{const c=findC(b.cid);if(!c)return"";return`<div class="rw"><span class="time">${hm(b.ts)}</span>${avatar(c)}<span><b>${esc(c.name)}</b><small>${b.type} · ${b.mode}${PRESENCIAL(b.type)?` · <b class="code">código ${meetCode(b)}</b>`:""}</small></span><span class="end">${b.status==="feito"?pill("ok","check","Feito"):PRESENCIAL(b.type)?((DB.checkins[b.id]||{}).in?`${pill("info","map-pin-check","Chegou "+hm(DB.checkins[b.id].in))}<button class="btn btn-primary btn-sm" data-ck="${b.id}" data-v="out"><i data-lucide="log-out"></i>Encerrar</button>`:`<button class="btn btn-primary btn-sm" data-ck="${b.id}" data-v="in" ${kycOf(c.id).status!=="verificado"||!pSafe(p)?"disabled title='Cliente ou personal sem verificação'":""}><i data-lucide="map-pin-check"></i>Cheguei</button>`):`<button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="feito"><i data-lucide="check"></i>Concluir</button><button class="btn btn-ghost btn-sm" data-bk="${b.id}" data-s="cancelado" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</span></div>`};
   $("#pv").innerHTML=`<div class="grid2 wide" style="margin-top:0">
     <section class="card"><div class="card-h"><h3>Próximos encontros</h3><span class="pill mute">${up.length}</span></div>${up.length?Object.entries(groups).map(([k,l])=>`<p style="font-weight:700;margin:10px 0 2px;text-transform:capitalize">${k}</p><div class="rows">${l.map(row).join("")}</div>`).join(""):`<p class="empty-s">Nada marcado. Use o formulário ao lado.</p>`}</section>
     <div style="display:grid;gap:14px;align-content:start">${bookingForm(cs)}<section class="card dm"><div class="card-h"><h3>Realizados recentemente</h3></div><div class="rows">${past.length?past.map(row).join(""):`<p class="empty-s">Nenhum ainda.</p>`}</div></section></div>
   </div>`;
+  document.querySelectorAll("[data-ck]").forEach(x=>x.onclick=()=>{const b=bookingsAll().find(y=>y.id===x.dataset.ck),c=DB.checkins[b.id]=DB.checkins[b.id]||{};
+    if(x.dataset.v==="in"){c.in=Date.now();saveDB();pushMsg(b.cid,`Cheguei! O código do nosso encontro é ${meetCode(b)}. Confira antes de abrir a porta. 🛡️`);toast("Check-in feito. A central foi avisada.")}
+    else{c.out=Date.now();saveDB();setBk(b,"feito");toast("Encontro encerrado. Obrigada!")}route(true)});
   document.querySelectorAll("[data-bk]").forEach(x=>x.onclick=()=>{const b=bookingsAll().find(y=>y.id===x.dataset.bk);setBk(b,x.dataset.s);if(x.dataset.s==="cancelado"&&b.cid!=="me")pushMsg(b.cid,`Precisei cancelar nosso horário de ${dlabel(b.ts).toLowerCase()}. Vamos remarcar? 🙏`);toast(x.dataset.s==="feito"?"Encontro concluído":"Horário cancelado e aluno avisado");route(true)});
   bindBookingForm(p.id,()=>route(true));
 }
@@ -1721,10 +1902,10 @@ function pMsgs(p,cs){
 function panelAdmin(tab){
   if(SESS.role!=="admin"){location.hash="#/entrar";return}
   const bl=bills(),late=bl.filter(b=>b.status==="atrasado").length,nl=DB.leads.filter(l=>l.status==="novo").length,pp=DB.personals.filter(p=>p.status==="pendente").length;
-  const tabs=[{k:"geral",ic:"layout-dashboard",l:"Visão geral",s:"Geral"},{k:"clientes",ic:"users",l:"Clientes"},{k:"personais",ic:"badge-check",l:"Personais",cnt:pp},{k:"financeiro",ic:"wallet",l:"Financeiro",s:"Finanças",cnt:late},{k:"leads",ic:"inbox",l:"Contatos",cnt:nl},{k:"ajustes",ic:"settings",l:"Ajustes"}];
-  const T={geral:["Painel da empresa","Visão geral"],clientes:["Todos os clientes","Clientes"],personais:["Equipe e novos parceiros","Personais"],financeiro:["Mensalidades e repasses","Financeiro"],leads:["Mensagens do site","Contatos"],ajustes:["Preços e dados","Ajustes"]}[tab]||["",""];
+  const tabs=[{k:"geral",ic:"layout-dashboard",l:"Visão geral",s:"Geral"},{k:"clientes",ic:"users",l:"Clientes"},{k:"personais",ic:"badge-check",l:"Personais",cnt:pp},{k:"financeiro",ic:"wallet",l:"Financeiro",s:"Finanças",cnt:late},{k:"seguranca",ic:"shield-check",l:"Segurança",cnt:allClients().filter(c=>kycOf(c.id).status==="analise").length+DB.incidents.filter(i=>i.status==="aberto").length},{k:"leads",ic:"inbox",l:"Contatos",cnt:nl},{k:"ajustes",ic:"settings",l:"Ajustes"}];
+  const T={geral:["Painel da empresa","Visão geral"],clientes:["Todos os clientes","Clientes"],personais:["Equipe e novos parceiros","Personais"],financeiro:["Mensalidades e repasses","Financeiro"],leads:["Mensagens do site","Contatos"],seguranca:["Verificações, encontros e relatos","Segurança"],ajustes:["Preços, pagamentos e dados","Ajustes"]}[tab]||["",""];
   shell({role:"Empresa",tabs,tab,base:"#/admin",me:{name:"Administração",sub:"Primeiro Passo"},title:T[1],kick:T[0]});
-  ({geral:aGeral,clientes:aClientes,personais:aPersonais,financeiro:aFin,leads:aLeads,ajustes:aAjustes}[tab]||aGeral)(bl);
+  ({geral:aGeral,clientes:aClientes,personais:aPersonais,financeiro:aFin,seguranca:aSeg,leads:aLeads,ajustes:aAjustes}[tab]||aGeral)(bl);
   bindOpen("admin");icons();
 }
 function aGeral(bl){
@@ -1733,6 +1914,9 @@ function aGeral(bl){
   const novos=cs.filter(c=>mkey(c.since)===cur).length,idle=act.filter(c=>c.level>=2&&daysAgo(lastAct(c))>=14);
   const pend=[...DB.personals.filter(p=>p.status==="pendente").map(p=>["badge-check",`${p.name} quer ser personal parceira`,"#/admin/personais","warn","Analisar"]),
     ...(late.length?[["circle-alert",`${late.length} mensalidades atrasadas (${money(late.reduce((s,b)=>s+b.amount,0))})`,"#/admin/financeiro","bad","Ver"]]:[]),
+    ...DB.incidents.filter(i=>i.status==="aberto").map(i=>["message-square-warning",`Relato: ${i.type.toLowerCase()} (${i.who})`,"#/admin/seguranca",i.sev==="alta"?"bad":"warn","Ver"]),
+    ...allClients().filter(c=>kycOf(c.id).status==="analise").map(c=>["shield-check",`${c.name} enviou documentos para verificação`,"#/admin/seguranca","warn","Conferir"]),
+    ...DB.personals.filter(p=>p.status==="ativo").flatMap(p=>monthsBack(6).filter(m=>payoutState(p.id,m).late&&fin(bills().filter(b=>b.pid===p.id&&b.m===m)).rep>0).map(m=>["wallet",`Repasse de ${mlabel(m,1)} da ${p.name.split(" ")[0]} está atrasado`,"#/admin/financeiro","bad","Pagar"])),
     ...DB.leads.filter(l=>l.status==="novo").map(l=>["inbox",`${l.name} mandou mensagem pelo site`,"#/admin/leads","info","Responder"]),
     ...idle.map(c=>["clock",`${c.name} está sem atividade há ${daysAgo(lastAct(c))} dias`,null,"mute","Ver ficha",c.id])];
   const byP=DB.personals.filter(p=>p.status==="ativo").map(p=>{const pc=act.filter(c=>c.pid===p.id);return{p,n:pc.length,rev:mb.filter(b=>b.pid===p.id).reduce((s,b)=>s+b.amount,0),idle:pc.filter(c=>alertsFor(c).length).length}});
@@ -1760,7 +1944,7 @@ function aPersonais(bl){
       <div style="display:flex;gap:6px;flex-wrap:wrap">${p.status==="ativo"?pill("ok","circle-check","Ativa"):p.status==="pendente"?pill("warn","hourglass","Aguardando análise"):pill("mute","pause","Inativa")}${p.spec.map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div>
       <p class="dm" style="color:var(--muted);font-size:14.5px">${esc(p.bio||"")}</p>
       ${p.status==="ativo"?`<div><div style="display:flex;justify-content:space-between;font-size:14px"><span>Alunos</span><b>${n} de ${p.cap}</b></div><div class="prog mt" style="margin-top:6px"><i style="width:${Math.min(100,n/p.cap*100)}%"></i></div></div>
-      <div class="kv"><div><span>Faturado no mês</span><b>${money(rev)}</b></div><div><span>Repasse (${pctf(splitOf(p.id))})</span><b>${money(rev*splitOf(p.id))}</b></div><div><span>Avaliação</span><b>${p.rating?p.rating.toLocaleString("pt-BR"):"—"}</b></div></div>
+      <div class="kv"><div><span>Faturado no mês</span><b>${money(rev)}</b></div><div><span>Repasse (${pctf(splitOf(p.id))})</span><b>${money(rev*splitOf(p.id))}</b></div><div><span>Avaliação (${ratingOf(p.id).n})</span><b>${ratingOf(p.id).n?ratingOf(p.id).avg.toLocaleString("pt-BR",{maximumFractionDigits:1})+" ★":"—"}</b></div></div>
       <div class="acts pc-foot"><button class="btn btn-ghost btn-sm" data-asp="${p.id}"><i data-lucide="log-in"></i>Ver o painel dela</button><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="inativo"><i data-lucide="pause"></i>Desativar</button></div>`
       :p.status==="pendente"?`<div class="acts pc-foot"><button class="btn btn-primary btn-sm" data-pst="${p.id}" data-v="ativo"><i data-lucide="check"></i>Aprovar</button><button class="btn btn-ghost btn-sm" data-pdel="${p.id}"><i data-lucide="x"></i>Recusar</button></div>`
       :`<div class="acts pc-foot"><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="ativo"><i data-lucide="play"></i>Reativar</button></div>`}</article>`}).join("")}</div>
@@ -1769,7 +1953,8 @@ function aPersonais(bl){
     <div class="field"><label for="npc">CREF</label><input id="npc" required placeholder="000000-G/SP"></div>
     <div class="field"><label for="npa">Região</label><input id="npa" required placeholder="Ex.: Santo André"></div>
     <div class="field"><label for="nps">Especialidade</label><input id="nps" placeholder="Ex.: Iniciantes"></div></div>
-    <button class="btn btn-primary" style="justify-self:start"><i data-lucide="user-plus"></i>Cadastrar</button></form>`;
+    <button class="btn btn-primary" style="justify-self:start"><i data-lucide="user-plus"></i>Cadastrar</button></form>${ratingsBlock()}`;
+  $("#rf").onchange=e=>{RF=e.target.value;route(true)};
   document.querySelectorAll("[data-pst]").forEach(b=>b.onclick=()=>{const p=findP(b.dataset.pst),v=b.dataset.v;
     if(v==="inativo"&&allClients().some(c=>c.pid===p.id&&c.status==="ativo")){toast("Transfira os alunos dela antes de desativar");return}
     p.status=v;if(v==="ativo"&&!p.rating)p.rating=null;saveDB();toast(v==="ativo"?`${p.name.split(" ")[0]} está ativa`:"Personal desativada");route(true)});
@@ -1799,14 +1984,18 @@ function aAjustes(){
     <div class="card-h" style="margin:22px 0 6px"><h3>Divisão entre empresa e personal</h3></div><p style="color:var(--muted);margin-bottom:14px">Percentual de cada mensalidade paga que vai para a personal. O resto, menos a taxa de pagamento, fica com a empresa.</p>
     <div class="set">${DB.personals.map(x=>`<div class="field" style="margin:0"><label for="sp-${x.id}">${esc(x.name)}</label><input id="sp-${x.id}" data-sp="${x.id}" type="number" min="0" max="100" step="0.5" value="${x.split!=null?x.split:DB.split}" inputmode="decimal"><small style="color:var(--muted)">% para a personal</small></div>`).join("")}
       <div class="field" style="margin:0"><label for="spl">Padrão para novas personais</label><input id="spl" type="number" min="0" max="100" step="0.5" value="${DB.split}" inputmode="decimal"><small style="color:var(--muted)">%</small></div>
-      <div class="field" style="margin:0"><label for="fee">Taxa de pagamento</label><input id="fee" type="number" min="0" max="20" step="0.01" value="${DB.fee}" inputmode="decimal"><small style="color:var(--muted)">% cobrada pelo Pix ou cartão</small></div></div>
+      <div class="field" style="margin:0"><label for="d3">Desconto trimestral</label><input id="d3" type="number" min="0" max="50" step="0.5" value="${(DB.disc||{3:10})[3]}" inputmode="decimal"><small style="color:var(--muted)">% no plano de 3 meses</small></div>
+      <div class="field" style="margin:0"><label for="d6">Desconto semestral</label><input id="d6" type="number" min="0" max="50" step="0.5" value="${(DB.disc||{6:15})[6]}" inputmode="decimal"><small style="color:var(--muted)">% no plano de 6 meses</small></div>
+      <div class="field" style="margin:0"><label for="pday">Prazo do repasse</label><input id="pday" type="number" min="1" max="28" value="${DB.payoutDay||5}" inputmode="numeric"><small style="color:var(--muted)">dia do mês seguinte</small></div></div>
+    <div class="card-h" style="margin:22px 0 6px"><h3>Formas de pagamento dos clientes</h3></div><p style="color:var(--muted);margin-bottom:14px">Ilustrativo por enquanto. As taxas entram no cálculo do que fica com a empresa.</p>
+    <div class="set">${Object.keys(METHODS).map(k=>`<div class="field" style="margin:0"><label class="chkline" style="margin:0"><input type="checkbox" data-mon="${k}" ${DB.methodsOn[k]?"checked":""}> ${METHODS[k].l}</label><input id="fee-${k}" data-fee="${k}" type="number" min="0" max="20" step="0.01" value="${DB.fees[k]}" inputmode="decimal" aria-label="Taxa ${METHODS[k].l}"><small style="color:var(--muted)">% de taxa · ${METHODS[k].sub.toLowerCase()}</small></div>`).join("")}</div>
     <div id="spprev" class="mt"></div>
     <button class="btn btn-primary mt"><i data-lucide="save"></i>Salvar preços e divisão</button></form>
   <section class="card mt" style="max-width:760px"><div class="card-h"><h3>Dados de demonstração</h3></div><p style="color:var(--muted)">Volta os clientes, personais, agenda, pagamentos e contatos de exemplo ao estado inicial. O app do cliente deste aparelho não é apagado.</p><button class="btn btn-ghost mt" id="rs" style="color:var(--red)"><i data-lucide="rotate-ccw"></i>Restaurar dados de exemplo</button></section>
   <div class="info mt" style="max-width:760px"><i data-lucide="server"></i><span><b style="color:var(--ink)">Para usar com clientes reais</b>, este site precisa de um servidor com login, banco de dados e pagamento online (por exemplo Pix). Hoje tudo fica salvo só no navegador de quem usa.</span></div>`;
-  $("#pr").onsubmit=e=>{e.preventDefault();DB.prices=LEVELS.map((_,i)=>Math.max(0,Math.round(+$("#pr"+i).value||0)));DB.split=Math.min(100,Math.max(0,+$("#spl").value||0));DB.fee=Math.min(20,Math.max(0,+$("#fee").value||0));document.querySelectorAll("[data-sp]").forEach(i=>{findP(i.dataset.sp).split=Math.min(100,Math.max(0,+i.value||0))});saveDB();syncPrices();toast("Preços e divisão salvos");route(true)};
-  const prev=()=>{const v=DB.prices[1],fe=(+$("#fee").value||0)/100,x=DB.personals.find(p=>p.status==="ativo"),sp=(+$("#sp-"+x.id).value||0)/100;
-    $("#spprev").innerHTML=`<p class="week-note" style="margin:0 0 8px">Exemplo com a mensalidade do nível 2 (${money(v)}) de ${esc(x.name.split(" ")[0])}:</p>${splitBar([{label:"Personal",v:v*sp,k:"k2"},{label:"Empresa",v:Math.max(0,v*(1-sp-fe)),k:"k1"},{label:"Taxa",v:v*fe,k:"k0"}])}`};
+  $("#pr").onsubmit=e=>{e.preventDefault();DB.prices=LEVELS.map((_,i)=>Math.max(0,Math.round(+$("#pr"+i).value||0)));DB.split=Math.min(100,Math.max(0,+$("#spl").value||0));DB.payoutDay=Math.min(28,Math.max(1,Math.round(+$("#pday").value||5)));DB.disc={1:0,3:Math.min(50,Math.max(0,+$("#d3").value||0)),6:Math.min(50,Math.max(0,+$("#d6").value||0))};document.querySelectorAll("[data-fee]").forEach(i=>{DB.fees[i.dataset.fee]=Math.min(20,Math.max(0,+i.value||0))});document.querySelectorAll("[data-mon]").forEach(i=>{DB.methodsOn[i.dataset.mon]=i.checked});if(!Object.values(DB.methodsOn).some(Boolean))DB.methodsOn.pix=true;document.querySelectorAll("[data-sp]").forEach(i=>{findP(i.dataset.sp).split=Math.min(100,Math.max(0,+i.value||0))});saveDB();syncPrices();toast("Preços e divisão salvos");route(true)};
+  const prev=()=>{const v=DB.prices[1],fe=(+$("#fee-pix").value||0)/100,x=DB.personals.find(p=>p.status==="ativo"),sp=(+$("#sp-"+x.id).value||0)/100;
+    $("#spprev").innerHTML=`<p class="week-note" style="margin:0 0 8px">Exemplo com a mensalidade do nível 2 (${money(v)}) de ${esc(x.name.split(" ")[0])}, paga via Pix:</p>${splitBar([{label:"Personal",v:v*sp,k:"k2"},{label:"Empresa",v:Math.max(0,v*(1-sp-fe)),k:"k1"},{label:"Taxa",v:v*fe,k:"k0"}])}`};
   document.querySelectorAll("#pr input").forEach(i=>i.addEventListener("input",prev));prev();
   $("#rs").onclick=()=>sheet("rotate-ccw","Restaurar dados de exemplo?","Todas as alterações feitas nos painéis serão perdidas.","Restaurar",{danger:true,cancel:"Cancelar",onOk:()=>{DB=seedDB();saveDB();syncPrices();FM=null;toast("Dados de exemplo restaurados");route(true)}});
 }
@@ -1814,14 +2003,15 @@ function aAjustes(){
 /* ================== FINANCEIRO ==================
    Cada mensalidade paga se divide em: parte da personal (% dela), taxa de pagamento e o que fica com a empresa. */
 const splitOf=pid=>{const p=findP(pid);return((p&&p.split!=null?p.split:DB.split))/100};
-const feeOf=()=>(DB.fee!=null?DB.fee:1.99)/100;
+/* taxa média ponderada pelas formas usadas nas mensalidades pagas */
+const feeOf=()=>{const pb=bills().filter(b=>b.paid);return pb.length?pb.reduce((s,b)=>s+feeFor(b),0)/pb.length:(DB.fees?DB.fees.pix:0.99)/100};
 const pctf=v=>(Math.round(v*1000)/10).toLocaleString("pt-BR")+"%";
 function fin(list){const r={fat:0,rec:0,open:0,late:0,rep:0,tax:0,emp:0,n:list.length,paidN:0};
-  list.forEach(b=>{r.fat+=b.amount;if(b.paid){r.paidN++;r.rec+=b.amount;const rp=b.amount*splitOf(b.pid),tx=b.amount*feeOf();r.rep+=rp;r.tax+=tx;r.emp+=b.amount-rp-tx}else{r.open+=b.amount;if(b.status==="atrasado")r.late+=b.amount}});
+  list.forEach(b=>{r.fat+=b.amount;if(b.paid){r.paidN++;r.rec+=b.amount;const rp=b.amount*splitOf(b.pid),tx=b.amount*feeFor(b);r.rep+=rp;r.tax+=tx;r.emp+=b.amount-rp-tx}else{r.open+=b.amount;if(b.status==="atrasado")r.late+=b.amount}});
   r.margin=r.rec?r.emp/r.rec:0;return r}
 const payoutKey=(pid,m)=>pid+"|"+m;
 /* repasses dos meses já fechados vêm marcados como pagos nos dados de exemplo */
-function seedFin(db){db.fee=1.99;db.payouts={};monthsBack(6).slice(0,4).forEach(m=>db.personals.forEach(p=>{if(p.status==="ativo")db.payouts[p.id+"|"+m]=new Date(m+"-05T12:00").getTime()+30*D1}));db.personals.forEach(p=>{if(p.split==null)p.split=p.id==="p1"?70:65});return db}
+function seedFin(db){db.payouts={};monthsBack(6).slice(0,4).forEach(m=>db.personals.forEach(p=>{if(p.status==="ativo")db.payouts[p.id+"|"+m]=new Date(m+"-05T12:00").getTime()+30*D1}));db.personals.forEach(p=>{if(p.split==null)p.split=p.id==="p1"?70:65});return db}
 if(!DB.payouts){seedFin(DB);saveDB()}
 
 /* barras empilhadas de duas séries, com legenda e total no último mês */
@@ -1842,16 +2032,18 @@ function pGanhos(p){
   const now=fin(bl.filter(b=>b.m===cur)),mine=bl.filter(b=>b.m===cur);
   const pv=fin(bl.filter(b=>b.m===prev)),po=DB.payouts[payoutKey(p.id,prev)];
   const year=bl.filter(b=>b.paid).reduce((s,b)=>s+b.amount*sp,0);
-  $("#pv").innerHTML=`<div class="kpis">${kpi("banknote","Recebido em "+mlabel(cur,1),money(now.rep),`${now.paidN} de ${now.n} alunos pagaram`)}${kpi("hourglass","A receber",money(now.open*sp),"se todos pagarem este mês")}${kpi("wallet","Repasse de "+mlabel(prev,1),money(pv.rep),po?`pago em ${new Date(po).toLocaleDateString("pt-BR")}`:"aguardando a empresa")}${kpi("trending-up","Últimos 6 meses",money(year),`média de ${money(year/6)} por mês`)}</div>
+  $("#pv").innerHTML=`<div class="kpis">${kpi("banknote","Recebido em "+mlabel(cur,1),money(now.rep),`${now.paidN} de ${now.n} alunos pagaram`)}${kpi("hourglass","A receber",money(now.open*sp),"se todos pagarem este mês")}${(()=>{const ps=payoutState(p.id,prev);return kpi("wallet","Repasse de "+mlabel(prev,1),money(pv.rep),ps.t)})()}${kpi("trending-up","Últimos 6 meses",money(year),`média de ${money(year/6)} por mês`)}</div>
   <div class="grid2">
     <section class="card"><div class="card-h"><h3>Seus ganhos por mês</h3></div>${vbars(ms.map(m=>({label:mlabel(m,1),short:mlabel(m),v:fin(bl.filter(b=>b.m===m)).rep})))}</section>
     <section class="card"><div class="card-h"><h3>Como cada mensalidade se divide</h3><span class="pill info">Você fica com ${pctf(sp)}</span></div>
       <p class="week-note" style="margin:0 0 12px">De cada ${money(100)} que um aluno paga:</p>
       ${splitBar([{label:"Para você",v:100*sp,k:"k2"},{label:"Empresa",v:100*(1-sp-feeOf()),k:"k1"},{label:"Taxa de pagamento",v:100*feeOf(),k:"k0"}])}
-      <p class="week-note">A taxa de pagamento (${pctf(feeOf())}) fica por conta da empresa: sua parte é calculada sobre o valor cheio.</p></section>
+      <p class="week-note">A taxa do meio de pagamento (em média ${pctf(feeOf())}) fica por conta da empresa: sua parte é calculada sobre o valor cheio.</p></section>
   </div>
   <section class="mt"><div class="card-h"><h3>Mensalidades de ${mlabel(cur,1)}</h3></div><div class="tbl"><table><thead><tr><th>Aluno</th><th class="hm">Nível</th><th class="num hm">Mensalidade</th><th class="num">Sua parte</th><th>Situação</th></tr></thead><tbody>${mine.map(b=>{const c=findC(b.cid);return`<tr data-open="${b.cid}"><td><span class="nm">${avatar(c)}<b>${esc(c.name)}</b></span></td><td class="hm">${lvb(b.lv)}</td><td class="num hm">${money(b.amount)}</td><td class="num"><b>${money(b.amount*sp)}</b></td><td>${pill(...BILL_PILL[b.status])}</td></tr>`}).join("")}</tbody></table></div></section>
-  <section class="card mt"><div class="card-h"><h3>Seus repasses</h3></div><div class="rows">${ms.slice(0,5).reverse().map(m=>{const f=fin(bl.filter(b=>b.m===m)),d=DB.payouts[payoutKey(p.id,m)];return`<div class="rw"><span><b>${mlabel(m,1)} de ${m.slice(0,4)}</b><small>${f.paidN} mensalidades pagas</small></span><span class="end"><b style="font-variant-numeric:tabular-nums">${money(f.rep)}</b>${d?pill("ok","circle-check","Pago "+new Date(d).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})):pill("mute","clock","A pagar")}</span></div>`}).join("")}</div></section>`;
+  <section class="card mt"><div class="card-h"><h3>Seus repasses</h3></div><div class="rows">${ms.slice(0,5).reverse().map(m=>{const f=fin(bl.filter(b=>b.m===m)),d=DB.payouts[payoutKey(p.id,m)];return`<div class="rw"><span><b>${mlabel(m,1)} de ${m.slice(0,4)}</b><small>${f.paidN} mensalidades pagas</small></span><span class="end"><b style="font-variant-numeric:tabular-nums">${money(f.rep)}</b>${(()=>{const ps=payoutState(p.id,m);return pill(ps.k,ps.ic,ps.t)})()}</span></div>`}).join("")}</div></section>
+  ${payoutForm(p)}`;
+  $("#pof").onsubmit=e=>{e.preventDefault();p.payout={type:$("#pot").value,key:$("#pok").value.trim()};saveDB();toast("Dados de recebimento salvos")};
 }
 
 /* ---------- empresa: financeiro ---------- */
@@ -1865,20 +2057,331 @@ function aFin(bl){
   $("#pv").innerHTML=`<div class="toolbar"><select id="fm" aria-label="Mês">${ms.map(m=>`<option value="${m}" ${m===FM?"selected":""}>${mlabel(m,1)} de ${m.slice(0,4)}</option>`).join("")}</select><button class="btn btn-ghost btn-sm" id="cprel"><i data-lucide="clipboard-copy"></i>Copiar relatório</button></div>
   <div class="kpis">${kpi("receipt","Faturado",money(F.fat),`${F.n} mensalidades`)}${kpi("circle-check","Recebido",money(F.rec),`${F.paidN} pagas`)}${kpi("hourglass","A receber",money(F.open),F.late?`${money(F.late)} em atraso`:"nada em atraso")}${kpi("users","Repasse às personais",money(F.rep),`${F.rec?pctf(F.rep/F.rec):"—"} do recebido`)}${kpi("percent","Taxas de pagamento",money(F.tax),pctf(feeOf())+" por pagamento")}${kpi("building-2","Fica com a empresa",money(F.emp),`margem de ${pctf(F.margin)}`)}</div>
   <div class="grid2">
-    <section class="card"><div class="card-h"><h3>Para onde vai o dinheiro recebido</h3></div>${sbars(series.map(({m,f})=>({label:mlabel(m,1),short:mlabel(m),a:Math.round(f.emp),b:Math.round(f.rep)})),["Empresa (líquido)","Personais"])}<p class="week-note">Taxas de pagamento já descontadas da parte da empresa.</p></section>
+    <section class="card"><div class="card-h"><h3>Para onde vai o dinheiro recebido</h3></div>${sbars(series.map(({m,f})=>({label:mlabel(m,1),short:mlabel(m),a:Math.round(f.emp),b:Math.round(f.rep)})),["Empresa (líquido)","Personais"])}<p class="week-note">Taxas de pagamento já descontadas da parte da empresa. Repasse às personais todo dia ${DB.payoutDay||5} do mês seguinte.</p></section>
     <section class="card"><div class="card-h"><h3>Divisão de ${mlabel(FM,1)}</h3></div>${splitBar([{label:"Personais",v:F.rep,k:"k2"},{label:"Empresa",v:F.emp,k:"k1"},{label:"Taxas",v:F.tax,k:"k0"}])}
+      <div class="card-h" style="margin:18px 0 10px"><h3>Por forma de pagamento</h3></div>${hbars(Object.keys(METHODS).map(k=>({label:METHODS[k].l.replace(" de crédito",""),v:Math.round(mb.filter(b=>b.paid&&methodOf(b)===k).reduce((s,b)=>s+b.amount,0))})),money)}
+      <p class="week-note">Taxas: ${Object.keys(METHODS).map(k=>`${METHODS[k].l.replace(" de crédito","")} ${String(DB.fees[k]).replace(".",",")}%`).join(" · ")}</p>
       <div class="card-h" style="margin:18px 0 10px"><h3>Faturado por nível</h3></div>${hbars(byLv,money)}</section>
   </div>
-  <section class="mt"><div class="card-h"><h3>Repasse por personal · ${mlabel(FM,1)}</h3></div><div class="tbl"><table><thead><tr><th>Personal</th><th class="num">Percentual</th><th class="num hm hx">Recebido dos alunos</th><th class="num">Repasse</th><th class="num hm hx">Fica com a empresa</th><th>Situação</th><th></th></tr></thead><tbody>${rep.map(r=>{const k=payoutKey(r.p.id,FM),d=DB.payouts[k];return`<tr style="cursor:default"><td><span class="nm"><span class="av">${esc(initials(r.p.name))}</span><b>${esc(r.p.name)}</b></span></td><td class="num">${pctf(r.sp)}</td><td class="num hm hx">${money(r.f.rec)}</td><td class="num"><b>${money(r.f.rep)}</b></td><td class="num hm hx">${money(r.f.emp)}</td><td>${d?pill("ok","circle-check","Pago "+new Date(d).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})):pill("mute","clock","A pagar")}</td><td data-stop>${d?`<button class="btn btn-ghost btn-sm" data-po="${k}" data-v="0">Desfazer</button>`:`<button class="btn btn-primary btn-sm" data-po="${k}" data-v="1" ${r.f.rep?"":"disabled"}>Registrar repasse</button>`}</td></tr>`}).join("")}</tbody></table></div></section>
+  <section class="mt"><div class="card-h"><h3>Repasse por personal · ${mlabel(FM,1)}</h3></div><div class="tbl"><table><thead><tr><th>Personal</th><th class="num">Percentual</th><th class="num hm hx">Recebido dos alunos</th><th class="num">Repasse</th><th class="num hm hx">Fica com a empresa</th><th>Situação</th><th></th></tr></thead><tbody>${rep.map(r=>{const k=payoutKey(r.p.id,FM),d=DB.payouts[k];return`<tr style="cursor:default"><td><span class="nm"><span class="av">${esc(initials(r.p.name))}</span><b>${esc(r.p.name)}</b></span></td><td class="num">${pctf(r.sp)}</td><td class="num hm hx">${money(r.f.rec)}</td><td class="num"><b>${money(r.f.rep)}</b></td><td class="num hm hx">${money(r.f.emp)}</td><td>${(()=>{const ps=payoutState(r.p.id,FM);return pill(ps.k,ps.ic,ps.t)})()}<br><small style="color:var(--muted)">Pix ${esc((r.p.payout||{}).type||"")} ${esc((r.p.payout||{}).key||"não cadastrado")}</small></td><td data-stop>${d?`<button class="btn btn-ghost btn-sm" data-po="${k}" data-v="0">Desfazer</button>`:`<button class="btn btn-primary btn-sm" data-po="${k}" data-v="1" ${r.f.rep?"":"disabled"}>Registrar repasse</button>`}</td></tr>`}).join("")}</tbody></table></div></section>
   <section class="mt"><div class="card-h"><h3>Resultado dos últimos 6 meses</h3></div><div class="tbl"><table><thead><tr><th>Mês</th><th class="num hm">Faturado</th><th class="num">Recebido</th><th class="num hm">Repasse</th><th class="num hm">Taxas</th><th class="num">Empresa</th><th class="num">Margem</th></tr></thead><tbody>${series.slice().reverse().map(({m,f})=>`<tr style="cursor:default"><td><b style="text-transform:capitalize">${mlabel(m,1)}</b></td><td class="num hm">${money(f.fat)}</td><td class="num">${money(f.rec)}</td><td class="num hm">${money(f.rep)}</td><td class="num hm">${money(f.tax)}</td><td class="num"><b>${money(f.emp)}</b></td><td class="num">${pctf(f.margin)}</td></tr>`).join("")}</tbody></table></div></section>
-  <section class="mt"><div class="card-h"><h3>Mensalidades de ${mlabel(FM,1)}</h3></div><div class="tbl"><table><thead><tr><th>Cliente</th><th class="hm">Nível</th><th class="num">Valor</th><th class="num hm hx">Personal</th><th class="num hm hx">Empresa</th><th>Situação</th><th></th></tr></thead><tbody>${mb.map(b=>{const c=findC(b.cid),p=findP(b.pid),sp=splitOf(b.pid);return`<tr data-open="${b.cid}"><td><span class="nm">${avatar(c)}<b>${esc(c.name)}</b></span></td><td class="hm">${lvb(b.lv)}</td><td class="num">${money(b.amount)}</td><td class="num hm hx" title="${esc(p?p.name:"")}">${money(b.amount*sp)}</td><td class="num hm hx">${money(b.amount*(1-sp-feeOf()))}</td><td>${pill(...BILL_PILL[b.status])}</td><td data-stop style="white-space:nowrap;text-align:right">${b.paid?`<button class="btn btn-ghost btn-sm" data-pay="${b.key}" data-v="0">Desfazer</button>`:`<button class="btn btn-ghost btn-sm" data-remind="${b.cid}" aria-label="Lembrar ${esc(c.name)}"><i data-lucide="bell"></i></button> <button class="btn btn-primary btn-sm" data-pay="${b.key}" data-v="1">Marcar pago</button>`}</td></tr>`}).join("")}</tbody></table></div></section>`;
+  <section class="mt"><div class="card-h"><h3>Mensalidades de ${mlabel(FM,1)}</h3></div><div class="tbl"><table><thead><tr><th>Cliente</th><th class="hm">Nível</th><th class="num">Valor</th><th class="num hm hx">Personal</th><th class="num hm hx">Empresa</th><th>Situação</th><th></th></tr></thead><tbody>${mb.map(b=>{const c=findC(b.cid),p=findP(b.pid),sp=splitOf(b.pid);return`<tr data-open="${b.cid}"><td><span class="nm">${avatar(c)}<b>${esc(c.name)}</b></span></td><td class="hm">${lvb(b.lv)}</td><td class="num">${money(b.amount)}</td><td class="num hm hx" title="${esc(p?p.name:"")}">${money(b.amount*sp)}</td><td class="num hm hx">${money(b.amount*(1-sp-(b.paid?feeFor(b):feeOf())))}</td><td>${pill(...BILL_PILL[b.status])}${b.paid?`<br><small style="color:var(--muted)">${METHODS[methodOf(b)].l.replace(" de crédito","")}</small>`:""}</td><td data-stop style="white-space:nowrap;text-align:right">${b.paid?`<button class="btn btn-ghost btn-sm" data-pay="${b.key}" data-v="0">Desfazer</button>`:`<button class="btn btn-ghost btn-sm" data-remind="${b.cid}" aria-label="Lembrar ${esc(c.name)}"><i data-lucide="bell"></i></button> <button class="btn btn-primary btn-sm" data-pay="${b.key}" data-v="1">Marcar pago</button>`}</td></tr>`}).join("")}</tbody></table></div></section>`;
   $("#fm").onchange=e=>{FM=e.target.value;route(true)};
-  document.querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{DB.paid[b.dataset.pay]=b.dataset.v==="1";saveDB();toast(b.dataset.v==="1"?"Pagamento registrado":"Pagamento desfeito");route(true)});
+  document.querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{if(b.dataset.v==="1")markPaid(b.dataset.pay,"pix");else{DB.paid[b.dataset.pay]=false;delete DB.payInfo[b.dataset.pay]}saveDB();toast(b.dataset.v==="1"?"Pagamento registrado":"Pagamento desfeito");route(true)});
   document.querySelectorAll("[data-po]").forEach(b=>b.onclick=()=>{if(b.dataset.v==="1")DB.payouts[b.dataset.po]=Date.now();else delete DB.payouts[b.dataset.po];saveDB();toast(b.dataset.v==="1"?"Repasse registrado. A personal já vê no painel dela.":"Repasse desfeito");route(true)});
   document.querySelectorAll("[data-remind]").forEach(b=>b.onclick=()=>{pushMsg(b.dataset.remind,"Oi! Passando para lembrar da mensalidade deste mês. Se precisar de mais prazo, é só falar. 💛");toast("Lembrete enviado no app do cliente")});
   $("#cprel").onclick=()=>{const L=[`Primeiro Passo · Relatório de ${mlabel(FM,1)} de ${FM.slice(0,4)}`,"",`Faturado\t${money(F.fat)}`,`Recebido\t${money(F.rec)}`,`A receber\t${money(F.open)}`,`Em atraso\t${money(F.late)}`,`Repasse às personais\t${money(F.rep)}`,`Taxas de pagamento\t${money(F.tax)}`,`Fica com a empresa\t${money(F.emp)}`,`Margem\t${pctf(F.margin)}`,"","Personal\tPercentual\tRecebido\tRepasse\tEmpresa\tSituação",...rep.map(r=>`${r.p.name}\t${pctf(r.sp)}\t${money(r.f.rec)}\t${money(r.f.rep)}\t${money(r.f.emp)}\t${DB.payouts[payoutKey(r.p.id,FM)]?"Pago":"A pagar"}`),"","Cliente\tPersonal\tValor\tSituação",...mb.map(b=>`${findC(b.cid).name}\t${(findP(b.pid)||{}).name||""}\t${money(b.amount)}\t${b.status}`)];
     copyText(L.join("\n"),"Relatório copiado. Cole numa planilha ou mensagem.")};
 }
+
+/* ================== PAGAMENTOS, REPASSES E AVALIAÇÕES ==================
+   Tudo ilustrativo: nenhum valor é cobrado. A estrutura já separa forma de pagamento,
+   taxa de cada forma, prazo de repasse e dados de recebimento, para ligar a um gateway depois. */
+const METHODS={pix:{l:"Pix",ic:"qr-code",sub:"Aprovação na hora"},cartao:{l:"Cartão de crédito",ic:"credit-card",sub:"Débito automático todo mês"},boleto:{l:"Boleto",ic:"barcode",sub:"Compensa em até 2 dias úteis"}};
+const RTAGS=["Paciente","Pontual","Explica bem","Me sinto à vontade","Adapta os treinos","Poderia responder mais rápido","Poderia explicar melhor"];
+function seedPay(db){
+  let r=5;const rnd=()=>(r=(r*9301+49297)%233280)/233280;
+  db.fees={pix:0.99,cartao:3.49,boleto:1.99};db.methodsOn={pix:true,cartao:true,boleto:true};db.payoutDay=5;db.payInfo={};
+  Object.keys(db.paid).forEach(k=>{if(db.paid[k]){const x=rnd();db.payInfo[k]={m:x<.55?"pix":x<.85?"cartao":"boleto",at:null}}});
+  db.personals.forEach((p,i)=>{if(!p.payout)p.payout={type:["CPF","E-mail","Celular"][i%3],key:["***.456.789-**","c***@exemplo.com","(11) 9****-1234"][i%3]}});
+  const now=Date.now(),R=[["p1","c1",5,["Paciente","Me sinto à vontade"],"Nunca pensei que ia gostar de treinar. Ela tem muita paciência.",false,6],["p1","c3",5,["Pontual","Explica bem"],"",false,12],
+    ["p1","c9",4,["Adapta os treinos"],"Gosto muito, só às vezes demora a responder à noite.",true,3],["p1","c11",5,["Explica bem","Pontual"],"Hoje vou à academia sozinho. Obrigado!",false,20],["p1","c6",4,["Paciente","Poderia responder mais rápido"],"",true,9],
+    ["p2","c5",5,["Pontual","Explica bem"],"Excelente profissional.",false,4],["p2","c4",3,["Poderia explicar melhor"],"Às vezes sinto que o treino está puxado demais para mim.",true,8],["p2","c8",5,["Me sinto à vontade"],"",false,15],["p2","c12",4,["Paciente"],"Muito atencioso.",false,2]];
+  db.ratings=R.map(([pid,cid,stars,tags,text,anon,d],i)=>({id:"r"+i,pid,cid,name:(db.clients.find(c=>c.id===cid)||{}).name||"",stars,tags,text,anon,at:now-d*D1}));
+  return db}
+if(!DB.fees){seedPay(DB);saveDB()}
+const methodOf=b=>(DB.payInfo[b.key]||{}).m||"pix";
+const feeFor=b=>(DB.fees[methodOf(b)]||0)/100;
+function ratingOf(pid){const l=DB.ratings.filter(x=>x.pid===pid);return{n:l.length,avg:l.length?l.reduce((s,x)=>s+x.stars,0)/l.length:0,list:l}}
+const stars=n=>`<span class="stars" aria-label="${n} de 5 estrelas">${[1,2,3,4,5].map(i=>`<i class="${i<=Math.round(n)?"on":""}">★</i>`).join("")}</span>`;
+function payoutDue(m){const [y,mo]=m.split("-").map(Number);return new Date(y,mo,DB.payoutDay||5,12).getTime()}
+function payoutState(pid,m){const d=DB.payouts[payoutKey(pid,m)],due=payoutDue(m),dd=new Date(due).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"});
+  if(d)return{k:"ok",ic:"circle-check",t:"Pago "+new Date(d).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"}),due,paid:true};
+  if(Date.now()>due)return{k:"bad",ic:"circle-alert",t:"Atrasado desde "+dd,due,late:true};
+  return{k:"mute",ic:"calendar",t:"Previsto "+dd,due}}
+function markPaid(key,m){DB.paid[key]=true;DB.payInfo[key]={m,at:Date.now()};saveDB()}
+
+/* ---------- checkout do cliente ---------- */
+function openCheckout(key){
+  const b=bills().find(x=>x.key===key);if(!b)return;
+  const on=Object.keys(METHODS).filter(k=>DB.methodsOn[k]);let m=on.includes(S.payMethod)?S.payMethod:on[0];
+  const prev=document.activeElement,md=document.createElement("div");md.className="modal";document.body.appendChild(md);document.body.style.overflow="hidden";
+  const close=()=>{removeEventListener("keydown",k);md.remove();document.body.style.overflow="";route(true);if(prev&&prev.isConnected)prev.focus()};
+  const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);md.onclick=e=>{if(e.target===md)close()};
+  const code=("00020126580014BR.GOV.BCB.PIX0136DEMO-PRIMEIROPASSO-"+b.key.replace(/\W/g,"")+"5204000053039865406"+b.amount.toFixed(2)).toUpperCase();
+  const line="34191.79001 01043.510047 91020.150008 "+(8+b.lv)+" 9"+String(1e9+b.amount*100).slice(-10);
+  const render=()=>{
+    md.innerHTML=`<div class="sheet pay" role="dialog" aria-modal="true" aria-labelledby="pyh">
+      <div class="pay-h"><div><small>Mensalidade de ${mlabel(b.m,1)}</small><h3 id="pyh">${money(b.amount)}</h3></div><button class="rbtn" id="pyx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
+      <div class="seg" style="grid-template-columns:repeat(${on.length},1fr)" role="group" aria-label="Forma de pagamento">${on.map(x=>`<button aria-pressed="${x===m}" data-pm="${x}"><i data-lucide="${METHODS[x].ic}"></i>${METHODS[x].l.replace(" de crédito","")}</button>`).join("")}</div>
+      <div class="pay-b">${m==="pix"?`<div class="qr" aria-hidden="true">${fakeQR(code)}</div><p class="exhint" style="margin:0">Aponte a câmera do app do banco para o código, ou copie o Pix copia e cola.</p>
+          <div class="copy"><code>${code.slice(0,38)}…</code><button class="btn btn-ghost btn-sm" data-cp="${code}"><i data-lucide="copy"></i>Copiar</button></div>
+          <button class="btn btn-primary" data-go><i data-lucide="check"></i>Simular pagamento aprovado</button>`
+        :m==="cartao"?`<div class="card-test"><i data-lucide="credit-card"></i><div><b>Cartão de teste •••• 4242</b><small>Validade 12/30 · usado só nesta demonstração</small></div></div>
+          <label class="chkline"><input type="checkbox" id="auto" ${S.autopay?"checked":""}> Cobrar automaticamente todo dia 10</label>
+          <button class="btn btn-primary" data-go><i data-lucide="lock"></i>Pagar ${money(b.amount)}</button>`
+        :`<p class="exhint" style="margin:0;text-align:left">Linha digitável do boleto:</p><div class="copy"><code>${line}</code><button class="btn btn-ghost btn-sm" data-cp="${line.replace(/\D/g,"")}"><i data-lucide="copy"></i>Copiar</button></div>
+          <p class="exhint" style="margin:0;text-align:left">Vencimento: 10/${b.m.slice(5)}. A confirmação leva até 2 dias úteis depois do pagamento.</p>
+          <button class="btn btn-primary" data-go><i data-lucide="check"></i>Simular compensação do boleto</button>`}</div>
+      <p class="pay-demo"><i data-lucide="info"></i>Demonstração: nenhum valor é cobrado e nenhum dado de pagamento é pedido. A cobrança real será configurada depois.</p>
+    </div>`;
+    icons();
+    $("#pyx").onclick=close;
+    md.querySelectorAll("[data-pm]").forEach(x=>x.onclick=()=>{m=x.dataset.pm;render()});
+    md.querySelectorAll("[data-cp]").forEach(x=>x.onclick=()=>copyText(x.dataset.cp,"Código copiado"));
+    md.querySelector("[data-go]").onclick=()=>{const a=$("#auto");if(a)S.autopay=a.checked;S.payMethod=m;save();markPaid(b.key,m);close();confetti();toast(`Pagamento via ${METHODS[m].l.toLowerCase()} confirmado. Obrigado!`)};
+    const f=md.querySelector("[data-go]");if(f)f.focus();
+  };render();
+}
+/* desenho de QR apenas ilustrativo (não é um código Pix válido) */
+function fakeQR(seed){let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;const n=25,cells=[];const rnd=()=>(h=(h*1103515245+12345)>>>0)/4294967296;
+  const finder=(x,y)=>[[x,y,7,7,1],[x+1,y+1,5,5,0],[x+2,y+2,3,3,1]];
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){const inF=(x<8&&y<8)||(x>n-9&&y<8)||(x<8&&y>n-9);if(!inF&&rnd()<.5)cells.push(`<rect x="${x}" y="${y}" width="1" height="1"/>`)}
+  const f=[...finder(0,0),...finder(n-7,0),...finder(0,n-7)].map(([x,y,w,hh,on])=>`<rect x="${x}" y="${y}" width="${w}" height="${hh}" fill="${on?"#1E2733":"#fff"}"/>`).join("");
+  return`<svg viewBox="-2 -2 ${n+4} ${n+4}"><rect x="-2" y="-2" width="${n+4}" height="${n+4}" fill="#fff"/><g fill="#1E2733">${cells.join("")}</g>${f}</svg>`}
+
+/* ---------- avaliação confidencial da personal ---------- */
+function openRating(){
+  const pid=S.pid||"p1",p=findP(pid),mk=mkey(Date.now()),old=DB.ratings.find(x=>x.cid==="me"&&x.pid===pid&&mkey(x.at)===mk);
+  let st=old?old.stars:0,tags=old?[...old.tags]:[],anon=old?old.anon:false;
+  const prev=document.activeElement,md=document.createElement("div");md.className="modal";document.body.appendChild(md);document.body.style.overflow="hidden";
+  const close=()=>{removeEventListener("keydown",k);md.remove();document.body.style.overflow="";route(true);if(prev&&prev.isConnected)prev.focus()};
+  const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);md.onclick=e=>{if(e.target===md)close()};
+  const render=()=>{const txt=$("#rt")?$("#rt").value:(old?old.text:"");
+    md.innerHTML=`<div class="sheet pay" role="dialog" aria-modal="true" aria-labelledby="rth">
+      <div class="pay-h"><div><small>Avaliação confidencial</small><h3 id="rth">Como está sendo com a ${esc(p.name.split(" ")[0])}?</h3></div><button class="rbtn" id="rtx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
+      <div class="rate" role="radiogroup" aria-label="Nota de 1 a 5">${[1,2,3,4,5].map(i=>`<button role="radio" aria-checked="${st===i}" aria-label="${i} ${i>1?"estrelas":"estrela"}" data-st="${i}" class="${i<=st?"on":""}">★</button>`).join("")}</div>
+      <p class="exhint" style="margin:0">${["Toque nas estrelas","Não gostei","Poderia ser melhor","Está ok","Estou gostando","Estou adorando"][st]}</p>
+      <div class="quick wrapq" style="justify-content:center;padding:6px 0 0">${RTAGS.map(t=>`<button aria-pressed="${tags.includes(t)}" data-tg="${esc(t)}" class="${tags.includes(t)?"on":""}">${t}</button>`).join("")}</div>
+      <div class="field" style="text-align:left;margin:4px 0 0"><label for="rt">Quer contar mais? (opcional)</label><textarea id="rt" rows="3" style="resize:vertical">${esc(txt)}</textarea></div>
+      <label class="chkline"><input type="checkbox" id="ran" ${anon?"checked":""}> Enviar sem meu nome</label>
+      <p class="pay-demo" style="text-align:left"><i data-lucide="shield-check"></i>Só a equipe da empresa vê sua avaliação. A ${esc(p.name.split(" ")[0])} não recebe sua nota nem seu comentário.</p>
+      <button class="btn btn-primary" id="rgo" ${st?"":"disabled"}><i data-lucide="send"></i>${old?"Atualizar avaliação":"Enviar avaliação"}</button>
+    </div>`;icons();
+    $("#rtx").onclick=close;
+    md.querySelectorAll("[data-st]").forEach(x=>x.onclick=()=>{st=+x.dataset.st;render()});
+    md.querySelectorAll("[data-tg]").forEach(x=>x.onclick=()=>{const t=x.dataset.tg;tags=tags.includes(t)?tags.filter(y=>y!==t):[...tags,t];render()});
+    $("#ran").onchange=e=>{anon=e.target.checked};
+    $("#rgo").onclick=()=>{const r={id:old?old.id:"r"+Date.now(),pid,cid:"me",name:S.profile.name,stars:st,tags,text:$("#rt").value.trim(),anon:$("#ran").checked,at:Date.now()};
+      DB.ratings=DB.ratings.filter(x=>x!==old);DB.ratings.push(r);saveDB();close();toast("Obrigado! Sua avaliação foi enviada com sigilo.")};
+  };render();
+}
+function rateCard(){const p=findP(S.pid||"p1"),mine=DB.ratings.filter(x=>x.cid==="me").sort((a,b)=>b.at-a.at)[0];
+  return`<button class="task" id="rate" style="text-align:left"><span class="ti"><i data-lucide="star"></i></span><span><b>${mine?`Você deu ${mine.stars} ${mine.stars>1?"estrelas":"estrela"}`:`Avaliar a ${esc(p.name.split(" ")[0])}`}</b><small>${mine?`em ${new Date(mine.at).toLocaleDateString("pt-BR")} · toque para atualizar`:"Confidencial: só a empresa vê"}</small></span><i class="go" data-lucide="chevron-right"></i></button>`}
+
+/* ---------- empresa: avaliações ---------- */
+let RF="";
+function ratingsBlock(){
+  const act=DB.personals.filter(p=>p.status==="ativo"),L=DB.ratings.filter(r=>!RF||r.pid===RF).sort((a,b)=>b.at-a.at);
+  const dist=[5,4,3,2,1].map(n=>({label:n+" estrela"+(n>1?"s":""),v:L.filter(r=>r.stars===n).length}));
+  const avg=L.length?L.reduce((s,r)=>s+r.stars,0)/L.length:0;
+  return`<section class="mt"><div class="card-h"><h3>Avaliações dos alunos</h3>${pill("info","shield-check","Confidencial: as personais não veem")}</div>
+    <div class="toolbar"><select id="rf" aria-label="Filtrar por personal"><option value="">Todas as personais</option>${act.map(p=>`<option value="${p.id}" ${RF===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select></div>
+    <div class="grid2" style="margin-top:0"><section class="card"><div class="card-h"><h3>Média</h3><span class="pill mute">${L.length} avaliações</span></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px"><b style="font-family:var(--display);font-size:44px;color:var(--navy);line-height:1">${avg?avg.toLocaleString("pt-BR",{maximumFractionDigits:1}):"—"}</b>${stars(avg)}</div>${hbars(dist)}</section>
+    <section class="card"><div class="card-h"><h3>O que os alunos mais citam</h3></div>${hbars(RTAGS.map(t=>({label:t,v:L.filter(r=>r.tags.includes(t)).length})).filter(x=>x.v).sort((a,b)=>b.v-a.v).slice(0,6))}</section></div>
+    <div class="pgrid mt">${L.length?L.map(r=>{const p=findP(r.pid);return`<article class="lead"><div class="top">${stars(r.stars)}<small style="margin-left:auto">${rel(r.at)}</small></div>
+      <small>${r.anon?"Aluno anônimo":esc(r.name)} sobre <b style="color:var(--ink)">${esc(p?p.name:"")}</b></small>${r.text?`<p>“${esc(r.text)}”</p>`:""}${r.tags.length?`<div class="chips">${r.tags.map(t=>`<span class="chip">${esc(t)}</span>`).join("")}</div>`:""}</article>`}).join(""):`<div class="empty">Nenhuma avaliação ainda.</div>`}</div></section>`}
+
+/* ---------- personal: dados para receber ---------- */
+function payoutForm(p){const po=p.payout||{type:"CPF",key:""};
+  return`<form class="card mt" id="pof"><div class="card-h"><h3>Onde você recebe os repasses</h3>${pill("mute","calendar","Todo dia "+(DB.payoutDay||5)+" do mês seguinte")}</div>
+    <div class="set"><div class="field" style="margin:0"><label for="pot">Tipo de chave Pix</label><select id="pot">${["CPF","CNPJ","E-mail","Celular","Chave aleatória"].map(t=>`<option ${po.type===t?"selected":""}>${t}</option>`).join("")}</select></div>
+    <div class="field" style="margin:0"><label for="pok">Chave Pix</label><input id="pok" value="${esc(po.key)}" autocomplete="off"></div></div>
+    <p class="fine" style="color:var(--muted);font-size:13px;margin-top:10px">Demonstração: não coloque dados reais. Na versão final, estes dados ficam protegidos e só o financeiro da empresa vê.</p>
+    <button class="btn btn-ghost btn-sm mt" style="justify-self:start"><i data-lucide="save"></i>Salvar dados de recebimento</button></form>`}
+
+/* ================== SEGURANÇA ==================
+   Verificação de identidade (dados, documento, selfie, consentimento), código de encontro,
+   check-in presencial, emergência e relatos confidenciais.
+   Demonstração: as fotos só aparecem na tela e são descartadas; nada de imagem é salvo.
+   A comparação facial e a leitura do documento serão feitas por um serviço especializado. */
+const PRESENCIAL=t=>t==="Ao ar livre"||t==="Academia";
+const CENTRAL="(11) 4000-0000";
+function cpfOk(v){const c=String(v).replace(/\D/g,"");if(c.length!==11||/^(\d)\1+$/.test(c))return false;
+  const d=n=>{let s=0;for(let i=0;i<n;i++)s+=+c[i]*(n+1-i);const r=(s*10)%11;return r===10?0:r};return d(9)===+c[9]&&d(10)===+c[10]}
+const maskCpf=v=>{const c=String(v).replace(/\D/g,"");return c.length===11?`***.${c.slice(3,6)}.${c.slice(6,9)}-**`:"—"};
+const fmtCpf=v=>{const c=String(v).replace(/\D/g,"").slice(0,11);return c.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})\.(\d{3})(\d)/,"$1.$2.$3").replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/,"$1.$2.$3-$4")};
+const meetCode=b=>String(1000+(Math.floor(b.ts/6e4)*7919+(b.cid||"").length*131)%9000).slice(0,4);
+function seedSafety(db){
+  db.kyc={};db.incidents=[];db.checkins={};
+  db.clients.forEach((c,i)=>{db.kyc[c.id]=c.level>=3||i%3===0?{status:"verificado",at:c.since+2*D1,cpf:"***.4"+i+"5.6"+i+"8-**",city:"Santo André",emerg:"Contato cadastrado"}:c.level===1&&i%2?{status:"analise",at:Date.now()-5*3600e3,cpf:"***.3"+i+"1.2"+i+"0-**",city:"São Bernardo",emerg:"Contato cadastrado"}:{status:"pendente"}});
+  db.personals.forEach(p=>{p.safety=p.status==="ativo"?{doc:true,selfie:true,cref:true,crim:true,at:p.since+5*D1}:{doc:true,selfie:true,cref:false,crim:false,at:null}});
+  db.incidents=[{id:"i1",from:"cliente",who:"Carlos Eduardo Santos",about:"Rafael Nunes",type:"Desconforto no treino",sev:"baixa",text:"Achei o treino pesado demais e fiquei constrangido de falar na hora.",at:Date.now()-2*D1,status:"aberto"},
+    {id:"i2",from:"personal",who:"Camila Rocha",about:"Praça do Carmo",type:"Local inseguro",sev:"media",text:"A praça estava sem iluminação no fim da tarde. Sugiro trocar o horário ou o local.",at:Date.now()-6*D1,status:"resolvido"}];
+  return db}
+if(!DB.kyc){seedSafety(DB);saveDB()}
+const kycOf=cid=>cid==="me"?(S.kyc||{status:"pendente"}):(DB.kyc[cid]||{status:"pendente"});
+const pSafe=p=>{const s=p.safety||{};return !!(s.doc&&s.selfie&&s.cref&&s.crim)};
+const KYC_PILL={verificado:["ok","shield-check","Identidade verificada"],analise:["warn","hourglass","Verificação em análise"],pendente:["mute","shield-alert","Não verificado"],recusado:["bad","shield-x","Verificação recusada"]};
+
+/* ---------- verificação do cliente (passo a passo) ---------- */
+let KV={step:0,d:{},doc:null,docB:null,selfie:null,ok:{}};
+function vVerif(){
+  const k=kycOf("me");
+  if(k.status==="verificado"||k.status==="analise"){$("#view").innerHTML=`<div class="hello"><small>Segurança</small><h2>${k.status==="verificado"?"Sua identidade está verificada":"Recebemos seus dados"}</h2></div>
+    <div class="verif-done">${pill(...KYC_PILL[k.status])}<p>${k.status==="verificado"?"Você já pode marcar encontros presenciais. Seus dados ficam protegidos e só são usados para a segurança de todos.":"A equipe confere em até 1 dia útil. Enquanto isso, os treinos online continuam liberados."}</p>
+    <div class="plist"><div><span>CPF</span><b>${esc(k.cpf||"—")}</b></div><div><span>Cidade</span><b>${esc(k.city||"—")}</b></div><div><span>Contato de emergência</span><b>${esc(k.emerg||"—")}</b></div><div><span>Enviado em</span><b>${k.at?new Date(k.at).toLocaleDateString("pt-BR"):"—"}</b></div></div></div>
+    ${safetyTips()}`;return}
+  const steps=["Seus dados","Documento","Selfie","Consentimento"],st=KV.step;
+  const bar=`<div class="vsteps">${steps.map((t,i)=>`<div class="${i<st?"done":i===st?"cur":""}"><i>${i<st?"✓":i+1}</i><span>${t}</span></div>`).join("")}</div>`;
+  let body="";
+  if(st===0)body=`<p class="sub">Pedimos isso de todo mundo, clientes e personais, porque existem encontros presenciais. É a mesma proteção para os dois lados.</p>
+    <div class="set">
+      <div class="field"><label for="kn">Nome completo</label><input id="kn" autocomplete="name" value="${esc(KV.d.name||S.profile.name)}"></div>
+      <div class="field"><label for="kc">CPF</label><input id="kc" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" value="${esc(KV.d.cpf||"")}"><small class="err" id="kce"></small></div>
+      <div class="field"><label for="kb">Data de nascimento</label><input id="kb" type="date" value="${esc(KV.d.birth||"")}"></div>
+      <div class="field"><label for="kt">Celular</label><input id="kt" type="tel" autocomplete="tel" placeholder="(11) 90000-0000" value="${esc(KV.d.tel||"")}"></div>
+      <div class="field"><label for="kz">CEP</label><input id="kz" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" value="${esc(KV.d.cep||"")}"></div>
+      <div class="field"><label for="ka">Endereço e número</label><input id="ka" autocomplete="street-address" value="${esc(KV.d.addr||"")}"></div>
+      <div class="field"><label for="ky">Cidade</label><input id="ky" autocomplete="address-level2" value="${esc(KV.d.city||"")}"></div>
+    </div>
+    <div class="card-h" style="margin:8px 0 10px"><h3 style="font-size:18px">Contato de emergência</h3></div>
+    <div class="set"><div class="field"><label for="en">Nome</label><input id="en" value="${esc(KV.d.en||"")}"></div><div class="field"><label for="et">Telefone</label><input id="et" type="tel" value="${esc(KV.d.et||"")}"></div><div class="field"><label for="er">Relação</label><select id="er">${["Família","Cônjuge","Amigo(a)","Outro"].map(x=>`<option ${KV.d.er===x?"selected":""}>${x}</option>`).join("")}</select></div></div>`;
+  if(st===1)body=`<p class="sub">Tire uma foto do seu RG ou CNH, frente e verso, num lugar com boa luz.</p>
+    <div class="seg" style="grid-template-columns:1fr 1fr;margin-bottom:14px">${["RG","CNH"].map(x=>`<button aria-pressed="${(KV.d.dt||"RG")===x}" data-dt="${x}">${x}</button>`).join("")}</div>
+    <div class="shots">${upl("docf","Frente do documento","id-card",KV.doc,"environment")}${upl("docb","Verso do documento","id-card",KV.docB,"environment")}</div>`;
+  if(st===2)body=`<p class="sub">Uma selfie para comparar com a foto do documento. Tire sem óculos escuros ou boné, olhando para a câmera.</p>
+    <div class="shots one">${upl("self","Sua selfie","scan-face",KV.selfie,"user",true)}</div>
+    ${KV.selfie?`<div class="alert ${KV.ok.face?"ok":"warn"}" id="fa"><i data-lucide="${KV.ok.face?"scan-face":"loader"}"></i><span>${KV.ok.face?"Rosto encontrado e comparado com o documento (simulação).":"Comparando com o documento…"}</span></div>`:""}`;
+  if(st===3)body=`<p class="sub">Leia com calma. Você pode pedir a exclusão dos seus dados quando quiser.</p>
+    <label class="chkline big"><input type="checkbox" id="c1" ${KV.ok.c1?"checked":""}> Autorizo o uso dos meus dados pessoais para verificar minha identidade e proteger os encontros presenciais.</label>
+    <label class="chkline big"><input type="checkbox" id="c2" ${KV.ok.c2?"checked":""}> Autorizo o tratamento da minha biometria facial (dado sensível, LGPD art. 11) só para confirmar que sou eu.</label>
+    <label class="chkline big"><input type="checkbox" id="c3" ${KV.ok.c3?"checked":""}> Li e concordo com o código de conduta: respeito, sem assédio, sem discriminação, e uso do código de segurança nos encontros.</label>
+    <div class="info"><i data-lucide="lock"></i><span>Seus dados ficam criptografados e só a equipe de segurança acessa. Personais veem apenas seu primeiro nome, a cidade e o código do encontro.</span></div>`;
+  $("#view").innerHTML=`<div class="hello"><small>Segurança · passo ${st+1} de 4</small><h2>Verificar identidade</h2></div>${bar}<div class="vbody">${body}</div>
+    <div class="vfoot">${st?`<button class="btn btn-ghost" id="kbk"><i data-lucide="arrow-left"></i>Voltar</button>`:`<a class="btn btn-ghost" href="#/app/perfil">Depois</a>`}<button class="btn btn-primary" id="knx">${st===3?"Enviar para análise":"Continuar"}<i data-lucide="arrow-right"></i></button></div>
+    <p class="pay-demo"><i data-lucide="info"></i>Demonstração: as fotos aparecem só na sua tela e não são salvas nem enviadas. A leitura do documento e a comparação facial reais serão feitas por um serviço especializado.</p>`;
+  icons();
+  const save0=()=>{if(st!==0)return;["name:kn","cpf:kc","birth:kb","tel:kt","cep:kz","addr:ka","city:ky","en:en","et:et","er:er"].forEach(x=>{const[k,id]=x.split(":");KV.d[k]=$("#"+id).value})};
+  if(st===0){const c=$("#kc");c.oninput=()=>{c.value=fmtCpf(c.value);$("#kce").textContent=c.value.replace(/\D/g,"").length===11&&!cpfOk(c.value)?"Este CPF não é válido. Confira os números.":""}}
+  document.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{KV.d.dt=b.dataset.dt;vVerif()});
+  document.querySelectorAll("input[type=file]").forEach(inp=>inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;const u=URL.createObjectURL(f);
+    if(inp.id==="docf")KV.doc=u;if(inp.id==="docb")KV.docB=u;if(inp.id==="self"){KV.selfie=u;KV.ok.face=false;setTimeout(()=>{KV.ok.face=true;if(location.hash.includes("verificacao"))vVerif()},1600)}vVerif()});
+  ["c1","c2","c3"].forEach(id=>{const c=$("#"+id);if(c)c.onchange=()=>{KV.ok[id]=c.checked}});
+  const bk=$("#kbk");if(bk)bk.onclick=()=>{save0();KV.step--;vVerif();scrollTo(0,0)};
+  $("#knx").onclick=()=>{
+    if(st===0){save0();const d=KV.d,age=d.birth?(Date.now()-new Date(d.birth))/(365.25*D1):0;
+      const miss=[!d.name.trim()&&"nome",!cpfOk(d.cpf)&&"CPF válido",!d.birth&&"data de nascimento",d.tel.replace(/\D/g,"").length<10&&"celular",!d.addr.trim()&&"endereço",!d.city.trim()&&"cidade",!d.en.trim()&&"contato de emergência",d.et.replace(/\D/g,"").length<10&&"telefone de emergência"].filter(Boolean);
+      if(miss.length){toast("Falta: "+miss.join(", "));return}
+      if(age<18){toast("Menores de 18 anos precisam de um responsável. Fale com a gente pelo chat.");return}}
+    if(st===1&&!(KV.doc&&KV.docB)){toast("Envie a frente e o verso do documento");return}
+    if(st===2&&!(KV.selfie&&KV.ok.face)){toast(KV.selfie?"Aguarde a comparação terminar":"Tire ou envie sua selfie");return}
+    if(st===3){if(!(KV.ok.c1&&KV.ok.c2&&KV.ok.c3)){toast("Marque as três autorizações para continuar");return}
+      [KV.doc,KV.docB,KV.selfie].forEach(u=>{try{u&&URL.revokeObjectURL(u)}catch(e){}});
+      S.kyc={status:"analise",at:Date.now(),cpf:maskCpf(KV.d.cpf),city:KV.d.city.trim(),emerg:`${KV.d.en.trim()} (${KV.d.er})`,emergTel:KV.d.et,doc:KV.d.dt||"RG"};save();
+      KV={step:0,d:{},doc:null,docB:null,selfie:null,ok:{}};toast("Enviado! A equipe confere em até 1 dia útil.");vVerif();icons();return}
+    KV.step++;vVerif();scrollTo(0,0)};
+}
+function upl(id,label,ic,url,cap,round){return`<label class="shot ${url?"has":""} ${round?"round":""}" for="${id}">${url?`<img src="${url}" alt="${label}">`:`<i data-lucide="${ic}"></i>`}<b>${url?"Trocar foto":label}</b><small>${url?label:"Tirar foto ou escolher arquivo"}</small><input id="${id}" type="file" accept="image/*" capture="${cap}" class="sr-only"></label>`}
+function safetyTips(){return`<div class="block"><div class="block-h"><h3>Nos encontros presenciais</h3></div><div class="tips">
+  <div><i data-lucide="key-round"></i><span><b>Código do encontro</b>A personal diz o código ao chegar. Se não disser o código certo, não abra a porta.</span></div>
+  <div><i data-lucide="map-pin-check"></i><span><b>Check-in</b>A central recebe o aviso de chegada e de saída de cada encontro.</span></div>
+  <div><i data-lucide="siren"></i><span><b>Emergência</b>O botão de emergência fica no app durante todo encontro.</span></div>
+  <div><i data-lucide="message-square-warning"></i><span><b>Relato confidencial</b>Qualquer desconforto pode ser contado só para a empresa.</span></div></div></div>`}
+
+/* ---------- emergência e relato (cliente e personal) ---------- */
+function openSOS(role){
+  const md=document.createElement("div");md.className="modal";document.body.appendChild(md);document.body.style.overflow="hidden";
+  const close=()=>{removeEventListener("keydown",k);md.remove();document.body.style.overflow="";route(true)};const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);md.onclick=e=>{if(e.target===md)close()};
+  const em=role==="cliente"&&S.kyc&&S.kyc.emerg;
+  md.innerHTML=`<div class="sheet pay" role="dialog" aria-modal="true" aria-labelledby="sosh">
+    <div class="pay-h"><div><small>Segurança</small><h3 id="sosh">Precisa de ajuda?</h3></div><button class="rbtn" id="sx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
+    <div class="sos-list">
+      <a class="sos danger" href="tel:190"><i data-lucide="siren"></i><span><b>Polícia · 190</b><small>Perigo agora. Ligue direto.</small></span></a>
+      <a class="sos" href="tel:192"><i data-lucide="ambulance"></i><span><b>SAMU · 192</b><small>Mal-estar, queda ou emergência de saúde.</small></span></a>
+      <a class="sos" href="tel:${CENTRAL.replace(/\D/g,"")}"><i data-lucide="headset"></i><span><b>Central Primeiro Passo · ${CENTRAL}</b><small>Todos os dias, das 6h às 23h.</small></span></a>
+      ${em?`<button class="sos" id="sem"><i data-lucide="users"></i><span><b>Avisar ${esc(S.kyc.emerg)}</b><small>Envia uma mensagem para seu contato de emergência.</small></span></button>`:""}
+      <button class="sos" id="srep"><i data-lucide="message-square-warning"></i><span><b>Relatar um problema</b><small>Confidencial. Só a equipe de segurança lê.</small></span></button>
+    </div>
+    <p class="pay-demo"><i data-lucide="info"></i>Se a ligação não abrir, disque o número manualmente. O aviso ao contato de emergência é ilustrativo nesta versão.</p></div>`;
+  icons();$("#sx").onclick=close;
+  const se=$("#sem");if(se)se.onclick=()=>{toast("Aviso enviado ao seu contato de emergência (simulação)")};
+  $("#srep").onclick=()=>{md.remove();removeEventListener("keydown",k);document.body.style.overflow="";openReport(role)};
+}
+function openReport(role){
+  const md=document.createElement("div");md.className="modal";document.body.appendChild(md);document.body.style.overflow="hidden";
+  const close=()=>{removeEventListener("keydown",k);md.remove();document.body.style.overflow="";route(true)};const k=e=>{if(e.key==="Escape")close()};addEventListener("keydown",k);md.onclick=e=>{if(e.target===md)close()};
+  const types=["Desconforto no treino","Comportamento inadequado","Assédio","Local inseguro","Atraso ou falta","Outro"];
+  md.innerHTML=`<form class="sheet pay" role="dialog" aria-modal="true" aria-labelledby="reph" id="repf">
+    <div class="pay-h"><div><small>Relato confidencial</small><h3 id="reph">Conte o que aconteceu</h3></div><button type="button" class="rbtn" id="rx" aria-label="Fechar"><i data-lucide="x"></i></button></div>
+    <div class="field" style="text-align:left;margin:0"><label for="rty">Assunto</label><select id="rty">${types.map(t=>`<option>${t}</option>`).join("")}</select></div>
+    <div class="field" style="text-align:left;margin:0"><label for="rtx2">O que aconteceu</label><textarea id="rtx2" rows="4" required placeholder="Escreva do seu jeito. Pode ser curto."></textarea></div>
+    <label class="chkline"><input type="checkbox" id="rur"> É urgente: quero que me liguem hoje</label>
+    <p class="pay-demo" style="text-align:left"><i data-lucide="shield-check"></i>${role==="cliente"?"A personal não é avisada do seu relato.":"O aluno não é avisado do seu relato."} A equipe responde em até 24 horas, ou no mesmo dia se for urgente.</p>
+    <button class="btn btn-primary"><i data-lucide="send"></i>Enviar relato</button></form>`;
+  icons();$("#rx").onclick=close;
+  $("#repf").onsubmit=e=>{e.preventDefault();const who=role==="cliente"?S.profile.name:curP().name,about=role==="cliente"?findP(S.pid||"p1").name:"—";
+    DB.incidents.push({id:"i"+Date.now(),from:role,who,about,type:$("#rty").value,sev:$("#rur").checked||/Assédio|inadequado/.test($("#rty").value)?"alta":"media",text:$("#rtx2").value.trim(),at:Date.now(),status:"aberto"});saveDB();close();toast("Relato enviado com sigilo. Vamos cuidar disso.")};
+}
+
+/* ---------- empresa: segurança ---------- */
+function aSeg(){
+  const t0=sod(),cs=allClients(),pend=cs.filter(c=>kycOf(c.id).status==="analise"),unver=cs.filter(c=>c.status==="ativo"&&kycOf(c.id).status==="pendente"&&c.level>=2);
+  const pp=DB.personals.filter(p=>p.status!=="inativo"&&!pSafe(p));
+  const today=bookingsAll().filter(b=>PRESENCIAL(b.type)&&b.status!=="cancelado"&&b.ts>=t0&&b.ts<t0+D1).sort((a,b)=>a.ts-b.ts);
+  const inc=DB.incidents.slice().sort((a,b)=>(a.status==="aberto"?0:1)-(b.status==="aberto"?0:1)||b.at-a.at);
+  const SEV={alta:["bad","Alta"],media:["warn","Média"],baixa:["mute","Baixa"]};
+  $("#pv").innerHTML=`<div class="kpis">${kpi("hourglass","Verificações em análise",pend.length,"clientes aguardando")}${kpi("shield-alert","Clientes sem verificação",unver.length,"a partir do nível 2")}${kpi("map-pin-check","Encontros presenciais hoje",today.length,`${today.filter(b=>(DB.checkins[b.id]||{}).in).length} com check-in`)}${kpi("message-square-warning","Relatos abertos",inc.filter(i=>i.status==="aberto").length,`${inc.filter(i=>i.status==="aberto"&&i.sev==="alta").length} urgentes`)}</div>
+  <div class="grid2">
+    <section class="card"><div class="card-h"><h3>Verificações para aprovar</h3></div><div class="rows clip">${pend.length?pend.map(c=>{const k=kycOf(c.id);return`<div class="rw">${avatar(c)}<span><b>${esc(c.name)}</b><small>CPF ${esc(k.cpf||"—")} · ${esc(k.city||"")} · ${rel(k.at)}</small></span><span class="end"><button class="btn btn-ghost btn-sm" data-kyc="${c.id}" data-v="recusado" aria-label="Recusar"><i data-lucide="x"></i></button><button class="btn btn-primary btn-sm" data-kyc="${c.id}" data-v="verificado"><i data-lucide="check"></i>Aprovar</button></span></div>`}).join(""):`<p class="empty-s">Nenhuma verificação esperando.</p>`}</div>
+      <p class="week-note">Na versão final, aqui aparecem o resultado da comparação facial e da leitura do documento feitos pelo serviço de verificação.</p></section>
+    <section class="card"><div class="card-h"><h3>Encontros presenciais de hoje</h3></div><div class="rows">${today.length?today.map(b=>{const c=findC(b.cid),p=findP(b.pid),ck=DB.checkins[b.id]||{};return c?`<div class="rw"><span class="time">${hm(b.ts)}</span><span><b>${esc(c.name)} · ${esc(p?p.name.split(" ")[0]:"")}</b><small>${b.type} · código ${meetCode(b)}</small></span><span class="end">${ck.out?pill("ok","circle-check","Encerrado "+hm(ck.out)):ck.in?pill("info","map-pin-check","Em andamento desde "+hm(ck.in)):b.ts<Date.now()-15*6e4?pill("bad","circle-alert","Sem check-in"):pill("mute","clock","Aguardando")}</span></div>`:""}).join(""):`<p class="empty-s">Nenhum encontro presencial hoje.</p>`}</div></section>
+  </div>
+  <section class="mt"><div class="card-h"><h3>Relatos</h3>${pill("info","shield-check","Confidencial")}</div><div class="pgrid">${inc.length?inc.map(i=>`<article class="lead"><div class="top">${pill(SEV[i.sev][0],"flag","Prioridade "+SEV[i.sev][1].toLowerCase())}${i.status==="aberto"?pill("warn","clock","Aberto"):pill("ok","check","Resolvido")}<small style="margin-left:auto">${rel(i.at)}</small></div>
+    <b>${esc(i.type)}</b><small>De ${i.from==="cliente"?"cliente":"personal"}: ${esc(i.who)}${i.about&&i.about!=="—"?` · sobre ${esc(i.about)}`:""}</small><p>“${esc(i.text)}”</p>
+    <div class="pc-foot">${i.status==="aberto"?`<button class="btn btn-primary btn-sm" data-inc="${i.id}"><i data-lucide="check"></i>Marcar resolvido</button>`:`<button class="btn btn-ghost btn-sm" data-inc="${i.id}">Reabrir</button>`}</div></article>`).join(""):`<div class="empty">Nenhum relato.</div>`}</div></section>
+  <section class="card mt"><div class="card-h"><h3>Verificação das personais</h3></div><div class="rows">${DB.personals.filter(p=>p.status!=="inativo").map(p=>{const s=p.safety||{};return`<div class="rw"><span class="av">${esc(initials(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.cref)}</small></span><span class="end">${[["doc","Documento"],["selfie","Selfie"],["cref","CREF"],["crim","Antecedentes"]].map(([k,t])=>`<button class="pill ${s[k]?"ok":"mute"} tog" data-ps="${p.id}" data-k="${k}" aria-pressed="${!!s[k]}"><i data-lucide="${s[k]?"check":"circle-dashed"}"></i>${t}</button>`).join("")}</span></div>`}).join("")}</div>
+    <p class="week-note">Uma personal só recebe alunos para encontros presenciais com os quatro itens conferidos. Toque para marcar ou desmarcar.</p></section>`;
+  document.querySelectorAll("[data-kyc]").forEach(b=>b.onclick=()=>{const id=b.dataset.kyc,v=b.dataset.v;
+    if(id==="me"){S.kyc=Object.assign(S.kyc||{},{status:v,at:Date.now()});save();S.messages.push({from:"them",text:v==="verificado"?"Sua identidade foi verificada. Agora podemos marcar encontros presenciais com segurança. 🛡️":"Não conseguimos confirmar sua identidade com as fotos enviadas. Pode tentar de novo pelo seu perfil?",t:nowT()});S.unread++;save()}
+    else{DB.kyc[id]=Object.assign(DB.kyc[id]||{},{status:v});saveDB()}
+    toast(v==="verificado"?"Identidade aprovada":"Verificação recusada");route(true)});
+  document.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{const i=DB.incidents.find(x=>x.id===b.dataset.inc);i.status=i.status==="aberto"?"resolvido":"aberto";saveDB();route(true)});
+  document.querySelectorAll("[data-ps]").forEach(b=>b.onclick=()=>{const p=findP(b.dataset.ps);p.safety=p.safety||{};p.safety[b.dataset.k]=!p.safety[b.dataset.k];saveDB();route(true)});
+}
+
+/* ================== PLANOS INTERATIVOS ==================
+   Período (mensal, trimestral, semestral) dá desconto; nos níveis presenciais escolhe-se aulas por semana;
+   "Qual nível é pra mim?" recomenda um plano; o combo tira o nível 1 na compra de 3 meses do nível 2. */
+let PL={per:3,freq:{3:2,4:2},q:{},shown:{}};
+const PERIODS=[[1,"Mensal"],[3,"Trimestral"],[6,"Semestral"]];
+const discOf=per=>((DB.disc||{1:0,3:10,6:15})[per]||0)/100;
+function planPrice(i){const base=DB.prices[i];if(i===0)return{m:base,full:base,once:true};
+  const fr=i>=2?PL.freq[i+1]:null,full=i>=2?base/8*fr*4:base,d=discOf(PL.per);return{m:full*(1-d),full,fr,per:PL.per,total:full*(1-d)*PL.per,save:full*d*PL.per}}
+function recLevel(){const q=PL.q;if(!q.a||!q.b)return null;if(q.a==="nunca"||q.b==="casa")return 2;if(q.b==="fora")return q.a==="parei"?3:3;return 4}
+function renderPlans(){const box=$("#plansBox");if(!box)return;const rec=recLevel(),d3=discOf(3);
+  const combo=DB.prices[1]*3*(1-d3),comboFull=DB.prices[0]+DB.prices[1]*3;
+  box.innerHTML=`<div class="pl-top">
+    <div class="pl-per" role="group" aria-label="Período de pagamento">${PERIODS.map(([n,t])=>`<button aria-pressed="${PL.per===n}" data-per="${n}">${t}${discOf(n)?`<small>−${Math.round(discOf(n)*100)}%</small>`:""}</button>`).join("")}</div>
+    <details class="pl-quiz" ${PL.q.open?"open":""}><summary><i data-lucide="sparkles"></i>Qual nível é para mim?<i data-lucide="chevron-down"></i></summary>
+      <div class="qz"><p>Você já treinou antes?</p><div class="qz-o">${[["nunca","Nunca"],["parei","Já, mas parei"],["treino","Treino às vezes"]].map(([v,t])=>`<button aria-pressed="${PL.q.a===v}" data-qa="${v}">${t}</button>`).join("")}</div>
+      <p>Onde você se sente melhor para começar?</p><div class="qz-o">${[["casa","Em casa, sem ninguém ver"],["fora","Ao ar livre"],["academia","Já topo academia"]].map(([v,t])=>`<button aria-pressed="${PL.q.b===v}" data-qb="${v}">${t}</button>`).join("")}</div>
+      ${rec?`<p class="qz-r"><i data-lucide="party-popper"></i><span>Recomendamos começar pelo <b>nível ${rec}: ${LEVELS[rec-1].t}</b>. Ele ficou destacado abaixo.</span></p>`:""}</div></details>
+  </div>
+  <div class="plans dyn">${LEVELS.map((l,i)=>{const pr=planPrice(i),isRec=rec===l.n,star=!rec&&i===1;
+    return`<article class="plan ${isRec||star?"hl":""} ${isRec?"rec":""}">
+      <span class="lv">Nível ${l.n}${isRec?` <em class="badge-r">Para você</em>`:star?` <em class="badge-r soft">Bom para começar</em>`:""}</span><h3>${l.t}</h3>
+      <div class="pr"><span class="pv" data-v="${Math.round(pr.m)}">${money(pr.m)}</span> <small>${pr.once?"pagamento único":"por mês"}</small></div>
+      <div class="pl-sub">${pr.once?`<span>Inclui 15 min de conversa grátis antes</span>`:`${pr.save?`<s>${money(pr.full)}</s> <b class="save">economize ${money(pr.save)}</b>`:`<span>Cobrança mensal</span>`}${pr.per>1?`<span>${money(pr.total)} a cada ${pr.per} meses</span>`:""}`}</div>
+      ${i>=2?`<div class="freq" role="group" aria-label="Aulas por semana no nível ${l.n}">${[1,2,3].map(n=>`<button aria-pressed="${PL.freq[l.n]===n}" data-fr="${l.n}" data-n="${n}">${n}x</button>`).join("")}<small>por semana · ${money(DB.prices[i]/8)}/aula</small></div>`:""}
+      <p class="om" style="color:var(--muted);font-size:14px">${l.short}</p><ul class="dm">${l.inc.map(x=>`<li><i data-lucide="check"></i>${x}</li>`).join("")}</ul>
+      <a class="btn ${isRec||star?"btn-primary":"btn-ghost"} btn-sm pl-cta" href="#/comecar" data-plan="${l.n}">Começar<span class="dm">&nbsp;${i===0?"agora":"neste nível"}</span></a></article>`}).join("")}</div>
+  <div class="combo"><div><span class="kicker" style="margin:0">Combo jornada completa</span><h3>Nível 1 grátis levando 3 meses do nível 2</h3><p>Primeira conversa, plano personalizado e 3 meses de treinos em casa com acompanhamento.</p></div>
+    <div class="combo-p"><s>${money(comboFull)}</s><b>${money(combo)}</b><small>economize ${money(comboFull-combo)}</small><a class="btn btn-gold" href="#/comecar" data-plan="combo"><i data-lucide="gift"></i>Quero o combo</a></div></div>`;
+  icons();
+  box.querySelectorAll("[data-per]").forEach(b=>b.onclick=()=>{PL.per=+b.dataset.per;renderPlans()});
+  box.querySelectorAll("[data-fr]").forEach(b=>b.onclick=()=>{PL.freq[b.dataset.fr]=+b.dataset.n;renderPlans()});
+  box.querySelectorAll("[data-qa]").forEach(b=>b.onclick=()=>{PL.q.a=b.dataset.qa;PL.q.open=true;renderPlans()});
+  box.querySelectorAll("[data-qb]").forEach(b=>b.onclick=()=>{PL.q.b=b.dataset.qb;PL.q.open=true;renderPlans();const r=recLevel();if(r){const el=box.querySelectorAll(".plan")[r-1];el&&el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"center"})}});
+  const qz=box.querySelector(".pl-quiz");qz.ontoggle=()=>{PL.q.open=qz.open};
+  box.querySelectorAll("[data-plan]").forEach(a=>a.onclick=()=>{const v=a.dataset.plan;OB.plan=v==="combo"?{combo:true,lv:2,per:3}:{lv:+v,per:+v===1?1:PL.per,freq:PL.freq[v]||null}});
+  /* números sobem até o valor novo */
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches)box.querySelectorAll(".pv").forEach(el=>{const to=+el.dataset.v,key=el.closest(".plan")&&[...box.querySelectorAll(".plan")].indexOf(el.closest(".plan")),from=PL.shown[key]!=null?PL.shown[key]:to;PL.shown[key]=to;if(from===to)return;const t0=performance.now();
+    const step=t=>{const k=Math.min(1,(t-t0)/450),e=1-Math.pow(1-k,3);el.textContent=money(from+(to-from)*e);if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)});
+  else box.querySelectorAll(".pv").forEach((el,i)=>{PL.shown[i]=+el.dataset.v});
+}
+function planLabel(pl){if(!pl)return"";if(pl.combo)return"Combo jornada completa (nível 1 + 3 meses do nível 2)";const L=LEVELS[pl.lv-1];return`Nível ${pl.lv} · ${L.t}${pl.lv>1?` · ${(PERIODS.find(x=>x[0]===pl.per)||[0,"Mensal"])[1].toLowerCase()}`:""}${pl.freq?` · ${pl.freq}x por semana`:""}`}
 
 /* formulários do site → contatos da empresa */
 function bindSiteForms(){
