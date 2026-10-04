@@ -18,6 +18,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.14.1/firebase-app-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.14.1/firebase-auth-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.14.1/firebase-firestore-compat.js"></script>
 <style>
 :root{
   --navy:#1B3A5C;--blue:#2F5D8A;--sky:#DCE7F3;--mist:#F3F6FA;--gold:#E0A93B;--gold-soft:#FBF1DC;
@@ -1120,8 +1123,193 @@ i[data-lucide],svg.lucide{width:20px;height:20px;stroke-width:1.9;flex:none}
 </style>
 </head>
 <body>
-<div id="root"></div>
+<div id="root"><p style="padding:40vh 20px 0;text-align:center;color:#5F6B7A;font-family:system-ui,sans-serif">Carregando…</p></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ================== FIREBASE ==================
+   Login de verdade (e-mail e senha) e dados guardados no Firestore, compartilhados entre
+   aluno, personal e empresa. Sem a biblioteca do Firebase (ou sem configuração), o site
+   volta ao modo demonstração, com tudo salvo só no navegador.
+   As permissões de cada tipo de conta ficam em firestore.rules. */
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyDDiaqBsFnSG7-o-0hzfo47hXQBXpG39Z8",
+  authDomain:"primeiro-passo-a792c.firebaseapp.com",
+  projectId:"primeiro-passo-a792c",
+  storageBucket:"primeiro-passo-a792c.firebasestorage.app",
+  messagingSenderId:"886654017067",
+  appId:"1:886654017067:web:ccce25b3b422ffd59c146e"
+};
+const FB=!!(window.firebase&&FIREBASE_CONFIG.apiKey);
+/* ME: id do aluno logado ("me" no modo demonstração). AL: outros alunos carregados nos painéis. */
+let ME=FB?null:"me",AL={};
+const A=id=>id==null?null:id===ME?(S.profile?S:null):(AL[id]||null);
+const alIds=()=>[...(ME&&S.profile?[ME]:[]),...Object.keys(AL)];
+const saveA=id=>id===ME?save():FBL.saveAluno(id);
+
+const FBL=(()=>{
+  if(!FB)return{booted:true};
+  const app=firebase.initializeApp(FIREBASE_CONFIG),auth=firebase.auth(),db=firebase.firestore();
+  if(/[?&]emulador\b/.test(location.search)){auth.useEmulator("http://127.0.0.1:9099");db.useEmulator("127.0.0.1",8080)}
+  const FV=firebase.firestore.FieldValue;
+  const J=v=>JSON.stringify(v===undefined?null:v);
+  const clean=o=>JSON.parse(JSON.stringify(o));
+  const PUB=["name","cref","uf","area","bio","spec","status","cap","since"],PRIV=["email","split","safety","terms","payout","info"];
+  const CFG=["prices","split","disc","fees","methodsOn","payoutDay"];
+  const COLS={leads:"contatos",ratings:"avaliacoes",incidents:"relatos",flags:"alertas"};
+  const pick=(o,ks)=>{const r={};ks.forEach(k=>{if(o[k]!==undefined)r[k]=o[k]});return r};
+  const warn=(what,e)=>console.warn("[firebase]",what,e&&e.code||e);
+  let SYNC={},DBS={},PAYPID={},subs=[],timers={},dbTimer=null,rr=null;
+  const F={booted:false,ready:false,busy:false,role:null,uid:null};
+
+  /* ---------- carregar ---------- */
+  function reset(){subs.forEach(u=>{try{u()}catch(e){}});subs=[];SYNC={};DBS={personais:{},priv:{},pag:{},rep:{},chk:{},cfg:null};PAYPID={};
+    Object.values(COLS).forEach(c=>DBS[c]={});AL={};ME=null;S=fresh();DB=emptyDB();F.role=null;F.uid=null;F.ready=false}
+  const docs=async(q,what)=>{try{return(await q.get()).docs}catch(e){warn(what,e);return[]}};
+  const one=async(ref,what)=>{try{const d=await ref.get();return d.exists?d.data():null}catch(e){warn(what,e);return null}};
+  function addPersonal(id,pub,priv){let p=DB.personals.find(x=>x.id===id);if(!p){p={id};DB.personals.push(p)}
+    Object.assign(p,pub||{},priv||{});DBS.personais[id]=J(pick(p,PUB));DBS.priv[id]=J(pick(p,PRIV))}
+  function addList(k,col,list){list.forEach(d=>{const o=Object.assign({id:d.id},d.data());DB[k].push(o);DBS[col][d.id]=J(o)})}
+  function addPays(list){list.forEach(d=>{const x=d.data(),k=d.id;DB.paid[k]=!!x.paid;if(x.metodo)DB.payInfo[k]={m:x.metodo,at:x.at||null};if(x.informado)DB.informed[k]=true;PAYPID[k]=x.pid||null;DBS.pag[k]=J(payDoc(k))})}
+  function addReps(list){list.forEach(d=>{DB.payouts[d.id]=d.data().at;DBS.rep[d.id]=J(d.data().at)})}
+  function addChks(list){list.forEach(d=>{const x=d.data();DB.checkins[d.id]={in:x.in||null,out:x.out||null};DBS.chk[d.id]=J(DB.checkins[d.id])})}
+  function watchAlunos(q){subs.push(q.onSnapshot(s=>{s.docChanges().forEach(ch=>{if(ch.type==="removed"){delete AL[ch.doc.id];return}remote(ch.doc.id,ch.doc.data(),ch.doc.metadata.hasPendingWrites)});rerender()},e=>warn("alunos",e)))}
+
+  async function loadFor(u){
+    reset();
+    const cfg=await one(db.collection("config").doc("empresa"),"config");
+    if(cfg)CFG.forEach(k=>{if(cfg[k]!==undefined)DB[k]=cfg[k]});DBS.cfg=J(pick(DB,CFG));
+    if(!u){(await docs(db.collection("personais").where("status","==","ativo"),"personais")).forEach(d=>addPersonal(d.id,d.data()));finish();return}
+    F.uid=u.uid;
+    const isAdm=await one(db.collection("admins").doc(u.uid),"admins");
+    const usr=isAdm?null:await one(db.collection("usuarios").doc(u.uid),"usuarios");
+    F.role=isAdm?"admin":usr?usr.role:null;
+    const P=db.collection("personais"),PV=db.collection("personaisPriv"),AU=db.collection("alunos");
+    if(F.role==="admin"){
+      const [ps,pv]=await Promise.all([docs(P,"personais"),docs(PV,"personaisPriv")]);
+      ps.forEach(d=>addPersonal(d.id,d.data(),(pv.find(x=>x.id===d.id)||{data:()=>({})}).data()));
+      const [pg,rp,ck]=await Promise.all(["pagamentos","repasses","checkins"].map(c=>docs(db.collection(c),c)));addPays(pg);addReps(rp);addChks(ck);
+      for(const[k,col]of Object.entries(COLS))addList(k,col,await docs(db.collection(col),col));
+      (await docs(AU,"alunos")).forEach(d=>remote(d.id,d.data()));watchAlunos(AU);
+      if(!(SESS.role==="personal"&&SESS.back==="admin"))setSess({role:"admin"});
+    }else if(F.role==="personal"){
+      (await docs(P.where("status","==","ativo"),"personais")).forEach(d=>addPersonal(d.id,d.data()));
+      const mine=await one(P.doc(u.uid),"personal"),priv=await one(PV.doc(u.uid),"personaisPriv");if(mine)addPersonal(u.uid,mine,priv||{});
+      const by=c=>docs(db.collection(c).where("pid","==",u.uid),c);
+      const [pg,rp,ck]=await Promise.all([by("pagamentos"),by("repasses"),by("checkins")]);addPays(pg);addReps(rp);addChks(ck);
+      if(mine&&mine.status==="ativo"){const q=AU.where("pid","==",u.uid);(await docs(q,"alunos")).forEach(d=>remote(d.id,d.data()));watchAlunos(q)}
+      setSess({role:"personal",pid:u.uid});
+    }else if(F.role==="aluno"){
+      (await docs(P.where("status","==","ativo"),"personais")).forEach(d=>addPersonal(d.id,d.data()));
+      ME=u.uid;const mine=await one(AU.doc(u.uid),"aluno");
+      if(mine){remote(u.uid,mine);subs.push(AU.doc(u.uid).onSnapshot(d=>{if(d.exists){remote(u.uid,d.data(),d.metadata.hasPendingWrites);rerender()}},e=>warn("aluno",e)))}
+      const by=c=>docs(db.collection(c).where("cid","==",u.uid),c);
+      addPays(await by("pagamentos"));addList("ratings","avaliacoes",await by("avaliacoes"));
+      setSess({});
+    }else{
+      /* conta recém-criada, ainda sem tipo: só o que é público */
+      (await docs(P.where("status","==","ativo"),"personais")).forEach(d=>addPersonal(d.id,d.data()));
+    }
+    finish();
+  }
+  function finish(){syncPrices();F.ready=true}
+
+  /* ---------- alunos: grava só os campos que mudaram ---------- */
+  const snap=o=>{const r={};Object.keys(o).forEach(k=>r[k]=J(o[k]));return r};
+  function remote(id,data,pending){
+    if(pending)return;
+    let a=A(id);
+    if(!a){if(id===ME){S=Object.assign(fresh(),data);SYNC[id]=snap(data);return}AL[id]=data;SYNC[id]=snap(data);return}
+    const prev=SYNC[id]||{};
+    Object.keys(data).forEach(k=>{const jr=J(data[k]);if(prev[k]===undefined||J(a[k])===prev[k])a[k]=data[k];prev[k]=jr});
+    SYNC[id]=prev;
+  }
+  function alunoDoc(a){const d=clean(a);delete d.account;delete d.loggedOut;return d}
+  function saveAluno(id){clearTimeout(timers[id]);timers[id]=setTimeout(()=>flushAluno(id),250)}
+  function flushAluno(id){
+    const a=A(id);if(!a||!F.ready)return;const d=alunoDoc(a),ref=db.collection("alunos").doc(id),prev=SYNC[id];
+    if(!prev){SYNC[id]=snap(d);ref.set(d).catch(e=>{delete SYNC[id];warn("salvar aluno",e)});return}
+    const up={},keys=new Set([...Object.keys(d),...Object.keys(prev)]);
+    keys.forEach(k=>{const j=J(d[k]);if(j===prev[k])return;
+      if(d[k]===undefined){if(prev[k]!=="null")up[k]=FV.delete();return}
+      if(k==="messages"&&prev[k]){const old=JSON.parse(prev[k])||[];if(Array.isArray(old)&&d[k].length>old.length&&old.every((m,i)=>J(m)===J(d[k][i]))){up[k]=FV.arrayUnion(...d[k].slice(old.length));return}}
+      up[k]=d[k]});
+    if(!Object.keys(up).length)return;
+    const was={};Object.keys(up).forEach(k=>{was[k]=prev[k];prev[k]=J(d[k])});
+    ref.update(up).catch(e=>{Object.assign(prev,was);warn("salvar aluno",e)});
+  }
+
+  /* ---------- dados da empresa: compara com o que veio do banco e grava a diferença ---------- */
+  function payDoc(k){const[cid,mes]=k.split("|"),c=typeof findC==="function"?findC(cid):null,pi=DB.payInfo[k]||{};
+    return{cid,mes,pid:PAYPID[k]!==undefined?PAYPID[k]:(c&&c.pid)||null,paid:!!DB.paid[k],informado:!!DB.informed[k],metodo:pi.m||null,at:pi.at||null}}
+  function saveDB(){if(!F.ready)return;clearTimeout(dbTimer);dbTimer=setTimeout(flushDB,200)}
+  function put(col,id,data,map,j){map[id]=j;db.collection(col).doc(id).set(data).catch(e=>{delete map[id];warn("salvar "+col,e)})}
+  function del(col,id,map){delete map[id];db.collection(col).doc(id).delete().catch(e=>warn("apagar "+col,e))}
+  function flushDB(){
+    if(!F.ready)return;
+    for(const[k,col]of Object.entries(COLS)){const seen=new Set;
+      (DB[k]||[]).forEach(o=>{if(!o.id)return;seen.add(o.id);const j=J(o);if(DBS[col][o.id]!==j){const d=clean(o);delete d.id;put(col,o.id,d,DBS[col],j)}});
+      Object.keys(DBS[col]).forEach(id=>{if(!seen.has(id))del(col,id,DBS[col])})}
+    const seenP=new Set;
+    DB.personals.forEach(p=>{seenP.add(p.id);const pub=pick(p,PUB),priv=pick(p,PRIV),jp=J(pub),jv=J(priv);
+      if(DBS.personais[p.id]!==jp)put("personais",p.id,clean(pub),DBS.personais,jp);
+      if(DBS.priv[p.id]!==jv)put("personaisPriv",p.id,clean(priv),DBS.priv,jv)});
+    Object.keys(DBS.personais).forEach(id=>{if(!seenP.has(id)){del("personais",id,DBS.personais);del("personaisPriv",id,DBS.priv)}});
+    new Set([...Object.keys(DB.paid),...Object.keys(DB.payInfo),...Object.keys(DB.informed)]).forEach(k=>{const d=payDoc(k),j=J(d);if(DBS.pag[k]!==j){PAYPID[k]=d.pid;put("pagamentos",k,d,DBS.pag,j)}});
+    Object.keys(DB.payouts).forEach(k=>{const j=J(DB.payouts[k]);if(DBS.rep[k]!==j)put("repasses",k,{pid:k.split("|")[0],at:DB.payouts[k]},DBS.rep,j)});
+    Object.keys(DBS.rep).forEach(k=>{if(!(k in DB.payouts))del("repasses",k,DBS.rep)});
+    Object.keys(DB.checkins).forEach(k=>{const c=DB.checkins[k],j=J(c);if(DBS.chk[k]!==j){const b=bookingsAll().find(x=>x.id===k)||{};put("checkins",k,{pid:b.pid||null,cid:b.cid||null,in:c.in||null,out:c.out||null},DBS.chk,j)}});
+    const jc=J(pick(DB,CFG));if(DBS.cfg!==jc&&F.role==="admin"){DBS.cfg=jc;db.collection("config").doc("empresa").set(clean(pick(DB,CFG))).catch(e=>warn("salvar config",e))}
+  }
+
+  /* ---------- redesenhar quando chega novidade do banco ---------- */
+  function rerender(){if(!F.booted)return;clearTimeout(rr);rr=setTimeout(()=>{
+    const el=document.activeElement,typing=el&&/INPUT|TEXTAREA|SELECT/.test(el.tagName)&&el.value;
+    if(typing||document.querySelector(".modal,.drawer,.player")){rerender();return}route(true)},typingDelay())}
+  const typingDelay=()=>{const el=document.activeElement;return el&&/INPUT|TEXTAREA|SELECT/.test(el.tagName)&&el.value?2000:150};
+
+  /* ---------- contas ---------- */
+  const MSG={"auth/invalid-credential":"E-mail ou senha incorretos.","auth/wrong-password":"E-mail ou senha incorretos.","auth/user-not-found":"E-mail ou senha incorretos.","auth/invalid-email":"Confira o e-mail.",
+    "auth/email-already-in-use":"Já existe uma conta com este e-mail. Use “Entrar” ou outro e-mail.","auth/weak-password":"A senha precisa de pelo menos 6 caracteres.",
+    "auth/too-many-requests":"Muitas tentativas. Espere alguns minutos e tente de novo.","auth/network-request-failed":"Sem conexão com a internet. Tente de novo.",
+    "auth/operation-not-allowed":"O login por e-mail ainda não foi ativado no Firebase (Authentication > Método de login > E-mail/senha)."};
+  F.err=e=>MSG[e&&e.code]||"Não deu certo agora. Tente de novo em instantes.";
+  F.boot=()=>{auth.onAuthStateChanged(async u=>{if(F.busy)return;await loadFor(u);if(!F.booted){F.booted=true;route()}else route(true)})};
+  /* entra e confere se a conta é do tipo pedido (aluno, personal ou empresa) */
+  F.login=async(email,pw,who)=>{F.busy=true;try{
+      const cr=await auth.signInWithEmailAndPassword(email,pw);await loadFor(cr.user);
+      const want={aluno:"aluno",personal:"personal",empresa:"admin"}[who];
+      if(F.role!==want){const t=F.role==="admin"?"Esta é uma conta da empresa. Entre pela área da empresa.":F.role==="personal"?"Esta é uma conta de personal. Entre pela área da personal.":F.role==="aluno"?"Esta é uma conta de aluno. Entre pela área do aluno.":"Esta conta ainda não tem acesso. Fale com a empresa.";
+        await auth.signOut();await loadFor(null);throw{msg:t}}
+      if(who==="personal"){const p=findP(F.uid);if(!p||p.status!=="ativo"){await auth.signOut();await loadFor(null);throw{msg:p&&p.status==="inativo"?"Este acesso está desativado. Fale com a empresa.":"Seu cadastro ainda está em análise. Avisamos quando for aprovado."}}}
+      if(who==="aluno"&&!S.profile){await auth.signOut();await loadFor(null);throw{msg:"Não encontramos os dados deste aluno. Fale com a empresa."}}
+    }catch(e){throw e.msg?e:{msg:F.err(e)}}finally{F.busy=false}};
+  F.logout=async()=>{F.busy=true;try{await auth.signOut()}catch(e){}await loadFor(null);F.busy=false;location.hash="#/entrar";route(true)};
+  F.reset=email=>auth.sendPasswordResetEmail(email);
+  /* cria a conta do aluno no fim do questionário; o resto do estado já está montado em S */
+  F.signupAluno=async(email,pw,build)=>{F.busy=true;try{
+      const cr=await auth.createUserWithEmailAndPassword(email,pw),uid=cr.user.uid;
+      await loadFor(cr.user);ME=uid;F.role="aluno";build();
+      const act=DB.personals.find(p=>p.status==="ativo");S.pid=act?act.id:null;
+      await db.collection("usuarios").doc(uid).set({role:"aluno",email,nome:S.profile.name,criadoEm:Date.now()});
+      const d=alunoDoc(S);await db.collection("alunos").doc(uid).set(d);SYNC[uid]=snap(d);
+      subs.push(db.collection("alunos").doc(uid).onSnapshot(x=>{if(x.exists){remote(uid,x.data(),x.metadata.hasPendingWrites);rerender()}},e=>warn("aluno",e)));
+      setSess({});
+    }catch(e){throw{msg:F.err(e)}}finally{F.busy=false}};
+  /* personal cria a conta; fica "pendente" até a empresa aprovar */
+  F.signupPersonal=async(f)=>{F.busy=true;try{
+      const cr=await auth.createUserWithEmailAndPassword(f.email,f.pw),uid=cr.user.uid;
+      await db.collection("usuarios").doc(uid).set({role:"personal",email:f.email,nome:f.name,criadoEm:Date.now()});
+      await db.collection("personais").doc(uid).set({name:f.name,cref:"CREF "+f.cref,uf:f.uf,area:f.city+" / "+f.uf,bio:"",spec:["Iniciantes"],status:"pendente",cap:15,since:Date.now()});
+      await db.collection("personaisPriv").doc(uid).set({email:f.email,info:{name:f.name,email:f.email,tel:f.tel}});
+      await auth.signOut();await loadFor(null);
+    }catch(e){throw{msg:F.err(e)}}finally{F.busy=false}};
+  F.saveAluno=saveAluno;F.saveDB=saveDB;
+  return F;
+})();
+function emptyDB(){return{v:1,personals:[],clients:[],bookings:[],leads:[],prices:[100,180,480,560],split:70,paid:{},payInfo:{},informed:{},payouts:{},
+  fees:{pix:0.99,cartao:3.49,boleto:1.99},methodsOn:{pix:true,cartao:true,boleto:true},payoutDay:5,disc:{1:0,3:10,6:15},ratings:[],incidents:[],flags:[],kyc:{},checkins:{}}}
+</script>
 
 <script>
 /* ================== DATA ================== */
@@ -1155,7 +1343,8 @@ const BARRIERS=[["Vergonha do corpo","eye-off"],["Medo de ser julgado","users"],
 const GOALS=[["Me sentir melhor comigo","smile"],["Ter mais disposição","zap"],["Perder peso com saúde","scale"],["Cuidar da saúde mental","brain"],["Ganhar força e mobilidade","activity"],["Conseguir ir à academia","dumbbell"]];
 const CONTACT=[["Só mensagem","message-square","Sem câmera e sem áudio"],["Áudio","mic","Conversa por voz"],["Vídeo-chamada","video","Com câmera"]];
 const PARQ=["Algum médico já disse que você tem problema no coração e só deve fazer atividade física com orientação?","Você sente dor no peito quando faz atividade física?","No último mês, sentiu dor no peito sem estar fazendo atividade física?","Você perde o equilíbrio por tontura ou já desmaiou?","Tem algum problema nos ossos ou articulações que pode piorar com exercício?","Toma remédio para pressão arterial ou para o coração?","Sabe de algum outro motivo pelo qual não deveria fazer atividade física?"];
-const myP=()=>DB.personals.find(p=>p.id===(S.pid||"p1"))||DB.personals[0];
+const NOP={id:null,name:"Sua personal",cref:"CREF a confirmar",bio:"Profissional de educação física parceira",status:"ativo",spec:[]};
+const myP=()=>DB.personals.find(p=>p.id===(S.pid||(FB?null:"p1")))||DB.personals.find(p=>p.status==="ativo")||DB.personals[0]||NOP;
 const PERSONAL={get name(){return myP().name},get cref(){return myP().cref},get bio(){return myP().bio||""},get initials(){return initials(myP().name)}};
 const BADGES=[["Primeiro passo","footprints","Criou seu plano"],["Primeira conversa","message-circle","Conversou com o personal"],["1º treino","flame","Concluiu o primeiro treino"],["Semana firme","calendar-check","3 treinos em uma semana"],["Nível 2","house","Chegou aos treinos em casa"],["8 treinos","award","Completou 8 treinos"],["Nível 3","trees","Primeiro encontro ao ar livre"],["Nível 4","dumbbell","Chegou à academia"]];
 
@@ -1163,8 +1352,8 @@ const BADGES=[["Primeiro passo","footprints","Criou seu plano"],["Primeira conve
 const KEY="primeiropasso:v1";
 const fresh=()=>({profile:null,level:1,workouts:[],bookings:[],messages:[],talked:false,outdoor:0,gymsessions:0,feel:[],unread:0,breaths:[],mood:null,sound:true});
 let S=load();
-function load(){try{const r=localStorage.getItem(KEY);return r?Object.assign(fresh(),JSON.parse(r)):fresh()}catch(e){return fresh()}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){if(FB)return fresh();try{const r=localStorage.getItem(KEY);return r?Object.assign(fresh(),JSON.parse(r)):fresh()}catch(e){return fresh()}}
+function save(){if(FB){if(ME&&S.profile)FBL.saveAluno(ME);return}try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
 /* ================== HELPERS ================== */
 const $=s=>document.querySelector(s);
@@ -1202,17 +1391,18 @@ function weekCount(){const w=Date.now()-7*864e5;return S.workouts.filter(x=>x.at
 /* level criteria */
 function criteria(){
   const lv=S.level;
-  if(lv===1)return[{t:"Responder o questionário",d:!!S.profile,go:"#/app"},{t:"Verificar sua identidade",d:kycOf("me").status==="verificado",go:"#/app/verificacao"},{t:"Agendar a conversa gratuita de 15 min",d:S.talked||S.bookings.some(b=>b.type==="Primeira conversa"),go:"#/app/agenda"},{t:"Conversar com a personal",d:S.talked,go:"#/app/mensagens"},{t:"Pagar o nível 1 e receber seu plano",d:lv1Paid(),go:"#/app/perfil"}];
+  if(lv===1)return[{t:"Responder o questionário",d:!!S.profile,go:"#/app"},{t:"Verificar sua identidade",d:kycOf(ME).status==="verificado",go:"#/app/verificacao"},{t:"Agendar a conversa gratuita de 15 min",d:S.talked||S.bookings.some(b=>b.type==="Primeira conversa"),go:"#/app/agenda"},{t:"Conversar com a personal",d:S.talked,go:"#/app/mensagens"},{t:"Pagar o nível 1 e receber seu plano",d:lv1Paid(),go:"#/app/perfil"}];
   if(lv===2){const n=S.workouts.length;return[{t:"Fazer o primeiro treino em casa",d:n>=1,go:"#/app/treinos"},{t:"Treinar 3 vezes em uma semana",d:weekCount()>=3||n>=3,go:"#/app/treinos"},{t:`Completar 8 treinos (${Math.min(n,8)}/8)`,d:n>=8,go:"#/app/treinos"}]}
   if(lv===3)return[{t:"Agendar o primeiro encontro ao ar livre",d:S.bookings.some(b=>b.type==="Ao ar livre"),go:"#/app/agenda"},{t:`Participar de 4 encontros (${Math.min(S.outdoor,4)}/4)`,d:S.outdoor>=4,go:"#/app/agenda"}];
   return[{t:"Agendar a primeira aula na academia",d:S.bookings.some(b=>b.type==="Academia"),go:"#/app/agenda"},{t:`Treinar 4 vezes na academia com o personal (${Math.min(S.gymsessions,4)}/4)`,d:S.gymsessions>=4,go:"#/app/agenda"},{t:"Montar seu plano para seguir sozinho",d:S.gymsessions>=4,go:"#/app/mensagens"}];
 }
-const lv1Paid=()=>bills().some(b=>b.cid==="me"&&b.lv===1&&b.paid);
+const lv1Paid=()=>bills().some(b=>b.cid===ME&&b.lv===1&&b.paid);
 const pct=()=>{const c=criteria();return Math.round(c.filter(x=>x.d).length/c.length*100)};
 function earned(){const n=S.workouts.length;return[!!S.profile,S.talked,n>=1,weekCount()>=3||n>=3,S.level>=2,n>=8,S.level>=3,S.level>=4]}
 
 /* ================== ROUTER ================== */
 function route(keep){
+  if(FB&&!FBL.booted)return;
   const h=location.hash||"#/";
   const y=scrollY;
   if(keep!==true)window.scrollTo(0,0);
@@ -1224,7 +1414,7 @@ function route(keep){
   if(h.startsWith("#/app")){if(!S.profile){location.hash="#/entrar/aluno";return}
     if(S.loggedOut){location.hash="#/entrar/aluno";return}
     /* sem identidade verificada o app não avança */
-    if(!TEST_MODE&&kycOf("me").status!=="verificado"&&h.split("/")[2]!=="verificacao"){location.hash="#/app/verificacao";return}
+    if(!TEST_MODE&&kycOf(ME).status!=="verificado"&&h.split("/")[2]!=="verificacao"){location.hash="#/app/verificacao";return}
     return app(h.split("/")[2]||"inicio")}
   site();
 }
@@ -1349,7 +1539,7 @@ function site(){
     <div class="uf-row"><div class="field"><label for="fpu">Estado</label>${ufSelect("fpu","",true)}</div><div class="field"><label for="fpa">Cidade onde atende</label><input id="fpa" required placeholder="Ex.: Salvador"></div></div>
     <div class="field"><label for="fpc">WhatsApp ou e-mail</label><input id="fpc" required></div>
     <button class="btn btn-primary"><i data-lucide="send"></i>Enviar cadastro</button>
-    <p class="fine">Demonstração: o cadastro fica salvo neste navegador e aparece no painel da empresa, em Contatos.</p></form>
+    <p class="fine">${FB?"Seu cadastro chega direto para a equipe.":"Demonstração: o cadastro fica salvo neste navegador e aparece no painel da empresa, em Contatos."}</p></form>
 </div></section>
 
 <section class="sec" id="duvidas"><div class="wrap">
@@ -1382,7 +1572,7 @@ function site(){
     <div class="field"><label for="fcc">WhatsApp ou e-mail</label><input id="fcc" required></div>
     <div class="field"><label for="fcm">Sua dúvida</label><textarea id="fcm" placeholder="Ex.: dá para começar se eu tenho dor no joelho?"></textarea></div>
     <button class="btn btn-primary"><i data-lucide="send"></i>Enviar</button>
-    <p class="fine">Demonstração: a mensagem fica salva neste navegador e aparece no painel da empresa, em Contatos.</p></form>
+    <p class="fine">${FB?"Sua mensagem chega direto para a equipe.":"Demonstração: a mensagem fica salva neste navegador e aparece no painel da empresa, em Contatos."}</p></form>
 </div></section>
 
 <footer class="foot"><div class="wrap">
@@ -1470,10 +1660,13 @@ function onboarding(){
   const bk=$("#back");if(bk)bk.onclick=()=>{OB.step--;onboarding();scrollTo(0,0)};
   $("#next").onclick=next;icons();
   async function next(){if(OB.step<OB_STEPS.length-1){OB.step++;onboarding();scrollTo(0,0);return}
-    const acc={email:(OB.email||"").toLowerCase(),h:await hashPw(OB.pw||"")};
-    S=fresh();S.account=acc;S.info={name:OB.name.trim(),email:acc.email};S.plan=OB.plan||null;S.profile={uf:OB.uf,city:(OB.city||"").trim(),name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
+    const acc={email:(OB.email||"").toLowerCase(),h:FB?null:await hashPw(OB.pw||"")};
+    const build=()=>{S=fresh();if(!FB)S.account=acc;S.info={name:OB.name.trim(),email:acc.email};S.plan=OB.plan||null;S.profile={uf:OB.uf,city:(OB.city||"").trim(),name:OB.name.trim(),goals:OB.goals,barriers:OB.barriers,days:OB.days,period:OB.period,contact:OB.contact,medical:OB.parq.some(x=>x===true),since:Date.now()};
     S.messages=[{from:"them",text:`Oi, ${OB.name.trim().split(" ")[0]}! Eu sou a ${PERSONAL.name.split(" ")[0]}, sua personal. Li suas respostas e fico feliz que você esteja aqui. 💛`,t:nowT()},{from:"them",text:"Quando quiser, agende nossa primeira conversa na aba Agenda. Pode ser só por mensagem, sem pressa nenhuma.",t:nowT()}];
-    S.unread=2;save();OB.step=0;location.hash=TEST_MODE?"#/app":"#/app/verificacao";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
+    S.unread=2};
+    if(FB){const bt=$("#next");bt.disabled=true;try{await FBL.signupAluno(acc.email,OB.pw,build)}catch(x){bt.disabled=false;toast(x.msg);if(/e-mail|senha/i.test(x.msg)){OB.step=OB_STEPS.indexOf("acesso");onboarding()}return}}
+    else{build();save()}
+    OB.step=0;OB.pw=OB.pw2="";location.hash=TEST_MODE?"#/app":"#/app/verificacao";setTimeout(()=>{confetti();toast("Conquista: Primeiro passo!")},300)}
 }
 
 /* ================== APP ================== */
@@ -1486,7 +1679,7 @@ function app(tab){
     <button class="icon-btn sos-ic" data-sos aria-label="Emergência e segurança"><i data-lucide="shield"></i></button><a class="icon-btn" href="#/app/mensagens" aria-label="Mensagens" style="margin-left:0"><i data-lucide="bell"></i>${S.unread?`<span class="dotb"></span>`:""}</a></div></header>
     ${TEST_MODE?`<div class="tbar"><i data-lucide="flask-conical"></i>Modo de teste: as etapas obrigatórias estão liberadas para você ver tudo.</div>`:""}
     <main class="view" id="view"></main>
-    <nav class="tabbar" aria-label="App" ${!TEST_MODE&&kycOf("me").status!=="verificado"?"hidden":""}><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||((tab==="verificacao"||tab==="dados")&&k==="perfil")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
+    <nav class="tabbar" aria-label="App" ${!TEST_MODE&&kycOf(ME).status!=="verificado"?"hidden":""}><div class="in">${tabs.map(([k,ic,l])=>`<a href="#/app/${k}" class="${k===tab||((tab==="verificacao"||tab==="dados")&&k==="perfil")?"on":""}"><i data-lucide="${ic}"></i>${l}</a>`).join("")}</div></nav>
   </div>`;
   v();icons();
   document.querySelectorAll("[data-sos]").forEach(b=>b.onclick=()=>openSOS("cliente"));
@@ -1503,7 +1696,7 @@ function vHome(){
     <div class="meta"><span>${p}% do nível concluído</span><span>${S.level<4?"Próximo: "+LEVELS[S.level].t:"Última etapa"}</span></div>
   </div>
   ${ready?`<button class="btn btn-gold next" id="up" style="width:100%"><i data-lucide="party-popper"></i>${S.level<4?"Me sinto pronto para o nível "+(S.level+1):"Concluir a jornada"}</button>`:nxt?`<a class="btn btn-primary next" style="width:100%" href="${nxt.go}"><i data-lucide="arrow-right"></i>Próximo passo: ${nxt.t.replace(/\s*\(.*\)/,"")}</a>`:""}
-  ${kycOf("me").status!=="verificado"?`<a class="kyc-cta" href="#/app/verificacao"><i data-lucide="${kycOf("me").status==="analise"?"hourglass":"shield-check"}"></i><span><b>${kycOf("me").status==="analise"?"Verificação em análise":"Verifique sua identidade"}</b><small>${kycOf("me").status==="analise"?"A equipe confere em até 1 dia útil.":"Leva 3 minutos e libera os encontros presenciais com segurança."}</small></span><i data-lucide="chevron-right"></i></a>`:""}
+  ${kycOf(ME).status!=="verificado"?`<a class="kyc-cta" href="#/app/verificacao"><i data-lucide="${kycOf(ME).status==="analise"?"hourglass":"shield-check"}"></i><span><b>${kycOf(ME).status==="analise"?"Verificação em análise":"Verifique sua identidade"}</b><small>${kycOf(ME).status==="analise"?"A equipe confere em até 1 dia útil.":"Leva 3 minutos e libera os encontros presenciais com segurança."}</small></span><i data-lucide="chevron-right"></i></a>`:""}
   <div class="block">${moodBox()}</div>
   <div class="block"><div class="block-h"><h3>Seu caminho, passo a passo</h3><span class="link">Nível ${S.level} de 4</span></div>
     <ol class="journey">${(()=>{const cur=c.findIndex(x=>!x.d);return c.map((x,i)=>{const st=x.d?"done":i===cur?"cur":"lock";
@@ -1598,7 +1791,7 @@ let TF="Todos";
 const TFILTERS={"Todos":()=>true,"Sentado":w=>w.seat,"Até 10 min":w=>w.min<=10,"Ainda não fiz":w=>!S.workouts.some(x=>x.id===w.id)};
 let TV="indicados",XF="";
 function vTreinos(){
-  const list=WORKOUTS.filter(TFILTERS[TF]),rx=rxOf("me");
+  const list=WORKOUTS.filter(TFILTERS[TF]),rx=rxOf(ME);
   const tabs=`<div class="seg tv" role="tablist" aria-label="Treinos">${[["indicados",`Indicados${rx.length?` (${rx.length})`:""}`],["treinos","Treinos em vídeo"],["biblioteca","Biblioteca"]].map(([k,t])=>`<button role="tab" aria-selected="${TV===k}" aria-pressed="${TV===k}" data-tv="${k}">${t}</button>`).join("")}</div>`;
   const exOn=TEST_MODE||S.level>=2||lv1Paid();
   if(TV!=="treinos"&&!exOn){
@@ -1692,7 +1885,7 @@ function vAgenda(){
   const slots=S.profile.period==="Manhã"?["07:00","08:00","09:00","10:00","11:00"]:S.profile.period==="Tarde"?["13:00","14:00","15:00","16:00","17:00"]:["18:00","19:00","20:00","21:00"];
   const list=[...S.bookings].sort((a,b)=>a.ts-b.ts);
   $("#view").innerHTML=`<div class="hello"><small>Agenda</small><h2>Marque no horário que for bom para você.</h2></div>
-  ${list.length?`<div class="block" style="margin-top:0"><div class="block-h"><h3>Seus agendamentos</h3></div><div class="tasks">${list.map((b,i)=>{const d=new Date(b.ts);const past=b.done;return `<div class="booking" style="${past?"opacity:.6":""}"><span class="d"><b>${d.getDate()}</b><small>${d.toLocaleDateString("pt-BR",{month:"short"}).replace(".","")}</small></span><span><b>${b.type}</b><br><small style="color:var(--muted)">${d.toLocaleDateString("pt-BR",{weekday:"long"})} · ${b.time} · ${b.mode}</small>${PRESENCIAL(b.type)&&!past?`<br><small class="code">Código de segurança: <b>${meetCode({ts:b.ts,cid:"me"})}</b> · a personal diz ao chegar</small>`:""}</span>${past?`<span class="chip ok" style="margin-left:auto"><i data-lucide="check"></i>Feito</span>`:`<button class="x" data-cancel="${b.ts}" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</div>`}).join("")}</div></div>`:""}
+  ${list.length?`<div class="block" style="margin-top:0"><div class="block-h"><h3>Seus agendamentos</h3></div><div class="tasks">${list.map((b,i)=>{const d=new Date(b.ts);const past=b.done;return `<div class="booking" style="${past?"opacity:.6":""}"><span class="d"><b>${d.getDate()}</b><small>${d.toLocaleDateString("pt-BR",{month:"short"}).replace(".","")}</small></span><span><b>${b.type}</b><br><small style="color:var(--muted)">${d.toLocaleDateString("pt-BR",{weekday:"long"})} · ${b.time} · ${b.mode}</small>${PRESENCIAL(b.type)&&!past?`<br><small class="code">Código de segurança: <b>${meetCode({ts:b.ts,cid:ME})}</b> · a personal diz ao chegar</small>`:""}</span>${past?`<span class="chip ok" style="margin-left:auto"><i data-lucide="check"></i>Feito</span>`:`<button class="x" data-cancel="${b.ts}" aria-label="Cancelar"><i data-lucide="x"></i></button>`}</div>`}).join("")}</div></div>`:""}
   ${(()=>{const fc=S.bookings.find(b=>b.type==="Primeira conversa");return S.level===1&&(fc||S.talked)?`<div class="block"><div class="alert ok" style="margin:0"><i data-lucide="calendar-check"></i><span>${S.talked?"Você já fez sua conversa gratuita. Os próximos agendamentos liberam no nível 2.":`Sua conversa gratuita está marcada para ${new Date(fc.ts).toLocaleDateString("pt-BR",{weekday:"long",day:"numeric"})} às ${fc.time}. Ela é uma só: para mudar o horário, cancele acima e marque de novo.`}</span></div></div>`:""})()}
   <div class="block" ${S.level===1&&(S.talked||S.bookings.some(b=>b.type==="Primeira conversa"))?"hidden":""}><div class="block-h"><h3>Novo agendamento</h3></div>
     <div class="seg" style="grid-template-columns:repeat(${types.length},1fr)">${types.map(([t,ic,s])=>`<button aria-pressed="${AG.type===t}" data-type="${t}"><i data-lucide="${ic}"></i>${t}<small style="font-size:11px;color:var(--muted);font-weight:500">${s}</small></button>`).join("")}</div>
@@ -1700,8 +1893,8 @@ function vAgenda(){
     <div class="days">${days.map((d,i)=>`<button class="day" aria-pressed="${AG.day===i}" data-d="${i}"><small>${d.toLocaleDateString("pt-BR",{weekday:"short"}).replace(".","")}</small><b>${d.getDate()}</b></button>`).join("")}</div>
     <p style="font-weight:700;margin:18px 0 10px">Horário <span style="color:var(--muted);font-weight:500">(${S.profile.period.toLowerCase()})</span></p>
     <div class="slots">${slots.map(s=>`<button class="slot" aria-pressed="${AG.slot===s}" data-s="${s}">${s}</button>`).join("")}</div>
-    ${PRESENCIAL(AG.type)&&kycOf("me").status!=="verificado"?`<div class="alert warn"><i data-lucide="shield-alert"></i><span>Encontros presenciais precisam da sua identidade verificada. <a href="#/app/verificacao" style="color:inherit;font-weight:700">Verificar agora</a>${TEST_MODE?`<br>${testTag()}`:""}</span></div>`:""}
-    <button class="btn btn-primary" id="book" style="width:100%;margin-top:18px" ${AG.slot&&(TEST_MODE||!(PRESENCIAL(AG.type)&&kycOf("me").status!=="verificado"))?"":"disabled"}><i data-lucide="calendar-check"></i>Confirmar agendamento</button>
+    ${PRESENCIAL(AG.type)&&kycOf(ME).status!=="verificado"?`<div class="alert warn"><i data-lucide="shield-alert"></i><span>Encontros presenciais precisam da sua identidade verificada. <a href="#/app/verificacao" style="color:inherit;font-weight:700">Verificar agora</a>${TEST_MODE?`<br>${testTag()}`:""}</span></div>`:""}
+    <button class="btn btn-primary" id="book" style="width:100%;margin-top:18px" ${AG.slot&&(TEST_MODE||!(PRESENCIAL(AG.type)&&kycOf(ME).status!=="verificado"))?"":"disabled"}><i data-lucide="calendar-check"></i>Confirmar agendamento</button>
   </div>
   ${demoBox()}`;
   document.querySelectorAll("[data-type]").forEach(b=>b.onclick=()=>{AG.type=b.dataset.type;vAgenda();icons()});
@@ -1727,8 +1920,8 @@ function vChat(){
   </div>`;
   const box=$("#msgs");box.scrollTop=box.scrollHeight;
   if(window._chd){$("#ci").value=window._chd;window._chd=""}
-  const send=t=>{if(!t.trim())return;offCheck(t.trim(),"cliente","me",S.pid||"p1",()=>{window._chd="";doSend(t)},d=>{window._chd=d})};
-  const doSend=t=>{S.messages.push({from:"me",text:t.trim(),t:nowT()});save();vChat();icons();setTimeout(()=>{S.messages.push({from:"them",text:reply(t),t:nowT()});if(S.level===1&&!S.talked&&S.bookings.length){S.talked=true;autoRx();S.messages.push({from:"them",text:"Adorei nossa primeira conversa! Seu plano está pronto. Quando se sentir à vontade, é só tocar em \"subir de nível\" no Início. 💛",t:nowT()})}save();if(location.hash.startsWith("#/app/mensagens")){vChat();icons()}},1200)};
+  const send=t=>{if(!t.trim())return;offCheck(t.trim(),"cliente",ME,myP().id,()=>{window._chd="";doSend(t)},d=>{window._chd=d})};
+  const doSend=t=>{S.messages.push({from:"me",text:t.trim(),t:nowT(),at:Date.now()});save();vChat();icons();if(!FB)setTimeout(()=>{S.messages.push({from:"them",text:reply(t),t:nowT()});if(S.level===1&&!S.talked&&S.bookings.length){S.talked=true;autoRx();S.messages.push({from:"them",text:"Adorei nossa primeira conversa! Seu plano está pronto. Quando se sentir à vontade, é só tocar em \"subir de nível\" no Início. 💛",t:nowT()})}save();if(location.hash.startsWith("#/app/mensagens")){vChat();icons()}},1200)};
   $("#cf").onsubmit=e=>{e.preventDefault();send($("#ci").value)};
   document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>send(b.dataset.q));
 }
@@ -1755,7 +1948,7 @@ function vPerfil(){
   <div class="block"><div class="block-h"><h3>Como você tem se sentido</h3></div>${feelHist()}</div>
   <div class="block"><div class="block-h"><h3>Pagamentos</h3></div>${myBills()}</div>
   <div class="block"><div class="block-h"><h3>Segurança</h3></div><div class="tasks">
-    <a class="task" href="#/app/verificacao" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="shield-check"></i></span><span><b>Verificação de identidade</b><small>${KYC_PILL[kycOf("me").status][2]}</small></span><i class="go" data-lucide="chevron-right"></i></a>
+    <a class="task" href="#/app/verificacao" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="shield-check"></i></span><span><b>Verificação de identidade</b><small>${KYC_PILL[kycOf(ME).status][2]}</small></span><i class="go" data-lucide="chevron-right"></i></a>
     ${rateCard()}
     <a class="task" href="#/app/dados" style="text-decoration:none;color:inherit"><span class="ti"><i data-lucide="id-card"></i></span><span><b>Meus dados e contrato</b><small>Dados pessoais, plano, documentos e privacidade</small></span><i class="go" data-lucide="chevron-right"></i></a>
     <button class="task" id="myterms" style="text-align:left"><span class="ti"><i data-lucide="file-text"></i></span><span><b>Termos de uso</b><small>Aulas e pagamentos sempre pelo app</small></span><i class="go" data-lucide="chevron-right"></i></button>
@@ -1767,7 +1960,7 @@ function vPerfil(){
   <div class="block" style="display:grid;gap:10px">
     <a class="btn btn-ghost" href="#/"><i data-lucide="globe"></i>Ver o site</a>
     <button class="btn btn-ghost" id="logout"><i data-lucide="log-out"></i>Sair da conta</button>
-    <button class="btn btn-ghost" id="reset" style="color:var(--red)"><i data-lucide="rotate-ccw"></i>Recomeçar do zero</button>
+    ${FB?"":`<button class="btn btn-ghost" id="reset" style="color:var(--red)"><i data-lucide="rotate-ccw"></i>Recomeçar do zero</button>`}
   </div>
   <p class="note"><i data-lucide="heart"></i>Se estiver passando por um momento difícil, o CVV atende 24 horas pelo 188.</p>`;
   $("#tg-theme").onclick=toggleTheme;
@@ -1776,13 +1969,13 @@ function vPerfil(){
   document.querySelectorAll("[data-mypay]").forEach(b=>b.onclick=()=>openCheckout(b.dataset.mypay));
   const rt=$("#rate");if(rt)rt.onclick=openRating;
   $("#tg-sound").onclick=()=>{S.sound=!S.sound;save();if(S.sound)beep(880);vPerfil();icons()};
-  $("#logout").onclick=()=>{S.loggedOut=true;save();toast("Você saiu. Até logo!");location.hash="#/"};
-  $("#reset").onclick=()=>sheet("rotate-ccw","Recomeçar do zero?","Isso apaga suas respostas, treinos, agendamentos e conversas deste aparelho. Não dá para desfazer.","Apagar e recomeçar",{danger:true,cancel:"Manter meu progresso",onOk:()=>{S=fresh();save();OB={step:0,name:"",goals:[],barriers:[],days:[],period:"",contact:"",parq:Array(PARQ.length).fill(null),notes:""};location.hash="#/"}});
+  $("#logout").onclick=()=>{if(FB){FBL.logout();return}S.loggedOut=true;save();toast("Você saiu. Até logo!");location.hash="#/"};
+  if($("#reset"))$("#reset").onclick=()=>sheet("rotate-ccw","Recomeçar do zero?","Isso apaga suas respostas, treinos, agendamentos e conversas deste aparelho. Não dá para desfazer.","Apagar e recomeçar",{danger:true,cancel:"Manter meu progresso",onOk:()=>{S=fresh();save();OB={step:0,name:"",goals:[],barriers:[],days:[],period:"",contact:"",parq:Array(PARQ.length).fill(null),notes:""};location.hash="#/"}});
 }
-function myBills(){const all=bills().filter(b=>b.cid==="me").reverse();
+function myBills(){const all=bills().filter(b=>b.cid===ME).reverse();
   if(!all.length)return`<div class="empty">Nenhuma cobrança ainda.</div>`;
   const open=all.filter(b=>!b.paid),bl=open.length?open:all.slice(0,1),rest=all.filter(b=>!bl.includes(b));
-  const row=b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><i data-lucide="receipt"></i><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}<br><small style="margin:0">Nível ${b.lv} · vence dia 10</small></span><small style="display:flex;gap:8px;align-items:center">${b.paid?pill(k,ic,t):b.lv===1&&!S.talked&&!TEST_MODE?`<span style="color:var(--muted);font-size:12.5px;text-align:right">Libera depois da conversa grátis</span>`:`${pill(k,ic,t)}<button class="btn btn-primary btn-sm" data-mypay="${b.key}">Pagar</button>`}</small></div>`};
+  const row=b=>{const[k,ic,t]=BILL_PILL[b.status];return`<div><i data-lucide="receipt"></i><span><b>${mlabel(b.m,1)}</b> · ${money(b.amount)}<br><small style="margin:0">Nível ${b.lv} · vence dia 10</small></span><small style="display:flex;gap:8px;align-items:center">${b.paid||b.status==="informado"?pill(k,ic,t):b.lv===1&&!S.talked&&!TEST_MODE?`<span style="color:var(--muted);font-size:12.5px;text-align:right">Libera depois da conversa grátis</span>`:`${pill(k,ic,t)}<button class="btn btn-primary btn-sm" data-mypay="${b.key}">Pagar</button>`}</small></div>`};
   return`<div class="hist">${bl.map(row).join("")}</div>${rest.length?`<details class="fold" style="margin-top:10px"><summary><span class="fs" style="margin:0">Ver histórico (${rest.length})</span><i data-lucide="chevron-down"></i></summary><div class="hist">${rest.map(row).join("")}</div></details>`:""}
   <p class="note" style="margin-top:10px"><i data-lucide="${METHODS[S.payMethod||"pix"].ic}"></i>Forma preferida: ${METHODS[S.payMethod||"pix"].l}${S.autopay?" · cobrança automática ligada":""}. Pagamentos ilustrativos por enquanto.</p>`}
 function weeksChart(){const w0=sod()-((new Date().getDay()+6)%7)*D1,data=[];
@@ -1798,13 +1991,13 @@ function feelHist(){
 
 /* demo controls (simulate what the personal does) */
 function demoBox(){
-  const b=[];
+  if(FB)return"";const b=[];
   if(S.level===1&&S.bookings.length&&!S.talked)b.push(["talk","Marcar conversa como realizada"]);
   if(S.level===3)b.push(["outdoor","Registrar encontro ao ar livre"]);
   if(S.level===4)b.push(["gym","Registrar aula na academia"]);
   if(S.level===2&&S.workouts.length<8)b.push(["wk","Adicionar treino feito"]);
   if(TEST_MODE&&S.level<4)b.push(["lvup",`Ir para o nível ${S.level+1} (teste)`]);
-  if(TEST_MODE&&kycOf("me").status!=="verificado")b.push(["kyc","Marcar identidade como verificada (teste)"]);
+  if(TEST_MODE&&kycOf(ME).status!=="verificado")b.push(["kyc","Marcar identidade como verificada (teste)"]);
   if(!b.length)return"";
   return `<div class="demo"><span><b>Modo demonstração.</b> No app real, estas etapas são confirmadas pelo personal.</span><div class="row">${b.map(([k,t])=>`<button data-demo="${k}">${t}</button>`).join("")}</div></div>`;
 }
@@ -1874,28 +2067,30 @@ function seedDB(){
   return seedInfo(seedTerms(seedSafety(seedPay(seedFin(db)))));
 }
 let DB=loadDB();
-function loadDB(){try{const r=localStorage.getItem(DBKEY);if(r)return JSON.parse(r)}catch(e){}return seedDB()}
-function saveDB(){try{localStorage.setItem(DBKEY,JSON.stringify(DB))}catch(e){}}
+function loadDB(){if(FB)return emptyDB();try{const r=localStorage.getItem(DBKEY);if(r)return JSON.parse(r)}catch(e){}return seedDB()}
+function saveDB(){if(FB){FBL.saveDB();return}try{localStorage.setItem(DBKEY,JSON.stringify(DB))}catch(e){}}
 function syncPrices(){LEVELS.forEach((l,i)=>{const v=DB.prices[i];l.price=money(v);l.per=i===0?"pagamento único":i===1?"por mês":`por mês · ${money(v/8)}/aula`})}
 syncPrices();
 
 /* o cliente deste aparelho visto pelos painéis */
-function meC(){if(!S.profile)return null;const p=S.profile;
-  return{id:"me",you:true,uf:p.uf||"SP",city:p.city||"",name:p.name,level:S.level,pid:S.pid||"p1",since:p.since,goals:p.goals,barriers:p.barriers,contact:p.contact,period:p.period,days:p.days,
-    medical:p.medical,medOk:!!p.medOk,workouts:S.workouts,talked:S.talked,outdoor:S.outdoor,gym:S.gymsessions,status:S.status||"ativo",msgs:S.messages,phone:"este aparelho"}}
-const allClients=()=>DB.clients.concat(S.profile?[meC()]:[]);
+/* cada aluno (o deste aparelho ou os carregados do banco) visto como cliente pelos painéis */
+function toC(id){const a=A(id);if(!a||!a.profile)return null;const p=a.profile;
+  return{id,you:id===ME,uf:p.uf||(FB?"":"SP"),city:p.city||"",name:p.name,level:a.level,pid:a.pid||(FB?null:"p1"),since:p.since,goals:p.goals||[],barriers:p.barriers||[],contact:p.contact||"Só mensagem",period:p.period||"Manhã",days:p.days||[],
+    medical:!!p.medical,medOk:!!p.medOk,workouts:a.workouts||[],talked:!!a.talked,outdoor:a.outdoor||0,gym:a.gymsessions||0,status:a.status||"ativo",msgs:a.messages||[],phone:FB?((a.info||{}).tel||"—"):"este aparelho"}}
+const meC=()=>toC(ME);
+const allClients=()=>DB.clients.concat(alIds().map(toC).filter(Boolean));
 const findC=id=>allClients().find(c=>c.id===id);
 const findP=id=>DB.personals.find(p=>p.id===id);
-function bookingsAll(){return DB.bookings.concat(S.profile?S.bookings.map(b=>({id:"me-"+b.ts,cid:"me",pid:S.pid||"p1",ts:b.ts,type:b.type,mode:b.mode,status:b.done?"feito":"agendado"})):[])}
+function bookingsAll(){return DB.bookings.concat(alIds().flatMap(id=>{const a=A(id);return(a.bookings||[]).map(b=>({id:id+"-"+b.ts,cid:id,pid:a.pid||(FB?null:"p1"),ts:b.ts,type:b.type,mode:b.mode,status:b.done?"feito":"agendado"}))}))}
 function updC(id,patch){
-  if(id==="me"){const map={level:"level",talked:"talked",outdoor:"outdoor",gym:"gymsessions",status:"status",pid:"pid"};
-    for(const k in patch){if(k==="medOk")S.profile.medOk=patch[k];else S[map[k]||k]=patch[k]}if(patch.talked)autoRx();save()}
+  const a=A(id);if(a){const map={level:"level",talked:"talked",outdoor:"outdoor",gym:"gymsessions",status:"status",pid:"pid"};
+    for(const k in patch){if(k==="medOk")a.profile.medOk=patch[k];else a[map[k]||k]=patch[k]}if(patch.talked)autoRx(a);saveA(id)}
   else{Object.assign(DB.clients.find(c=>c.id===id),patch);saveDB()}}
 function pushMsg(id,text){const m={from:"them",text,t:nowT(),at:Date.now()};
-  if(id==="me"){S.messages.push(m);S.unread++;save()}else{DB.clients.find(c=>c.id===id).msgs.push(m);saveDB()}}
-function autoRx(){if(S.rx&&S.rx.length)return;const dor=(S.profile.barriers||[]).some(b=>/Dor|energia/.test(b));
-  S.rx=(dor?["resp","sentar","lateral","perna","remada"]:["resp","marcha","sentar","parede","ponte"]).map(id=>({id,dose:exById(id).dose,note:id==="resp"?"Comece sempre por este.":"",at:Date.now()}));
-  S.messages.push({from:"them",text:"Montei sua primeira lista de exercícios, com demonstração de cada um. Está em Treinos → Indicados. 💪",t:nowT()});S.unread++}
+  const a=A(id);if(a){(a.messages=a.messages||[]).push(m);a.unread=(a.unread||0)+1;saveA(id)}else{DB.clients.find(c=>c.id===id).msgs.push(m);saveDB()}}
+function autoRx(a=S){if(FB||(a.rx&&a.rx.length))return;const dor=(a.profile.barriers||[]).some(b=>/Dor|energia/.test(b));
+  a.rx=(dor?["resp","sentar","lateral","perna","remada"]:["resp","marcha","sentar","parede","ponte"]).map(id=>({id,dose:exById(id).dose,note:id==="resp"?"Comece sempre por este.":"",at:Date.now()}));
+  a.messages.push({from:"them",text:"Montei sua primeira lista de exercícios, com demonstração de cada um. Está em Treinos → Indicados. 💪",t:nowT()});a.unread++}
 function lastAct(c){const w=c.workouts[c.workouts.length-1];return w?w.at:c.since}
 const lastMsg=c=>c.msgs[c.msgs.length-1];
 const needsReply=c=>{const m=lastMsg(c);return !!m&&m.from==="me"};
@@ -1916,12 +2111,12 @@ function alertsFor(c){const a=[];if(c.status==="pausado")return a;
 /* mensalidades: nível 1 é pago uma vez; depois, uma por mês pelo nível em que o aluno estava */
 function billsOf(db,list){const out=[],ms=monthsBack(6),cur=mkey(Date.now());
   list.forEach(c=>ms.forEach((m,idx)=>{const sm=mkey(c.since);if(m<sm)return;if(c.status==="pausado"&&m===cur)return;
-    const ago=5-idx;let lv=c.id==="me"?c.level:Math.max(1,c.level-Math.floor(ago/2));
+    const ago=5-idx;let lv=A(c.id)?c.level:Math.max(1,c.level-Math.floor(ago/2));
     if(lv===1&&m!==sm){if(c.level===1)return;lv=2}
     out.push({key:c.id+"|"+m,cid:c.id,pid:c.pid,m,lv,amount:db.prices[lv-1]})}));return out}
 function bills(){const cur=mkey(Date.now()),late=new Date().getDate()>10;
-  return billsOf(DB,allClients()).map(b=>{const paid=!!DB.paid[b.key];return{...b,paid,status:paid?"pago":b.m<cur||late?"atrasado":"pendente"}})}
-const BILL_PILL={pago:["ok","circle-check","Pago"],pendente:["mute","clock","Pendente"],atrasado:["bad","circle-alert","Atrasado"]};
+  return billsOf(DB,allClients()).map(b=>{const paid=!!DB.paid[b.key];return{...b,paid,status:paid?"pago":(DB.informed||{})[b.key]?"informado":b.m<cur||late?"atrasado":"pendente"}})}
+const BILL_PILL={informado:["info","hourglass","Pagamento informado"],pago:["ok","circle-check","Pago"],pendente:["mute","clock","Pendente"],atrasado:["bad","circle-alert","Atrasado"]};
 
 /* ================== PEÇAS DE INTERFACE ================== */
 const pill=(k,ic,t)=>`<span class="pill ${k}">${ic?`<i data-lucide="${ic}"></i>`:""}${esc(t)}</span>`;
@@ -1951,14 +2146,33 @@ function setSess(x){SESS=x;try{localStorage.setItem(SKEY,JSON.stringify(x))}catc
 /* acesso de teste: o login real (senha com hash, recuperação por e-mail) vem com o servidor */
 const TEST_PASS="teste123",ADMIN_EMAIL="admin@primeiropasso.com.br";
 function mailOf(n){return n.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().split(" ").filter(Boolean).slice(0,2).join(".")+"@primeiropasso.com.br"}
-DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
+if(!FB)DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
 function login(){
-  DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
+  if(!FB)DB.personals.forEach(p=>{if(!p.email)p.email=mailOf(p.name)});
   const has=!!S.profile,who=(location.hash.split("/")[2]||"");
-  const R={aluno:{ic:"footprints",t:"Entrar como aluno",d:"Seu caminho, treinos, agenda e conversa com a sua personal.",u:"E-mail",um:"email"},personal:{ic:"dumbbell",t:"Entrar como personal",d:"Seus alunos, alertas do dia, agenda, mensagens e ganhos.",u:"E-mail ou CREF",um:"email"},
+  const R={aluno:{ic:"footprints",t:"Entrar como aluno",d:"Seu caminho, treinos, agenda e conversa com a sua personal.",u:"E-mail",um:"email"},personal:{ic:"dumbbell",t:"Entrar como personal",d:"Seus alunos, alertas do dia, agenda, mensagens e ganhos.",u:FB?"E-mail":"E-mail ou CREF",um:"email"},
            empresa:{ic:"building-2",t:"Entrar como empresa",d:"Visão geral, clientes, personais, financeiro, segurança e preços.",u:"E-mail",um:"email"}}[who];
   const top=`<header class="topbar"><div class="wrap"><a class="brand" href="#/"><span class="mk"><i data-lucide="footprints"></i></span><span>Primeiro Passo</span></a>
     <a class="btn btn-ghost" href="#/" style="margin-left:auto" aria-label="Voltar ao site"><i data-lucide="arrow-left"></i><span class="dm">Voltar ao site</span></a><button class="rbtn" id="theme" aria-label="Alternar tema claro e escuro"><i data-lucide="${themeIcon()}"></i></button></div></header>`;
+  if(who==="nova-personal"&&FB){
+    $("#root").innerHTML=`${top}<main class="login-main lg-center"><form class="lg-card" id="npf" novalidate>
+      <span class="ri"><i data-lucide="dumbbell"></i></span><h1>Criar conta de personal</h1><p class="lg-lead">Depois do cadastro, a empresa confere seu CREF e libera o seu painel.</p>
+      <div class="field lg-f"><label for="npn">Nome completo</label><input id="npn" autocomplete="name"></div>
+      <div class="field lg-f"><label for="npc">Número do CREF</label><input id="npc" placeholder="000000-G/SP"></div>
+      <div class="uf-row lg-f"><div class="field" style="margin:0"><label for="npu">Estado</label>${ufSelect("npu","")}</div><div class="field" style="margin:0"><label for="npa">Cidade</label><input id="npa" autocomplete="address-level2"></div></div>
+      <div class="field lg-f"><label for="npt">Celular</label><input id="npt" type="tel" autocomplete="tel"></div>
+      <div class="field lg-f"><label for="npe">E-mail</label><input id="npe" type="email" autocomplete="email" inputmode="email"></div>
+      <div class="field lg-f"><label for="npw">Senha</label><input id="npw" type="password" autocomplete="new-password" placeholder="Pelo menos 6 caracteres"></div>
+      <small class="err" id="npx" role="alert"></small>
+      <button class="btn btn-primary">Enviar cadastro<i data-lucide="arrow-right"></i></button>
+    </form><a class="lg-back" href="#/entrar/personal"><i data-lucide="arrow-left"></i>Já tenho conta</a></main>`;
+    $("#theme").onclick=toggleTheme;icons();
+    $("#npf").onsubmit=e=>{e.preventDefault();const f={name:$("#npn").value.trim(),cref:$("#npc").value.trim(),uf:$("#npu").value,city:$("#npa").value.trim(),tel:$("#npt").value.trim(),email:$("#npe").value.trim().toLowerCase(),pw:$("#npw").value};
+      const miss=[f.name.length<3&&"nome",f.cref.length<4&&"CREF",!f.uf&&"estado",f.city.length<2&&"cidade",!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)&&"e-mail",f.pw.length<6&&"senha com 6 caracteres"].filter(Boolean);
+      if(miss.length){$("#npx").textContent="Falta: "+miss.join(", ")+".";return}
+      const bt=$("#npf button.btn-primary");bt.disabled=true;$("#npx").textContent="";
+      FBL.signupPersonal(f).then(()=>sheet("badge-check","Cadastro enviado","A empresa vai conferir seu CREF. Quando for aprovado, você entra com este e-mail e senha em Entrar → Personal.","Entendi",{onOk:()=>{location.hash="#/entrar/personal"}})).catch(x=>{bt.disabled=false;$("#npx").textContent=x.msg})};
+    return}
   if(!R){
     $("#root").innerHTML=`${top}<main class="login-main lg-center">
       <span class="kicker">Área de acesso</span><h1>Que bom ter você aqui.</h1><p class="lg-lead">Escolha como você faz parte do Primeiro Passo.</p>
@@ -1967,7 +2181,7 @@ function login(){
         <div class="role"><span class="ri"><i data-lucide="dumbbell"></i></span><h2>Sou personal</h2><p>Seus alunos, alertas do dia, agenda, mensagens e seus ganhos.</p><a class="btn btn-primary" href="#/entrar/personal">Entrar no painel<i data-lucide="arrow-right"></i></a></div>
         <div class="role"><span class="ri"><i data-lucide="building-2"></i></span><h2>Sou da empresa</h2><p>Gestão completa: clientes, personais, financeiro e segurança.</p><a class="btn btn-primary" href="#/entrar/empresa">Entrar no painel<i data-lucide="arrow-right"></i></a></div>
       </div>
-      <p class="lg-note"><i data-lucide="info"></i>Versão de demonstração: os dados ficam salvos só neste navegador.</p>
+      ${FB?"":`<p class="lg-note"><i data-lucide="info"></i>Versão de demonstração: os dados ficam salvos só neste navegador.</p>`}
     </main>`;
     $("#theme").onclick=toggleTheme;icons();return}
   $("#root").innerHTML=`${top}<main class="login-main lg-center">
@@ -1979,7 +2193,8 @@ function login(){
       <button class="btn btn-primary">Entrar<i data-lucide="arrow-right"></i></button>
       <a href="#" data-forgot class="lg-forgot">Esqueci minha senha</a>
       ${who==="aluno"?`<p class="lg-new">Ainda não tem conta? <a href="#/comecar">Criar meu plano</a></p>`:""}
-      ${TEST_MODE?`<div class="lg-testbox"><button type="button" class="lg-test" id="lgt"><i data-lucide="flask-conical"></i>Usar conta de teste</button><small>O login de verdade, com senha protegida e recuperação por e-mail, entra junto com o servidor.</small></div>`:""}
+      ${who==="personal"&&FB?`<p class="lg-new">Ainda não tem conta? <a href="#/entrar/nova-personal">Criar conta de personal</a></p>`:""}
+      ${TEST_MODE&&!FB?`<div class="lg-testbox"><button type="button" class="lg-test" id="lgt"><i data-lucide="flask-conical"></i>Usar conta de teste</button><small>O login de verdade, com senha protegida e recuperação por e-mail, entra junto com o servidor.</small></div>`:""}
     </form>
     <a class="lg-back" href="#/entrar"><i data-lucide="arrow-left"></i>Escolher outro acesso</a>
   </main>`;
@@ -1987,6 +2202,7 @@ function login(){
   const norm=v=>String(v).trim().toLowerCase(),dig=v=>String(v).replace(/\D/g,""),err=t=>{$("#lge").textContent=t};
   $("#lgf").onsubmit=e=>{e.preventDefault();const u=norm($("#lgu").value),w=$("#lgw").value;
     if(!u||!w)return err(`Preencha ${R.u.toLowerCase()} e senha.`);
+    if(FB){const bt=$("#lgf button.btn-primary");bt.disabled=true;err("");FBL.login(u,w,who).then(()=>{location.hash=who==="aluno"?"#/app":who==="empresa"?"#/admin":"#/personal";route(true)}).catch(x=>{bt.disabled=false;err(x.msg)});return}
     if(who==="aluno"){if(!S.profile||!S.account)return err("Não encontramos uma conta com esse e-mail neste aparelho. Nesta versão de teste, a conta fica salva no navegador onde foi criada.");
       hashPw(w).then(h=>{if(u!==S.account.email||h!==S.account.h)return err("E-mail ou senha incorretos.");S.loggedOut=false;save();location.hash="#/app"});return}
     if(who==="empresa"){if(u!==ADMIN_EMAIL||w!==TEST_PASS)return err("E-mail ou senha incorretos.");setSess({role:"admin"});location.hash="#/admin";return}
@@ -2001,9 +2217,9 @@ function login(){
       S.messages=[{from:"them",text:"Oi, Ana! Que bom ter você aqui. 💛",t:"09:00"},{from:"me",text:"Oi! Estou gostando dos treinos.",t:"09:10"}];autoRx();save()}
     $("#lgu").value=S.account.email;$("#lgw").value=TEST_PASS;if(!S.account.demo){err("Conta de teste indisponível: há uma conta criada neste aparelho. Use o seu e-mail e senha.");return}$("#lgf").requestSubmit()};
   else if(t)t.onclick=()=>{$("#lgu").value=who==="empresa"?ADMIN_EMAIL:DB.personals.find(x=>x.status==="ativo").email;$("#lgw").value=TEST_PASS;$("#lgf").requestSubmit()};
-  document.querySelectorAll("[data-forgot]").forEach(a=>a.onclick=e=>{e.preventDefault();toast("Na versão final, enviamos um link de recuperação para o seu e-mail.")});
+  document.querySelectorAll("[data-forgot]").forEach(a=>a.onclick=e=>{e.preventDefault();if(FB){const u=norm($("#lgu").value);if(!/@/.test(u)){err("Escreva seu e-mail no campo acima e toque de novo em “Esqueci minha senha”.");return}FBL.reset(u).then(()=>toast("Enviamos um link para criar uma nova senha. Confira seu e-mail.")).catch(x=>err(FBL.err(x)));return}toast("Na versão final, enviamos um link de recuperação para o seu e-mail.")});
 }
-function logout(){setSess({});location.hash="#/entrar"}
+function logout(){if(FB){FBL.logout();return}setSess({});location.hash="#/entrar"}
 
 /* ================== MOLDURA DOS PAINÉIS ================== */
 function shell({role,tabs,tab,base,me,title,kick,acts=""}){
@@ -2078,10 +2294,10 @@ function openClient(id,role){
 }
 /* muda o estado de um agendamento; skipCount evita contar duas vezes quando a ficha já contou */
 function setBk(b,status,skipCount){
-  if(b.cid==="me"){const x=S.bookings.find(y=>"me-"+y.ts===b.id);if(!x)return;
-    if(status==="cancelado"){S.bookings=S.bookings.filter(y=>y!==x);S.messages.push({from:"them",text:`Precisei cancelar nosso horário de ${dlabel(b.ts).toLowerCase()} às ${hm(b.ts)}. Vamos remarcar? 🙏`,t:nowT()});S.unread++}
-    else{x.done=true;if(!skipCount){if(b.type==="Ao ar livre")S.outdoor++;if(b.type==="Academia")S.gymsessions++}if(b.type==="Primeira conversa")S.talked=true}
-    save();return}
+  const a=A(b.cid);if(a){const x=(a.bookings||[]).find(y=>b.cid+"-"+y.ts===b.id);if(!x)return;
+    if(status==="cancelado"){a.bookings=a.bookings.filter(y=>y!==x);a.messages.push({from:"them",text:`Precisei cancelar nosso horário de ${dlabel(b.ts).toLowerCase()} às ${hm(b.ts)}. Vamos remarcar? 🙏`,t:nowT()});a.unread++}
+    else{x.done=true;if(!skipCount){if(b.type==="Ao ar livre")a.outdoor++;if(b.type==="Academia")a.gymsessions++}if(b.type==="Primeira conversa")a.talked=true}
+    saveA(b.cid);return}
   const x=DB.bookings.find(y=>y.id===b.id);x.status=status;
   if(status==="feito"&&!skipCount){const c=DB.clients.find(y=>y.id===b.cid);if(c){if(b.type==="Ao ar livre")c.outdoor++;if(b.type==="Academia")c.gym++;if(b.type==="Primeira conversa")c.talked=true}}
   saveDB()}
@@ -2147,7 +2363,7 @@ function bindBookingForm(pid,after){$("#nbk").onsubmit=e=>{e.preventDefault();co
   if(PRESENCIAL(type)&&kycOf(cid).status!=="verificado"){if(!TEST_MODE){toast("Encontro presencial só com a identidade do aluno verificada");return}toast("Aviso: identidade do aluno não verificada (obrigatório, liberado no teste)")}
   const[y,mo,da]=$("#nbd").value.split("-"),[h,mi]=$("#nbh").value.split(":");
   const ts=new Date(+y,+mo-1,+da,+h,+mi).getTime(),mode=type==="Ao ar livre"?"presencial":type==="Academia"?"na academia":"online";
-  if(cid==="me"){S.bookings.push({ts,time:$("#nbh").value,type,mode:mode==="online"?S.profile.contact.toLowerCase():mode,done:false})}else DB.bookings.push({id:"b"+Date.now(),cid,pid,ts,type,mode,status:"agendado"});
+  const ab=A(cid);if(ab){(ab.bookings=ab.bookings||[]).push({ts,time:$("#nbh").value,type,mode:mode==="online"?ab.profile.contact.toLowerCase():mode,done:false});saveA(cid)}else DB.bookings.push({id:"b"+Date.now(),cid,pid,ts,type,mode,status:"agendado"});
   pushMsg(cid,`Marquei nosso ${type.toLowerCase()} para ${dlabel(ts).toLowerCase()} às ${hm(ts)}. Se não puder, é só me avisar. 😊`);saveDB();toast("Horário marcado e aluno avisado");after()}}
 function pAgenda(p,cs){
   const t0=sod(),all=bookingsAll().filter(b=>b.pid===p.id&&b.status!=="cancelado");
@@ -2161,7 +2377,7 @@ function pAgenda(p,cs){
   document.querySelectorAll("[data-ck]").forEach(x=>x.onclick=()=>{const b=bookingsAll().find(y=>y.id===x.dataset.ck),c=DB.checkins[b.id]=DB.checkins[b.id]||{};
     if(x.dataset.v==="in"){c.in=Date.now();saveDB();pushMsg(b.cid,`Cheguei! O código do nosso encontro é ${meetCode(b)}. Confira antes de abrir a porta. 🛡️`);toast("Check-in feito. A central foi avisada.")}
     else{c.out=Date.now();saveDB();setBk(b,"feito");toast("Encontro encerrado. Obrigada!")}route(true)});
-  document.querySelectorAll("[data-bk]").forEach(x=>x.onclick=()=>{const b=bookingsAll().find(y=>y.id===x.dataset.bk);setBk(b,x.dataset.s);if(x.dataset.s==="cancelado"&&b.cid!=="me")pushMsg(b.cid,`Precisei cancelar nosso horário de ${dlabel(b.ts).toLowerCase()}. Vamos remarcar? 🙏`);toast(x.dataset.s==="feito"?"Encontro concluído":"Horário cancelado e aluno avisado");route(true)});
+  document.querySelectorAll("[data-bk]").forEach(x=>x.onclick=()=>{const b=bookingsAll().find(y=>y.id===x.dataset.bk);setBk(b,x.dataset.s);if(x.dataset.s==="cancelado"&&!A(b.cid))pushMsg(b.cid,`Precisei cancelar nosso horário de ${dlabel(b.ts).toLowerCase()}. Vamos remarcar? 🙏`);toast(x.dataset.s==="feito"?"Encontro concluído":"Horário cancelado e aluno avisado");route(true)});
   bindBookingForm(p.id,()=>route(true));
 }
 const TEMPLATES=["Como você está hoje?","Lembrete: nosso horário é amanhã.","Liberei um treino novo para você.","Tudo bem pular hoje. Amanhã a gente retoma. 💛"];
@@ -2185,7 +2401,7 @@ function pMsgs(p,cs){
   if(PM.draft){$("#pci").value=PM.draft;PM.draft=""}
   const send=t=>{if(!t.trim())return;offCheck(t.trim(),"personal",c.id,c.pid,()=>{PM.draft="";doSend(t)},d=>{PM.draft=d})};
   const doSend=t=>{pushMsg(c.id,t.trim());route(true);
-    if(!c.you)setTimeout(()=>{const x=DB.clients.find(y=>y.id===c.id);if(!x)return;x.msgs.push({from:"me",text:["Obrigado! 😊","Combinado!","Vou tentar hoje à noite.","Valeu pelo cuidado 💛"][x.msgs.length%4],t:nowT(),at:Date.now()});saveDB();if(location.hash.includes("personal/mensagens")&&!document.querySelector(".drawer"))route(true)},1800)};
+    if(!FB&&!c.you)setTimeout(()=>{const x=DB.clients.find(y=>y.id===c.id);if(!x)return;x.msgs.push({from:"me",text:["Obrigado! 😊","Combinado!","Vou tentar hoje à noite.","Valeu pelo cuidado 💛"][x.msgs.length%4],t:nowT(),at:Date.now()});saveDB();if(location.hash.includes("personal/mensagens")&&!document.querySelector(".drawer"))route(true)},1800)};
   $("#pcf").onsubmit=e=>{e.preventDefault();send($("#pci").value)};
   document.querySelectorAll("[data-tq]").forEach(b=>b.onclick=()=>send(b.dataset.tq));
   if(wide)$("#pci").focus({preventScroll:true});
@@ -2244,7 +2460,7 @@ function aPersonais(bl){
       <div class="acts pc-foot"><button class="btn btn-ghost btn-sm" data-pfi="${p.id}"><i data-lucide="id-card"></i>Ficha completa</button><button class="btn btn-ghost btn-sm" data-asp="${p.id}"><i data-lucide="log-in"></i>Ver o painel dela</button><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="inativo"><i data-lucide="pause"></i>Desativar</button></div>`
       :p.status==="pendente"?`<div class="acts pc-foot"><button class="btn btn-primary btn-sm" data-pst="${p.id}" data-v="ativo"><i data-lucide="check"></i>Aprovar</button><button class="btn btn-ghost btn-sm" data-pdel="${p.id}"><i data-lucide="x"></i>Recusar</button></div>`
       :`<div class="acts pc-foot"><button class="btn btn-ghost btn-sm" data-pst="${p.id}" data-v="ativo"><i data-lucide="play"></i>Reativar</button></div>`}</article>`}).join("")}</div>
-  <form class="form mt" id="np" style="max-width:720px"><h3>Cadastrar personal</h3><div class="set">
+  ${FB?`<div class="info mt" style="max-width:720px"><i data-lucide="info"></i><span>Novas personais criam a própria conta em <b style="color:var(--ink)">Entrar → Personal → Criar conta de personal</b>. O cadastro aparece aqui como “Aguardando análise” para você aprovar.</span></div>`:""}<form class="form mt" id="np" style="max-width:720px" ${FB?"hidden":""}><h3>Cadastrar personal</h3><div class="set">
     <div class="field"><label for="npn">Nome</label><input id="npn" required placeholder="Nome completo"></div>
     <div class="field"><label for="npc">CREF</label><input id="npc" required placeholder="000000-G/SP"></div>
     <div class="field"><label for="npu">Estado</label>${ufSelect("npu","",true)}</div>
@@ -2272,6 +2488,7 @@ function aLeads(){
   document.querySelectorAll("[data-lf]").forEach(b=>b.onclick=()=>{LF=b.dataset.lf;route(true)});
   document.querySelectorAll("[data-ls]").forEach(b=>b.onclick=()=>{DB.leads.find(l=>l.id===b.dataset.ls).status=b.dataset.v;saveDB();toast(b.dataset.v==="arquivado"?"Arquivado":"Marcado como em contato");route(true)});
   document.querySelectorAll("[data-conv]").forEach(b=>b.onclick=()=>{const l=DB.leads.find(x=>x.id===b.dataset.conv);l.status="convertido";
+    if(FB){saveDB();toast(l.type==="personal"?"Marcado. Peça para ela criar a conta em Entrar → Personal.":"Marcado como convertido. O cliente cria a conta em Começar.");route(true);return}
     if(l.type==="personal"){DB.personals.push({id:"p"+Date.now(),name:l.name,email:/@/.test(l.contact)?l.contact:mailOf(l.name),cref:l.cref||"CREF a confirmar",area:l.area||"A definir",bio:l.msg,spec:["A definir"],status:"pendente",cap:15,rating:null,since:Date.now()});toast("Enviado para análise em Personais")}
     else{const pid=DB.personals.find(p=>p.status==="ativo").id;DB.clients.push({id:"c"+Date.now(),name:l.name,level:1,pid,since:Date.now(),goals:["Me sentir melhor comigo"],barriers:["Não sei por onde começar"],contact:"Só mensagem",period:"Noite",days:["Seg","Qua"],medical:false,medOk:false,workouts:[],talked:false,outdoor:0,gym:0,status:"ativo",msgs:[{from:"me",text:l.msg,t:"",at:l.at}],phone:l.contact});toast("Cliente criado no nível 1")}
     saveDB();route(true)});
@@ -2289,10 +2506,10 @@ function aAjustes(){
     <div class="set">${Object.keys(METHODS).map(k=>`<div class="field" style="margin:0"><label class="chkline" style="margin:0"><input type="checkbox" data-mon="${k}" ${DB.methodsOn[k]?"checked":""}> ${METHODS[k].l}</label><input id="fee-${k}" data-fee="${k}" type="number" min="0" max="20" step="0.01" value="${DB.fees[k]}" inputmode="decimal" aria-label="Taxa ${METHODS[k].l}"><small style="color:var(--muted)">% de taxa · ${METHODS[k].sub.toLowerCase()}</small></div>`).join("")}</div>
     <div id="spprev" class="mt"></div>
     <button class="btn btn-primary mt"><i data-lucide="save"></i>Salvar preços e divisão</button></form>
-  <section class="card mt" style="max-width:760px"><div class="card-h"><h3>Dados de demonstração</h3></div><p style="color:var(--muted)">Volta os clientes, personais, agenda, pagamentos e contatos de exemplo ao estado inicial. O app do cliente deste aparelho não é apagado.</p><button class="btn btn-ghost mt" id="rs" style="color:var(--red)"><i data-lucide="rotate-ccw"></i>Restaurar dados de exemplo</button></section>
-  <div class="info mt" style="max-width:760px"><i data-lucide="server"></i><span><b style="color:var(--ink)">Para usar com clientes reais</b>, este site precisa de um servidor com login, banco de dados e pagamento online (por exemplo Pix). Hoje tudo fica salvo só no navegador de quem usa.</span></div>`;
+  <section class="card mt" style="max-width:760px" ${FB?"hidden":""}><div class="card-h"><h3>Dados de demonstração</h3></div><p style="color:var(--muted)">Volta os clientes, personais, agenda, pagamentos e contatos de exemplo ao estado inicial. O app do cliente deste aparelho não é apagado.</p><button class="btn btn-ghost mt" id="rs" style="color:var(--red)"><i data-lucide="rotate-ccw"></i>Restaurar dados de exemplo</button></section>
+  <div class="info mt" style="max-width:760px"><i data-lucide="server"></i><span>${FB?`<b style="color:var(--ink)">Login e dados no Firebase.</b> Contas, alunos, agenda, conversas e financeiro ficam guardados no banco e aparecem em qualquer aparelho. O pagamento online ainda não está ligado: a empresa confirma cada pagamento aqui.`:`<b style="color:var(--ink)">Para usar com clientes reais</b>, este site precisa de um servidor com login, banco de dados e pagamento online (por exemplo Pix). Hoje tudo fica salvo só no navegador de quem usa.`}</span></div>`;
   $("#pr").onsubmit=e=>{e.preventDefault();DB.prices=LEVELS.map((_,i)=>Math.max(0,Math.round(+$("#pr"+i).value||0)));DB.split=Math.min(100,Math.max(0,+$("#spl").value||0));DB.payoutDay=Math.min(28,Math.max(1,Math.round(+$("#pday").value||5)));DB.disc={1:0,3:Math.min(50,Math.max(0,+$("#d3").value||0)),6:Math.min(50,Math.max(0,+$("#d6").value||0))};document.querySelectorAll("[data-fee]").forEach(i=>{DB.fees[i.dataset.fee]=Math.min(20,Math.max(0,+i.value||0))});document.querySelectorAll("[data-mon]").forEach(i=>{DB.methodsOn[i.dataset.mon]=i.checked});if(!Object.values(DB.methodsOn).some(Boolean))DB.methodsOn.pix=true;document.querySelectorAll("[data-sp]").forEach(i=>{findP(i.dataset.sp).split=Math.min(100,Math.max(0,+i.value||0))});saveDB();syncPrices();toast("Preços e divisão salvos");route(true)};
-  const prev=()=>{const v=DB.prices[1],fe=(+$("#fee-pix").value||0)/100,x=DB.personals.find(p=>p.status==="ativo"),sp=(+$("#sp-"+x.id).value||0)/100;
+  const prev=()=>{const v=DB.prices[1],fe=(+$("#fee-pix").value||0)/100,x=DB.personals.find(p=>p.status==="ativo")||{id:"",name:"a personal"},sp=(+(($("#sp-"+x.id)||$("#spl")).value)||0)/100;
     $("#spprev").innerHTML=`<p class="week-note" style="margin:0 0 8px">Exemplo com a mensalidade do nível 2 (${money(v)}) de ${esc(x.name.split(" ")[0])}, paga via Pix:</p>${splitBar([{label:"Personal",v:v*sp,k:"k2"},{label:"Empresa",v:Math.max(0,v*(1-sp-fe)),k:"k1"},{label:"Taxa",v:v*fe,k:"k0"}])}`};
   document.querySelectorAll("#pr input").forEach(i=>i.addEventListener("input",prev));prev();
   $("#rs").onclick=()=>sheet("rotate-ccw","Restaurar dados de exemplo?","Todas as alterações feitas nos painéis serão perdidas.","Restaurar",{danger:true,cancel:"Cancelar",onOk:()=>{DB=seedDB();saveDB();syncPrices();FM=null;toast("Dados de exemplo restaurados");route(true)}});
@@ -2313,7 +2530,7 @@ function seedFin(db){db.payouts={};monthsBack(6).slice(0,4).forEach(m=>db.person
 if(!DB.payouts){seedFin(DB);saveDB()}
 
 /* barras empilhadas de duas séries, com legenda e total no último mês */
-function sbars(data,names,fmt=money){const W=560,H=230,pl=52,pr=8,pt=30,pb=28,iw=W-pl-pr,ih=H-pt-pb,max=niceMax(Math.max(...data.map(d=>d.a+d.b),1)),cw=iw/data.length,bw=Math.min(46,cw*.55),y=v=>pt+ih-(v/max)*ih;
+function sbars(data,names,fmt=money){const W=560,H=230,pl=52,pr=8,pt=30,pb=28,iw=W-pl-pr,ih=H-pt-pb,max=niceMax(Math.max(...data.map(d=>d.a+d.b),100)),cw=iw/data.length,bw=Math.min(46,cw*.55),y=v=>pt+ih-(v/max)*ih;
   const grid=[0,.5,1].map(f=>`<line class="gl" x1="${pl}" x2="${W-pr}" y1="${y(max*f)}" y2="${y(max*f)}"/><text class="ax" x="${pl-8}" y="${y(max*f)+4}" text-anchor="end">${fmt(max*f).replace("R$ ","")}</text>`).join("");
   const bars=data.map((d,i)=>{const x=pl+cw*i+(cw-bw)/2,ha=ih*d.a/max,hb=ih*d.b/max,gap=d.a&&d.b?2:0,top=y(d.a+d.b);
     return`<g><rect class="hit" x="${pl+cw*i}" y="${pt}" width="${cw}" height="${ih}" data-tip="${esc(d.label)}: ${esc(fmt(d.a+d.b))}"/>${ha?`<rect class="s1" x="${x}" y="${y(d.a)}" width="${bw}" height="${ha}" data-tip="${esc(d.label)} · ${names[0]}: ${esc(fmt(d.a))}"/>`:""}${hb?`<path class="s2" d="${rtop(x,top,bw,Math.max(0,hb-gap),4)}" data-tip="${esc(d.label)} · ${names[1]}: ${esc(fmt(d.b))}"/>`:""}<text class="ax" x="${x+bw/2}" y="${H-8}" text-anchor="middle">${esc(d.short)}</text>${i===data.length-1?`<text class="vl" x="${x+bw/2}" y="${top-8}" text-anchor="middle">${esc(fmt(d.a+d.b))}</text>`:""}</g>`}).join("");
@@ -2413,20 +2630,20 @@ function openCheckout(key){
       <div class="seg" style="grid-template-columns:repeat(${on.length},1fr)" role="group" aria-label="Forma de pagamento">${on.map(x=>`<button aria-pressed="${x===m}" data-pm="${x}"><i data-lucide="${METHODS[x].ic}"></i>${METHODS[x].l.replace(" de crédito","")}</button>`).join("")}</div>
       <div class="pay-b">${m==="pix"?`<div class="qr" aria-hidden="true">${fakeQR(code)}</div><p class="exhint" style="margin:0">Aponte a câmera do app do banco para o código, ou copie o Pix copia e cola.</p>
           <div class="copy"><code>${code.slice(0,38)}…</code><button class="btn btn-ghost btn-sm" data-cp="${code}"><i data-lucide="copy"></i>Copiar</button></div>
-          <button class="btn btn-primary" data-go><i data-lucide="check"></i>Simular pagamento aprovado</button>`
+          <button class="btn btn-primary" data-go><i data-lucide="check"></i>${FB?"Já fiz o Pix":"Simular pagamento aprovado"}</button>`
         :m==="cartao"?`<div class="card-test"><i data-lucide="credit-card"></i><div><b>Cartão de teste •••• 4242</b><small>Validade 12/30 · usado só nesta demonstração</small></div></div>
           <label class="chkline"><input type="checkbox" id="auto" ${S.autopay?"checked":""}> Cobrar automaticamente todo dia 10</label>
           <button class="btn btn-primary" data-go><i data-lucide="lock"></i>Pagar ${money(b.amount)}</button>`
         :`<p class="exhint" style="margin:0;text-align:left">Linha digitável do boleto:</p><div class="copy"><code>${line}</code><button class="btn btn-ghost btn-sm" data-cp="${line.replace(/\D/g,"")}"><i data-lucide="copy"></i>Copiar</button></div>
           <p class="exhint" style="margin:0;text-align:left">Vencimento: 10/${b.m.slice(5)}. A confirmação leva até 2 dias úteis depois do pagamento.</p>
-          <button class="btn btn-primary" data-go><i data-lucide="check"></i>Simular compensação do boleto</button>`}</div>
-      <p class="pay-demo"><i data-lucide="info"></i>Demonstração: nenhum valor é cobrado e nenhum dado de pagamento é pedido. A cobrança real será configurada depois.</p>
+          <button class="btn btn-primary" data-go><i data-lucide="check"></i>${FB?"Já paguei o boleto":"Simular compensação do boleto"}</button>`}</div>
+      <p class="pay-demo"><i data-lucide="info"></i>${FB?"O pagamento online ainda não está ligado. Ao confirmar, a empresa é avisada e marca como pago depois de conferir.":"Demonstração: nenhum valor é cobrado e nenhum dado de pagamento é pedido. A cobrança real será configurada depois."}</p>
     </div>`;
     icons();
     $("#pyx").onclick=close;
     md.querySelectorAll("[data-pm]").forEach(x=>x.onclick=()=>{m=x.dataset.pm;render()});
     md.querySelectorAll("[data-cp]").forEach(x=>x.onclick=()=>copyText(x.dataset.cp,"Código copiado"));
-    md.querySelector("[data-go]").onclick=()=>{const a=$("#auto");if(a)S.autopay=a.checked;S.payMethod=m;save();markPaid(b.key,m);close();confetti();toast(`Pagamento via ${METHODS[m].l.toLowerCase()} confirmado. Obrigado!`)};
+    md.querySelector("[data-go]").onclick=()=>{const a=$("#auto");if(a)S.autopay=a.checked;S.payMethod=m;save();if(FB){DB.informed[b.key]=true;DB.payInfo[b.key]={m,at:Date.now()};saveDB();close();toast("Pagamento informado. A empresa confere e marca como pago.");return}markPaid(b.key,m);close();confetti();toast(`Pagamento via ${METHODS[m].l.toLowerCase()} confirmado. Obrigado!`)};
     const f=md.querySelector("[data-go]");if(f)f.focus();
   };render();
 }
@@ -2439,7 +2656,7 @@ function fakeQR(seed){let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;c
 
 /* ---------- avaliação confidencial da personal ---------- */
 function openRating(){
-  const pid=S.pid||"p1",p=findP(pid),mk=mkey(Date.now()),old=DB.ratings.find(x=>x.cid==="me"&&x.pid===pid&&mkey(x.at)===mk);
+  const p=myP(),pid=p.id,mk=mkey(Date.now()),old=DB.ratings.find(x=>x.cid===ME&&x.pid===pid&&mkey(x.at)===mk);
   let st=old?old.stars:0,tags=old?[...old.tags]:[],anon=old?old.anon:false;
   const prev=document.activeElement,md=document.createElement("div");md.className="modal";document.body.appendChild(md);document.body.style.overflow="hidden";
   const close=()=>{removeEventListener("keydown",k);md.remove();document.body.style.overflow="";route(true);if(prev&&prev.isConnected)prev.focus()};
@@ -2459,11 +2676,11 @@ function openRating(){
     md.querySelectorAll("[data-st]").forEach(x=>x.onclick=()=>{st=+x.dataset.st;render()});
     md.querySelectorAll("[data-tg]").forEach(x=>x.onclick=()=>{const t=x.dataset.tg;tags=tags.includes(t)?tags.filter(y=>y!==t):[...tags,t];render()});
     $("#ran").onchange=e=>{anon=e.target.checked};
-    $("#rgo").onclick=()=>{const r={id:old?old.id:"r"+Date.now(),pid,cid:"me",name:S.profile.name,stars:st,tags,text:$("#rt").value.trim(),anon:$("#ran").checked,at:Date.now()};
+    $("#rgo").onclick=()=>{const r={id:old?old.id:"r"+Date.now(),pid,cid:ME,name:S.profile.name,stars:st,tags,text:$("#rt").value.trim(),anon:$("#ran").checked,at:Date.now()};
       DB.ratings=DB.ratings.filter(x=>x!==old);DB.ratings.push(r);saveDB();close();toast("Obrigado! Sua avaliação foi enviada com sigilo.")};
   };render();
 }
-function rateCard(){const p=findP(S.pid||"p1"),mine=DB.ratings.filter(x=>x.cid==="me").sort((a,b)=>b.at-a.at)[0];
+function rateCard(){const p=myP(),mine=DB.ratings.filter(x=>x.cid===ME).sort((a,b)=>b.at-a.at)[0];
   return`<button class="task" id="rate" style="text-align:left"><span class="ti"><i data-lucide="star"></i></span><span><b>${mine?`Você deu ${mine.stars} ${mine.stars>1?"estrelas":"estrela"}`:`Avaliar a ${esc(p.name.split(" ")[0])}`}</b><small>${mine?`em ${new Date(mine.at).toLocaleDateString("pt-BR")} · toque para atualizar`:"Confidencial: só a empresa vê"}</small></span><i class="go" data-lucide="chevron-right"></i></button>`}
 
 /* ---------- empresa: avaliações ---------- */
@@ -2508,18 +2725,18 @@ function seedSafety(db){
     {id:"i2",from:"personal",who:"Camila Rocha",about:"Praça do Carmo",type:"Local inseguro",sev:"media",text:"A praça estava sem iluminação no fim da tarde. Sugiro trocar o horário ou o local.",at:Date.now()-6*D1,status:"resolvido"}];
   return db}
 if(!DB.kyc){seedSafety(DB);saveDB()}
-const kycOf=cid=>cid==="me"?(S.kyc||{status:"pendente"}):(DB.kyc[cid]||{status:"pendente"});
+const kycOf=cid=>{const a=A(cid);return a?(a.kyc||{status:"pendente"}):((DB.kyc||{})[cid]||{status:"pendente"})};
 const pSafe=p=>{const s=p.safety||{};return !!(s.doc&&s.selfie&&s.cref&&s.crim)};
 const KYC_PILL={verificado:["ok","shield-check","Identidade verificada"],analise:["warn","hourglass","Verificação em análise"],pendente:["mute","shield-alert","Não verificado"],recusado:["bad","shield-x","Verificação recusada"]};
 
 /* ---------- verificação do cliente (passo a passo) ---------- */
 let KV={step:0,d:{},doc:null,docB:null,selfie:null,ok:{}};
 function vVerif(){
-  const k=kycOf("me");
-  if(k.status==="analise"){const left=4000-(Date.now()-(k.at||0));if(left<=0){S.kyc.status="verificado";S.kyc.approvedAt=Date.now();S.messages.push({from:"them",text:"Sua identidade foi verificada. Agora é só seguir o seu caminho, passo a passo. 🛡️",t:nowT()});S.unread++;save();toast("Identidade verificada!");location.hash="#/app";return}
+  const k=kycOf(ME);
+  if(k.status==="analise"&&!FB){const left=4000-(Date.now()-(k.at||0));if(left<=0){S.kyc.status="verificado";S.kyc.approvedAt=Date.now();S.messages.push({from:"them",text:"Sua identidade foi verificada. Agora é só seguir o seu caminho, passo a passo. 🛡️",t:nowT()});S.unread++;save();toast("Identidade verificada!");location.hash="#/app";return}
     clearTimeout(vVerif._t);vVerif._t=setTimeout(()=>{if(location.hash.includes("verificacao"))vVerif()},left+50)}
   if(k.status==="verificado"||k.status==="analise"){$("#view").innerHTML=`<div class="hello"><small>Segurança</small><h2>${k.status==="verificado"?"Sua identidade está verificada":"Recebemos seus dados"}</h2></div>
-    <div class="verif-done">${pill(...KYC_PILL[k.status])}<p>${k.status==="verificado"?"Você já pode marcar encontros presenciais. Seus dados ficam protegidos e só são usados para a segurança de todos.":"Na versão final, a equipe e o serviço de verificação conferem em até 1 dia útil. Neste site de teste, a aprovação é automática em alguns segundos."}</p>${k.status==="verificado"?`<a class="btn btn-primary" href="#/app"><i data-lucide="arrow-right"></i>Seguir meu caminho</a>`:`<div class="spin" aria-hidden="true"></div>`}
+    <div class="verif-done">${pill(...KYC_PILL[k.status])}<p>${k.status==="verificado"?"Você já pode marcar encontros presenciais. Seus dados ficam protegidos e só são usados para a segurança de todos.":(FB?"A equipe confere seus dados em até 1 dia útil. Você recebe uma mensagem aqui quando for aprovado.":"Na versão final, a equipe e o serviço de verificação conferem em até 1 dia útil. Neste site de teste, a aprovação é automática em alguns segundos.")}</p>${k.status==="verificado"?`<a class="btn btn-primary" href="#/app"><i data-lucide="arrow-right"></i>Seguir meu caminho</a>`:FB?"":`<div class="spin" aria-hidden="true"></div>`}
     <div class="plist"><div><span>CPF</span><b>${esc(k.cpf||"—")}</b></div><div><span>Cidade</span><b>${esc(k.city||"—")}</b></div><div><span>Contato de emergência</span><b>${esc(k.emerg||"—")}</b></div><div><span>Enviado em</span><b>${k.at?new Date(k.at).toLocaleDateString("pt-BR"):"—"}</b></div></div></div>
     ${safetyTips()}`;return}
   const steps=["Seus dados","Documento","Selfie","Consentimento"],st=KV.step;
@@ -2613,7 +2830,7 @@ function openReport(role){
     <p class="pay-demo" style="text-align:left"><i data-lucide="shield-check"></i>${role==="cliente"?"A personal não é avisada do seu relato.":"O aluno não é avisado do seu relato."} A equipe responde em até 24 horas, ou no mesmo dia se for urgente.</p>
     <button class="btn btn-primary"><i data-lucide="send"></i>Enviar relato</button></form>`;
   icons();$("#rx").onclick=close;
-  $("#repf").onsubmit=e=>{e.preventDefault();const who=role==="cliente"?S.profile.name:curP().name,about=role==="cliente"?findP(S.pid||"p1").name:"—";
+  $("#repf").onsubmit=e=>{e.preventDefault();const who=role==="cliente"?S.profile.name:curP().name,about=role==="cliente"?myP().name:"—";
     DB.incidents.push({id:"i"+Date.now(),from:role,who,about,type:$("#rty").value,sev:$("#rur").checked||/Assédio|inadequado/.test($("#rty").value)?"alta":"media",text:$("#rtx2").value.trim(),at:Date.now(),status:"aberto"});saveDB();close();toast("Relato enviado com sigilo. Vamos cuidar disso.")};
 }
 
@@ -2641,7 +2858,7 @@ function aSeg(){
   <section class="card mt"><div class="card-h"><h3>Verificação das personais</h3></div><div class="rows">${DB.personals.filter(p=>p.status!=="inativo").map(p=>{const s=p.safety||{};return`<div class="rw"><span class="av">${esc(initials(p.name))}</span><span><b>${esc(p.name)}</b><small>${esc(p.cref)}</small></span><span class="end">${[["doc","Documento"],["selfie","Selfie"],["cref","CREF"],["crim","Antecedentes"]].map(([k,t])=>`<button class="pill ${s[k]?"ok":"mute"} tog" data-ps="${p.id}" data-k="${k}" aria-pressed="${!!s[k]}"><i data-lucide="${s[k]?"check":"circle-dashed"}"></i>${t}</button>`).join("")}</span></div>`}).join("")}</div>
     <p class="week-note">Uma personal só recebe alunos para encontros presenciais com os quatro itens conferidos. Toque para marcar ou desmarcar.</p></section>`;
   document.querySelectorAll("[data-kyc]").forEach(b=>b.onclick=()=>{const id=b.dataset.kyc,v=b.dataset.v;
-    if(id==="me"){S.kyc=Object.assign(S.kyc||{},{status:v,at:Date.now()});save();S.messages.push({from:"them",text:v==="verificado"?"Sua identidade foi verificada. Agora podemos marcar encontros presenciais com segurança. 🛡️":"Não conseguimos confirmar sua identidade com as fotos enviadas. Pode tentar de novo pelo seu perfil?",t:nowT()});S.unread++;save()}
+    const ak=A(id);if(ak){ak.kyc=Object.assign(ak.kyc||{},{status:v,at:Date.now()});saveA(id);ak.messages.push({from:"them",text:v==="verificado"?"Sua identidade foi verificada. Agora podemos marcar encontros presenciais com segurança. 🛡️":"Não conseguimos confirmar sua identidade com as fotos enviadas. Pode tentar de novo pelo seu perfil?",t:nowT()});ak.unread++;saveA(id)}
     else{DB.kyc[id]=Object.assign(DB.kyc[id]||{},{status:v});saveDB()}
     toast(v==="verificado"?"Identidade aprovada":"Verificação recusada");route(true)});
   document.querySelectorAll("[data-flag]").forEach(b=>b.onclick=()=>{const f=DB.flags.find(x=>x.id===b.dataset.flag),v=b.dataset.v;
@@ -2757,8 +2974,8 @@ requestAnimationFrame(figTick);
 function figPause(sv,on){const now=performance.now();if(on){sv.dataset.paused="1";sv._pa=now}else{if(sv._pa!=null&&sv._t0!=null)sv._t0+=now-sv._pa;sv.dataset.paused="0"}}
 
 /* prescrições: cliente deste aparelho (S.rx) ou cliente de exemplo (c.rx) */
-const rxOf=cid=>cid==="me"?(S.rx||[]):((DB.clients.find(c=>c.id===cid)||{}).rx||[]);
-function setRx(cid,list){if(cid==="me"){S.rx=list;save()}else{DB.clients.find(c=>c.id===cid).rx=list;saveDB()}}
+const rxOf=cid=>{const a=A(cid);return a?(a.rx||[]):((DB.clients.find(c=>c.id===cid)||{}).rx||[])};
+function setRx(cid,list){const a=A(cid);if(a){a.rx=list;saveA(cid)}else{DB.clients.find(c=>c.id===cid).rx=list;saveDB()}}
 function exCard(ex,rx,locked){return`<button class="exc ${locked?"locked":""}" data-ex="${ex.id}">${fig(ex,"sm")}<span class="exc-t"><b>${ex.n}</b><small>${rx?esc(rx.dose):ex.cat}${ex.seat?" · dá sentado":""}</small>${rx&&rx.note?`<small class="rxn">“${esc(rx.note)}”</small>`:""}</span>${locked?`<i data-lucide="lock"></i>`:""}</button>`}
 function exDetail(id,opts={}){
   const ex=exById(id),rx=opts.rx;const md=document.createElement("div");md.className="modal";document.body.appendChild(md);document.body.style.overflow="hidden";
@@ -2881,7 +3098,7 @@ function privacyBlock(){return`<section class="card mt"><div class="card-h"><h3>
 
 /* ---------- aluno ---------- */
 function vDados(){
-  const p=S.profile,k=kycOf("me"),inf=S.info=S.info||{name:p.name},bl=bills().filter(b=>b.cid==="me"),per=findP(S.pid||"p1");
+  const p=S.profile,k=kycOf(ME),inf=S.info=S.info||{name:p.name},bl=bills().filter(b=>b.cid===ME),per=myP();
   const plan=S.plan?planLabel(S.plan):`Nível ${S.level} · ${LEVELS[S.level-1].t}`;
   $("#view").innerHTML=`<div class="hello"><small>Perfil</small><h2>Meus dados</h2></div>
   <form class="card" id="dfm"><div class="card-h"><h3>Dados pessoais</h3>${pill(...KYC_PILL[k.status])}</div>
@@ -2952,7 +3169,7 @@ function bindSiteForms(){
 
 (()=>{const mq=matchMedia("(min-width:901px)"),f=()=>{if(/^#\/(personal|admin)/.test(location.hash)&&!document.querySelector(".drawer,.modal"))route(true)};mq.addEventListener?mq.addEventListener("change",f):mq.addListener(f)})();
 applyTheme();
-route();
+if(FB)FBL.boot();else route();
 </script>
 
 <script>

@@ -1,0 +1,139 @@
+rules_version = '2';
+
+// Regras de segurança do banco do Primeiro Passo.
+// Cole este arquivo em Firebase > Firestore Database > Regras > Publicar.
+//
+// Quem é quem:
+// - empresa: conta com um documento em admins/{uid} (criado à mão no console)
+// - personal: conta com usuarios/{uid}.role == "personal" e personais/{uid}
+// - aluno: conta com usuarios/{uid}.role == "aluno" e alunos/{uid}
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function logado() { return request.auth != null; }
+    function eu(uid) { return logado() && request.auth.uid == uid; }
+    function admin() {
+      return logado() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function personalAtiva() {
+      return logado()
+        && exists(/databases/$(database)/documents/personais/$(request.auth.uid))
+        && get(/databases/$(database)/documents/personais/$(request.auth.uid)).data.status == 'ativo';
+    }
+    function mudou(campos) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasAny(campos);
+    }
+    function so(campos) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(campos);
+    }
+
+    // Lista de contas da empresa. Só o console do Firebase cria.
+    match /admins/{uid} {
+      allow read: if eu(uid);
+      allow write: if false;
+    }
+
+    // Preços, divisão e taxas: o site mostra para todo mundo, só a empresa muda.
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if admin();
+    }
+
+    // Tipo de cada conta. Ninguém vira empresa por aqui.
+    match /usuarios/{uid} {
+      allow read: if eu(uid) || admin();
+      allow create: if eu(uid) && request.resource.data.role in ['aluno', 'personal'];
+      allow update: if admin() || (eu(uid) && !mudou(['role']));
+      allow delete: if admin();
+    }
+
+    // Perfil público da personal (nome, CREF, cidade, bio).
+    // Toda personal começa "pendente"; só a empresa aprova.
+    match /personais/{uid} {
+      allow read: if resource.data.status == 'ativo' || eu(uid) || admin();
+      allow create: if eu(uid) && request.resource.data.status == 'pendente';
+      allow update: if admin() || (eu(uid) && !mudou(['status', 'cap']));
+      allow delete: if admin();
+    }
+
+    // Dados privados da personal: contato, chave Pix, termo, percentual e checagens.
+    // Percentual (split) e checagens (safety) só a empresa altera.
+    match /personaisPriv/{uid} {
+      allow read: if eu(uid) || admin();
+      allow create: if admin() || (eu(uid)
+        && request.resource.data.keys().hasOnly(['email', 'info', 'payout', 'terms']));
+      allow update: if admin() || (eu(uid) && so(['email', 'info', 'payout', 'terms']));
+      allow delete: if admin();
+    }
+
+    // App de cada aluno: questionário, treinos, agenda, conversa, verificação.
+    match /alunos/{uid} {
+      function minhaAluna() {
+        return logado() && resource.data.pid == request.auth.uid && personalAtiva();
+      }
+      function kycNovo() { return request.resource.data.get('kyc', {}).get('status', ''); }
+      function kycVelho() { return resource.data.get('kyc', {}).get('status', ''); }
+
+      allow read: if eu(uid) || admin() || minhaAluna();
+      // o próprio aluno nunca aprova a própria identidade
+      allow create: if eu(uid) && kycNovo() != 'verificado';
+      allow update: if admin()
+        || (eu(uid) && !mudou(['pid']) && (kycNovo() != 'verificado' || kycVelho() == 'verificado'))
+        || (minhaAluna() && !mudou(['pid', 'kyc']));
+      allow delete: if admin();
+    }
+
+    // Mensalidades. O aluno só consegue "informar" um pagamento; quem confirma é a empresa.
+    match /pagamentos/{id} {
+      allow read: if admin() || (logado()
+        && (resource.data.cid == request.auth.uid || resource.data.pid == request.auth.uid));
+      allow create: if admin() || (logado()
+        && request.resource.data.cid == request.auth.uid && request.resource.data.paid == false);
+      allow update: if admin() || (logado()
+        && resource.data.cid == request.auth.uid && resource.data.paid == false
+        && request.resource.data.cid == request.auth.uid && request.resource.data.paid == false);
+      allow delete: if admin();
+    }
+
+    // Repasses às personais.
+    match /repasses/{id} {
+      allow read: if admin() || (logado() && resource.data.pid == request.auth.uid);
+      allow write: if admin();
+    }
+
+    // Check-in e saída dos encontros presenciais.
+    match /checkins/{id} {
+      allow read: if admin() || (logado() && resource.data.pid == request.auth.uid);
+      allow create, update: if admin()
+        || (personalAtiva() && request.resource.data.pid == request.auth.uid);
+      allow delete: if admin();
+    }
+
+    // Avaliações: confidenciais. A personal nunca lê.
+    match /avaliacoes/{id} {
+      allow read: if admin() || (logado() && resource.data.cid == request.auth.uid);
+      allow create: if logado() && request.resource.data.cid == request.auth.uid;
+      allow update: if admin() || (logado()
+        && resource.data.cid == request.auth.uid && request.resource.data.cid == request.auth.uid);
+      allow delete: if admin();
+    }
+
+    // Relatos confidenciais e alertas de contato por fora: qualquer conta envia, só a empresa lê.
+    match /relatos/{id} {
+      allow create: if logado();
+      allow read, update, delete: if admin();
+    }
+    match /alertas/{id} {
+      allow create: if logado();
+      allow read, update, delete: if admin();
+    }
+
+    // Formulários do site (dúvidas e "quero ser parceiro"): qualquer visitante envia.
+    match /contatos/{id} {
+      allow create: if request.resource.data.status == 'novo'
+        && request.resource.data.msg is string && request.resource.data.msg.size() < 3000;
+      allow read, update, delete: if admin();
+    }
+  }
+}
