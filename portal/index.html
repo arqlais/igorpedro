@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Primeiro Passo e PassosFit</title>
+<meta name="description" content="Duas plataformas de treino com acompanhamento de um profissional: o Primeiro Passo, para quem ainda não começou, e o PassosFit, para quem já treina na academia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Portal neutro com duas marcas lado a lado: cada plataforma tem a própria cor e fonte de título */
+:root{
+  --bg:#F7F8FA;--surface:#FFFFFF;--ink:#17202B;--muted:#5E6875;--line:#E1E5EB;
+  --pp:#1B3A5C;--pp-2:#2F5D8A;--pp-acc:#E0A93B;--pp-soft:#FBF1DC;--pp-tint:#EEF3F9;
+  --pf-deep:#070B22;--pf-navy:#111A4A;--pf-blue:#2E4BDB;--pf-lime:#CBEF3C;--pf-text:#F3F5FF;--pf-muted:#A9B3DA;--pf-card:rgba(255,255,255,.06);--pf-line:rgba(255,255,255,.12);--pf-ink:#4B5A12;
+  --ok:#3E8E5E;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --pp-display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --pf-display:"Outfit","Figtree",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1319;--surface:#151C25;--ink:#E8EDF3;--muted:#9AA6B4;--line:#26313E;
+  --pp:#9CC0E6;--pp-2:#7FA6CF;--pp-acc:#F0BE5A;--pp-soft:#3A2F17;--pp-tint:#162433;
+  --pf-ink:#CBEF3C;
+  --ok:#6CC08E;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1319;--surface:#151C25;--ink:#E8EDF3;--muted:#9AA6B4;--line:#26313E;
+  --pp:#9CC0E6;--pp-2:#7FA6CF;--pp-acc:#F0BE5A;--pp-soft:#3A2F17;--pp-tint:#162433;
+  --pf-ink:#CBEF3C;
+  --ok:#6CC08E;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;line-height:1.08;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+img{max-width:100%;display:block}
+[hidden]{display:none!important}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+:focus-visible{outline:3px solid var(--pp-acc);outline-offset:3px;border-radius:8px}
+
+/* topo */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;height:60px}
+.top .home{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:15px}
+.duo{display:flex}
+.duo i{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;border:2px solid var(--bg)}
+.duo i+i{margin-left:-8px}
+.duo svg{width:14px;height:14px}
+.top nav{margin-left:auto;display:flex;gap:4px}
+.top nav a{text-decoration:none;font-weight:600;font-size:14px;color:var(--muted);padding:8px 12px;border-radius:999px}
+.top nav a:hover,.top nav a[aria-current="page"]{background:var(--surface);color:var(--ink)}
+
+/* escolha */
+.pick{padding-block:56px 64px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pick h1{font-family:var(--pp-display);font-weight:800;font-size:clamp(34px,5.6vw,60px);letter-spacing:-.02em;margin:10px 0 12px;max-width:16ch}
+.pick .lead{color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:52ch}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:36px}
+.card{position:relative;border-radius:26px;padding:28px;display:flex;flex-direction:column;gap:14px;text-decoration:none;min-width:0;overflow:hidden;transition:transform .2s,box-shadow .2s;border:1px solid transparent}
+.card:hover{transform:translateY(-3px)}
+.card .who{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.card h2{font-size:clamp(30px,4vw,42px)}
+.card p{font-size:16px;max-width:38ch}
+.card ul{list-style:none;padding:0;margin:4px 0 0;display:grid;gap:7px;font-size:15px}
+.card li{display:flex;gap:9px;align-items:flex-start}
+.card li svg{width:18px;height:18px;flex:none;margin-top:3px}
+.card .go{margin-top:auto;padding-top:10px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
+.card .go svg{width:18px;height:18px;transition:transform .2s}
+.card:hover .go svg{transform:translateX(4px)}
+.card.pp{background:#1B3A5C;color:#fff;box-shadow:0 24px 48px -28px rgba(27,58,92,.7)}
+.card.pp h2{font-family:var(--pp-display);font-weight:800;color:#fff}
+.card.pp .who,.card.pp li svg,.card.pp .go{color:#E0A93B}
+.card.pp p,.card.pp li{color:#D6E2EF}
+.card.pf{background:radial-gradient(120% 90% at 90% 0%,#2E4BDB 0%,rgba(46,75,219,0) 55%),radial-gradient(90% 80% at 0% 100%,#3B2A8F 0%,rgba(59,42,143,0) 60%),#0B1233;color:#fff;box-shadow:0 24px 48px -28px rgba(17,26,74,.8)}
+.card.pf h2{font-family:var(--pf-display);font-weight:700;letter-spacing:-.02em;color:#fff}
+.card.pf .who,.card.pf li svg,.card.pf .go{color:#CBEF3C}
+.card.pf p,.card.pf li{color:#C9D1F0}
+:root[data-theme="dark"] .card.pp,:root[data-theme="dark"] .card.pf{border-color:var(--line)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card.pp,:root:not([data-theme="light"]) .card.pf{border-color:var(--line)}}
+.compare{margin-top:22px;border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow-x:auto}
+.compare table{width:100%;border-collapse:collapse;font-size:15px;min-width:560px}
+.compare th,.compare td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.compare tr:last-child td{border-bottom:0}
+.compare th{font-size:13px;color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.compare td:first-child{color:var(--muted);font-weight:600;width:28%}
+.compare .pp-c{color:var(--pp);font-weight:700}
+.compare .pf-c{color:var(--pf-ink);font-weight:700}
+
+/* páginas de apresentação */
+.area{padding-block:40px 70px}
+.back{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:var(--muted);text-decoration:none;margin-bottom:22px}
+.back svg{width:16px;height:16px}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+.hero .tag{display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:999px;font-weight:700;font-size:14px}
+.hero h1{margin:16px 0 14px;letter-spacing:-.02em}
+.hero .lead{color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:44ch}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 22px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:1.5px solid transparent;cursor:pointer}
+.btn svg{width:18px;height:18px}
+.btn.ghost{border-color:var(--line);background:var(--surface);color:var(--ink)}
+.sec{margin-top:56px}
+.sec h2{font-size:clamp(24px,3.2vw,34px);margin-bottom:8px}
+.sec>p{color:var(--muted);max-width:60ch;margin-bottom:22px}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.f{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.f .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.f .ic svg{width:20px;height:20px}
+.f b{font-size:16.5px}
+.f span{color:var(--muted);font-size:15px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.role{border-radius:20px;padding:22px;min-width:0}
+.role h3{font-size:22px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.role h3 svg{width:22px;height:22px}
+.role ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.role li{display:flex;gap:10px;font-size:15.5px}
+.role li svg{width:18px;height:18px;flex:none;margin-top:3px}
+
+/* Primeiro Passo */
+#primeiro-passo h1,#primeiro-passo h2,#primeiro-passo h3{font-family:var(--pp-display);font-weight:800;color:var(--pp)}
+#primeiro-passo h1{font-size:clamp(38px,6vw,66px)}
+#primeiro-passo h1 em{font-style:normal;color:var(--pp-acc)}
+#primeiro-passo .tag{background:var(--pp-soft);color:var(--ink)}
+#primeiro-passo .tag svg{width:16px;height:16px;color:var(--pp-acc)}
+#primeiro-passo .btn.main{background:#1B3A5C;color:#fff}
+#primeiro-passo .f .ic{background:var(--pp-soft);color:var(--pp)}
+.shotpair{position:relative;justify-self:center;width:min(100%,420px)}
+.shotpair .site{border-radius:16px;border:1px solid var(--line);box-shadow:0 30px 60px -30px rgba(27,58,92,.5)}
+.shotpair .phone{position:absolute;right:-8px;bottom:-34px;width:34%;border-radius:18px;border:4px solid #0F1720;box-shadow:0 20px 40px -18px rgba(15,23,32,.6)}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.lv{padding:0 16px 0 0;min-width:0}
+.lv .bar{height:10px;border-radius:99px;margin-bottom:16px}
+.lv:nth-child(1) .bar{background:#9DB8D4}.lv:nth-child(2) .bar{background:#6F93BA}.lv:nth-child(3) .bar{background:#2F5D8A}.lv:nth-child(4) .bar{background:#1B3A5C}
+.lv small{display:block;font-weight:800;color:var(--pp-acc);font-size:14px}
+.lv b{display:block;font-family:var(--pp-display);font-size:21px;color:var(--pp);margin:2px 0 6px}
+.lv span{color:var(--muted);font-size:15px}
+#primeiro-passo .role{background:var(--pp-tint)}
+#primeiro-passo .role li svg{color:var(--pp-2)}
+#primeiro-passo .role h3 svg{color:var(--pp-acc)}
+
+/* PassosFit: mesmo visual do app (azul-noite com brilho azul e roxo, destaque verde-limão) */
+#passosfit{color:var(--pf-text);background:radial-gradient(900px 520px at 85% -5%,rgba(46,75,219,.75) 0%,rgba(46,75,219,0) 60%),radial-gradient(700px 600px at -10% 70%,rgba(76,52,170,.55) 0%,rgba(76,52,170,0) 60%),linear-gradient(180deg,#070B22 0%,#0D1440 55%,#141C55 100%)}
+#passosfit h1,#passosfit h2,#passosfit h3{font-family:var(--pf-display);font-weight:700;letter-spacing:-.025em;color:#fff}
+#passosfit h1{font-size:clamp(40px,6.4vw,68px);line-height:1.02}
+#passosfit h1 em{font-style:normal;color:var(--pf-lime)}
+#passosfit h2{font-size:clamp(26px,3.4vw,36px)}
+#passosfit .role h3{font-size:22px}
+#passosfit .lead,#passosfit .sec>p{color:var(--pf-muted)}
+#passosfit .back{color:var(--pf-muted)}
+#passosfit .tag{background:var(--pf-card);border:1px solid var(--pf-line);color:var(--pf-text)}
+#passosfit .tag svg{width:16px;height:16px;color:var(--pf-lime)}
+#passosfit .btn.main{background:var(--pf-lime);color:#0B1233}
+#passosfit .btn.ghost{background:var(--pf-card);border-color:var(--pf-line);color:#fff}
+#passosfit .f,#passosfit .stat{background:var(--pf-card);border-color:var(--pf-line)}
+#passosfit .f b{color:#fff}
+#passosfit .f span,#passosfit .stat span{color:var(--pf-muted)}
+#passosfit .f .ic{background:rgba(203,239,60,.12);color:var(--pf-lime)}
+#passosfit .role{background:var(--pf-card);border:1px solid var(--pf-line)}
+#passosfit .role li{color:#DCE2F7}
+#passosfit .role li svg,#passosfit .role h3 svg{color:var(--pf-lime)}
+#passosfit .cross{background:var(--pf-card);border-color:var(--pf-line)}
+#passosfit .cross b{color:#fff}
+#passosfit .cross p{color:var(--pf-muted)}
+#passosfit :focus-visible{outline-color:var(--pf-lime)}
+/* tela de exemplo no estilo do app */
+.mock{justify-self:center;width:min(100%,330px);background:#03050F;border-radius:38px;padding:10px;box-shadow:0 34px 70px -24px rgba(5,8,30,.9),0 0 0 1px rgba(255,255,255,.08)}
+.mock .scr{border-radius:30px;overflow:hidden;color:#fff;padding:18px 14px 14px;background:radial-gradient(260px 200px at 85% 0%,#2E4BDB 0%,rgba(46,75,219,0) 70%),radial-gradient(240px 260px at 0% 100%,#4A35A8 0%,rgba(74,53,168,0) 70%),#0A1030;font-family:var(--pf-display)}
+.mock .hi small{color:#B9C2E8;font-size:12px}
+.mock .hi b{display:block;font-size:24px;font-weight:700;line-height:1.08;letter-spacing:-.02em;margin-top:6px}
+.mock .days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:14px 0 12px}
+.mock .days span{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);border-radius:12px;padding:5px 0;text-align:center;font-size:12.5px;font-weight:600;line-height:1.2}
+.mock .days span small{display:block;font-size:9.5px;color:#B9C2E8;font-weight:600}
+.mock .days span.on{background:#fff;color:#0B1233;border-color:#fff}
+.mock .days span.on small{color:#0B1233}
+.mock .mc{background:rgba(5,9,32,.72);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:13px;margin-top:8px}
+.mock .mc .k{color:#CBEF3C;font-size:10.5px;font-weight:700;letter-spacing:.12em}
+.mock .mc b.t{display:block;font-size:20px;font-weight:700;letter-spacing:-.02em;margin:2px 0 8px}
+.mock .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12.5px;margin-top:7px}
+.mock .row span{color:#B9C2E8;font-size:11px;white-space:nowrap}
+.mock .sets{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:5px}
+.mock .set{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);border-radius:10px;padding:4px 0;text-align:center;font-size:11.5px;line-height:1.2;font-variant-numeric:tabular-nums}
+.mock .set em{display:block;font-style:normal;font-size:9.5px;color:#B9C2E8}
+.mock .set.done{background:#CBEF3C;border-color:#CBEF3C;color:#0B1233}
+.mock .set.done em{color:#4B5A12}
+.mock .cardio{display:flex;align-items:center;gap:10px;background:#CBEF3C;color:#0B1233;border-radius:999px;padding:6px 14px 6px 6px;margin-top:10px;font-weight:700;font-size:13.5px}
+.mock .cardio i{width:30px;height:30px;border-radius:50%;background:#0B1233;display:grid;place-items:center;flex:none}
+.mock .cardio i svg{width:15px;height:15px;color:#CBEF3C}
+.mock .cardio span{margin-left:auto;font-weight:800;letter-spacing:-.1em}
+.mock .bar{height:8px;border-radius:99px;background:rgba(255,255,255,.14);margin:8px 0 5px;overflow:hidden}
+.mock .bar i{display:block;height:100%;width:68%;background:#CBEF3C;border-radius:99px}
+.mock .meta{display:flex;justify-content:space-between;font-size:11.5px;color:#DCE2F7}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.stat b{display:block;font-family:var(--pf-display);font-weight:700;font-size:44px;letter-spacing:-.03em;line-height:1;color:var(--pf-lime)}
+.stat span{color:var(--muted);font-size:15px}
+
+.cross{margin-top:56px;border-radius:22px;padding:24px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;border:1px solid var(--line);background:var(--surface)}
+.cross p{color:var(--muted)}
+.cross b{display:block;font-size:18px;color:var(--ink);margin-bottom:2px}
+
+footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
+footer a{color:var(--ink);font-weight:600;text-decoration:none}
+
+@media (max-width:860px){
+  .cards,.hero,.roles{grid-template-columns:1fr}
+  .feat{grid-template-columns:1fr 1fr}
+  .levels{grid-template-columns:1fr 1fr;row-gap:22px}
+  .hero{gap:46px}
+  .top nav a{padding:8px 9px}
+  .cross{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .top nav a{font-size:13px;padding:7px 9px}
+  .feat,.stat-row{grid-template-columns:1fr}
+  .card{padding:22px}
+  .ctas .btn{width:100%}
+  .shotpair .phone{right:0}
+}
+/* celular: menu do topo compacto e tabela de comparação em blocos */
+@media (max-width:430px){
+  .top .home>span:last-child{display:none}
+}
+@media (max-width:640px){
+  .compare{overflow:visible;border:0;background:none;display:grid;gap:10px}
+  .compare table{min-width:0;display:block}
+  .compare thead{display:none}
+  .compare tbody{display:grid;gap:10px}
+  .compare tr{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+  .compare td{display:block;padding:0;border:0;font-size:14.5px}
+  .compare td:first-child{grid-column:1/-1;width:auto;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+  .compare td:nth-child(2)::before,.compare td:nth-child(3)::before{display:block;font-size:11.5px;font-weight:800;margin-bottom:2px}
+  .compare td:nth-child(2)::before{content:"Primeiro Passo";color:var(--pp)}
+  .compare td:nth-child(3)::before{content:"PassosFit";color:var(--pf-ink)}
+}
+/* monitores grandes: tudo um pouco maior, sem esticar as linhas de texto */
+@media (min-width:1700px){html{zoom:1.15}}
+@media (min-width:2200px){html{zoom:1.35}}
+@media (min-width:3000px){html{zoom:1.7}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="home" href="#inicio" data-go="inicio" aria-label="Início">
+    <span class="duo"><i style="background:#1B3A5C"><svg viewBox="0 0 24 24" fill="none" stroke="#E0A93B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-2.38C4 11.5 3 10.5 3 8c0-2.7 1.5-6 4.5-6C9.4 2 10 3.8 10 5.5c0 3.1-2 5.7-2 8.7V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.38c0-2.1 1-3.1 1-5.6 0-2.7-1.5-6-4.5-6C14.6 6 14 7.8 14 9.5c0 3.1 2 5.7 2 8.7V20a2 2 0 1 0 4 0Z"/></svg></i><i style="background:#111A4A"><svg viewBox="0 0 24 24" fill="none" stroke="#CBEF3C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6v12M18 6v12M3 9v6M21 9v6M6 12h12"/></svg></i></span>
+    <span>passosfit.com.br</span>
+  </a>
+  <nav aria-label="Plataformas">
+    <a href="#primeiro-passo" data-go="primeiro-passo">Primeiro Passo</a>
+    <a href="#passosfit" data-go="passosfit">PassosFit</a>
+  </nav>
+</div></header>
+
+<main>
+<!-- ===================== ESCOLHA ===================== -->
+<section id="inicio" class="pick view"><div class="wrap">
+  <span class="eyebrow">Duas plataformas, um só lugar</span>
+  <h1>Onde você está na sua jornada?</h1>
+  <p class="lead">As duas plataformas colocam um profissional de educação física ao seu lado. Escolha a que combina com o seu momento.</p>
+
+  <div class="cards">
+    <a class="card pp" href="#primeiro-passo" data-go="primeiro-passo">
+      <span class="who">Para quem ainda não começou</span>
+      <h2>Primeiro Passo</h2>
+      <p>Do primeiro "oi", pela tela, até a academia, com a mesma personal e no seu tempo.</p>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>4 níveis: online, em casa, ao ar livre e academia</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Sem câmera, se preferir, e sem fidelidade</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Primeira conversa grátis</li>
+      </ul>
+      <span class="go">Conhecer o Primeiro Passo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+    <a class="card pf" href="#passosfit" data-go="passosfit">
+      <span class="who">Para quem já treina na academia</span>
+      <h2>PassosFit</h2>
+      <p>O seu treino do dia no celular, com carga, repetições e a evolução de cada exercício.</p>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Treino montado pelo seu professor</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Veja quanto pegou da última vez e progrida</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Cardio, medidas e histórico em um lugar</li>
+      </ul>
+      <span class="go">Conhecer o PassosFit <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+
+  <div class="compare" role="region" aria-label="Comparação entre as plataformas" tabindex="0">
+    <table>
+      <thead><tr><th></th><th>Primeiro Passo</th><th>PassosFit</th></tr></thead>
+      <tbody>
+        <tr><td>Você está</td><td>Parado, com medo ou sem saber por onde começar</td><td>Treinando na academia, com professor</td></tr>
+        <tr><td>Onde treina</td><td>Online, em casa, ao ar livre e, no fim, na academia</td><td>Na academia</td></tr>
+        <tr><td>Quem acompanha</td><td>A mesma personal, do começo ao fim</td><td>O seu professor, pelo painel dele</td></tr>
+        <tr><td>Para começar</td><td class="pp-c">Conversa grátis de 15 minutos</td><td class="pf-c">Acesso enviado pelo professor</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></section>
+
+<!-- ===================== PRIMEIRO PASSO ===================== -->
+<section id="primeiro-passo" class="area view" hidden><div class="wrap">
+  <a class="back" href="#inicio" data-go="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Escolher outra plataforma</a>
+  <div class="hero">
+    <div>
+      <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/></svg>Para quem ainda não teve coragem de começar</span>
+      <h1>Seu primeiro passo, <em>no seu tempo.</em></h1>
+      <p class="lead">Um personal que começa com você pela tela, vai até a sua casa e só te leva para a academia quando você estiver pronto.</p>
+      <div class="ctas">
+        <a class="btn main" data-link="primeiroPasso" href="https://arqlais.github.io/igorpedro/#/comecar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Começar sem compromisso</a>
+        <a class="btn ghost" data-link="primeiroPassoEntrar" href="https://arqlais.github.io/igorpedro/#/entrar">Já tenho conta</a>
+      </div>
+    </div>
+    <div class="shotpair">
+      <img class="site" src="img/primeiro-passo-site.png" alt="Página inicial do Primeiro Passo">
+      <img class="phone" src="img/primeiro-passo-app.png" alt="App do aluno do Primeiro Passo no celular">
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>Quatro níveis. Você só sobe quando se sentir pronto.</h2>
+    <p>A mesma personal acompanha você do começo ao fim. Os níveis 1 e 2 são online, para todo o Brasil.</p>
+    <div class="levels">
+      <div class="lv"><div class="bar"></div><small>Nível 1</small><b>Conhecer</b><span>Conversa por mensagem, áudio ou vídeo. A personal entende sua rotina e monta o plano com você.</span></div>
+      <div class="lv"><div class="bar"></div><small>Nível 2</small><b>Em casa</b><span>Treinos curtos em vídeo, no seu espaço, sem ninguém olhando.</span></div>
+      <div class="lv"><div class="bar"></div><small>Nível 3</small><b>Ao ar livre</b><span>Primeiros encontros presenciais, na sua casa ou numa praça tranquila.</span></div>
+      <div class="lv"><div class="bar"></div><small>Nível 4</small><b>Academia</b><span>A personal vai junto até você se sentir seguro para treinar sozinho.</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>Feito para quem acha que academia não é para si</h2>
+    <div class="feat">
+      <div class="f"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20M10.4 10.4a2 2 0 1 0 2.8 2.8M9.9 4.2A10 10 0 0 1 12 4c7 0 10 8 10 8a13 13 0 0 1-1.7 2.7M6.6 6.6A13 13 0 0 0 2 12s3 8 10 8a9.7 9.7 0 0 0 5.4-1.6"/></svg></span><b>Sem foto de antes e depois</b><span>Progresso é o que você consegue fazer, não o que aparece no espelho.</span></div>
+      <div class="f"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span><b>Segurança em cada encontro</b><span>Identidade verificada, CREF conferido e código de segurança no encontro.</span></div>
+      <div class="f"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg></span><b>Primeira conversa grátis</b><span>15 minutos, só por mensagem se preferir, sem compromisso.</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>Uma plataforma, três lados</h2>
+    <div class="roles">
+      <div class="role"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Para o aluno</h3><ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Caminho passo a passo, com o próximo passo sempre à vista</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Treinos guiados, pausa para respirar e exercícios com demonstração</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Agenda, conversa com a personal e conquistas</li></ul></div>
+      <div class="role"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6v12M18 6v12M3 9v6M21 9v6M6 12h12"/></svg>Para a personal</h3><ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Alunos chegam com questionário de saúde e objetivos respondidos</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Alertas do dia, agenda, mensagens e indicação de exercícios</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Ganhos do mês e repasse direto na chave Pix</li></ul></div>
+    </div>
+  </div>
+
+  <div class="cross"><div><b>Já treina na academia com professor?</b><p>O PassosFit organiza o treino do dia, as cargas e a sua evolução.</p></div><a class="btn ghost" href="#passosfit" data-go="passosfit">Conhecer o PassosFit</a></div>
+</div></section>
+
+<!-- ===================== PASSOSFIT ===================== -->
+<section id="passosfit" class="area view" hidden><div class="wrap">
+  <a class="back" href="#inicio" data-go="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Escolher outra plataforma</a>
+  <div class="hero">
+    <div>
+      <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6v12M18 6v12M3 9v6M21 9v6M6 12h12"/></svg>Para quem já treina na academia</span>
+      <h1>Seu treino do dia, <em>na palma da mão.</em></h1>
+      <p class="lead">Marque cada série com carga e repetições, veja quanto pegou da última vez e acompanhe a sua evolução. Funciona no celular e no computador, direto pelo navegador.</p>
+      <div class="ctas">
+        <a class="btn main" data-link="passosfit" href="https://passosfit.com.br/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Abrir o PassosFit</a>
+        <a class="btn ghost" href="#pf-professor">Sou professor</a>
+      </div>
+    </div>
+    <div class="mock" aria-label="Exemplo da tela inicial do PassosFit" role="img">
+      <div class="scr">
+        <div class="hi"><small>Quarta, 21 de out · exemplo</small><b>Oi, Ana,<br>bora treinar?</b></div>
+        <div class="days"><span><small>S</small>19</span><span><small>T</small>20</span><span class="on"><small>Q</small>21</span><span><small>Q</small>22</span><span><small>S</small>23</span><span><small>S</small>24</span><span><small>D</small>25</span></div>
+        <div class="mc"><span class="k">HOJE</span><b class="t">Treino B · Costas</b>
+          <div class="row"><b>Puxada frontal</b><span>última: 40 kg</span></div>
+          <div class="sets"><div class="set done">42 kg<em>12 rep</em></div><div class="set done">42 kg<em>10 rep</em></div><div class="set done">45 kg<em>8 rep</em></div><div class="set">–<em>série 4</em></div></div>
+          <div class="cardio"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="m7 21 3-6 3 2v5M9 10l3-3 4 3 3 1M10 15l-2-5"/></svg></i>Cardio de hoje: 20 min<span>›››</span></div>
+        </div>
+        <div class="mc"><b style="font-size:13.5px">Sua meta de cardio da semana</b>
+          <div class="bar"><i></i></div>
+          <div class="meta"><span><b>102 min</b> feitos</span><span>faltam <b>48 min</b></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="stat-row">
+      <div class="stat"><b>250</b><span>exercícios na biblioteca, com mapa muscular</span></div>
+      <div class="stat"><b>2</b><span>lados: aluno no celular e professor no painel</span></div>
+      <div class="stat"><b>0</b><span>lojas de app: instala direto pelo navegador</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>Tudo do treino em um lugar</h2>
+    <div class="feat">
+      <div class="f"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></span><b>Evolução das cargas</b><span>Veja quanto pegou da última vez e tente progredir a cada treino.</span></div>
+      <div class="f"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></span><b>Cronômetro de cardio</b><span>Com meta semanal para você não perder o ritmo.</span></div>
+      <div class="f"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><b>Agenda e histórico</b><span>Os dias treinados, o histórico completo e as medidas do corpo.</span></div>
+      <div class="f"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v6l-3 7M12 13l3 7M7 10h10"/></svg></span><b>Como fazer cada exercício</b><span>Figurinhas mostram a execução certa, sem precisar perguntar.</span></div>
+      <div class="f"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg></span><b>Recados do professor</b><span>As orientações chegam junto com o treino.</span></div>
+      <div class="f"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg></span><b>Treino feito, compartilhado</b><span>Artes prontas para postar quando terminar o treino.</span></div>
+    </div>
+  </div>
+
+  <div class="sec" id="pf-professor">
+    <h2>Para o aluno e para o professor</h2>
+    <div class="roles">
+      <div class="role"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Aluno</h3><ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Treino do dia já liberado ao abrir o app</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Séries marcadas com carga e repetições</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Cardio, agenda, histórico, cargas e medidas</li></ul></div>
+      <div class="role"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Professor</h3><ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Painel com quem treinou e quem precisa de atenção</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Monta treinos com cerca de 250 exercícios e mapa muscular</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Divisão da semana, metas de cardio, perfil e pagamentos</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Assistente com IA para ajudar no dia a dia</li></ul></div>
+    </div>
+  </div>
+
+  <div class="cross"><div><b>Ainda não começou a treinar?</b><p>O Primeiro Passo te leva do zero até a academia, no seu tempo.</p></div><a class="btn ghost" href="#primeiro-passo" data-go="primeiro-passo">Conhecer o Primeiro Passo</a></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <span>passosfit.com.br · Primeiro Passo e PassosFit</span>
+  <span><a href="#primeiro-passo" data-go="primeiro-passo">Primeiro Passo</a> · <a href="#passosfit" data-go="passosfit">PassosFit</a></span>
+</div></footer>
+
+<script>
+/* Endereços de cada plataforma. Ao mudar onde cada uma fica, troque só aqui. */
+const LINKS={
+  primeiroPasso:"https://arqlais.github.io/igorpedro/#/comecar",
+  primeiroPassoEntrar:"https://arqlais.github.io/igorpedro/#/entrar",
+  primeiroPassoApp:"https://arqlais.github.io/igorpedro/#/",
+  passosfit:"https://passosfit.com.br/app/"
+};
+document.querySelectorAll("[data-link]").forEach(a=>{const u=LINKS[a.dataset.link];if(u)a.href=u});
+
+/* ---------- abrir direto na plataforma certa ----------
+   1. Aberto pelo ícone instalado na tela inicial: vai direto para o app do PassosFit.
+   2. Quem já entrou numa plataforma antes vai direto para ela na próxima visita.
+   Para ver a página de escolha de novo, use passosfit.com.br/#escolher (link "trocar de plataforma").
+   Só age no domínio passosfit.com.br, para não atrapalhar prévias e testes. */
+const KEY_ESCOLHA="plataforma-escolhida";
+const DESTINO={passosfit:LINKS.passosfit,"primeiro-passo":LINKS.primeiroPassoApp};
+const lembrar=v=>{try{localStorage.setItem(KEY_ESCOLHA,v)}catch(e){}};
+const lembrada=()=>{try{return localStorage.getItem(KEY_ESCOLHA)}catch(e){return null}};
+document.querySelectorAll('[data-link="passosfit"]').forEach(a=>a.addEventListener("click",()=>lembrar("passosfit")));
+document.querySelectorAll('[data-link^="primeiroPasso"]').forEach(a=>a.addEventListener("click",()=>lembrar("primeiro-passo")));
+(function abrirDireto(){
+  if(!/(^|\.)passosfit\.com\.br$/.test(location.hostname))return;
+  const h=location.hash.slice(1);
+  if(h==="escolher"){try{localStorage.removeItem(KEY_ESCOLHA)}catch(e){}history.replaceState(null,"",location.pathname);return}
+  if(h)return; /* abriu um endereço com #, como #passosfit: mostra a página pedida */
+  const instalado=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  const alvo=instalado?DESTINO.passosfit:DESTINO[lembrada()];
+  if(!alvo)return;
+  const u=new URL(alvo,location.href);
+  if(u.href.split("#")[0]===location.href.split("#")[0])return; /* nunca redireciona para si mesma */
+  location.replace(u.href);
+})();
+
+/* troca entre a escolha e as apresentações sem recarregar a página */
+const VIEWS=["inicio","primeiro-passo","passosfit"];
+function show(id,push){
+  if(!VIEWS.includes(id))id="inicio";
+  document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!==id);
+  document.querySelectorAll(".top nav a").forEach(a=>a.toggleAttribute("aria-current",a.dataset.go===id));
+  if(push){try{history.pushState(null,"","#"+id)}catch(e){}}
+  window.scrollTo(0,0);
+  const t={inicio:"Primeiro Passo e PassosFit","primeiro-passo":"Primeiro Passo","passosfit":"PassosFit"}[id];
+  document.title=t;
+}
+document.addEventListener("click",e=>{const a=e.target.closest("[data-go]");if(!a)return;e.preventDefault();show(a.dataset.go,true)});
+/* um endereço como #pf-professor abre a área que contém essa parte e rola até ela */
+function fromHash(){const h=(location.hash||"").slice(1);if(VIEWS.includes(h)||!h){show(h,false);return}
+  const el=document.getElementById(h),v=el&&el.closest(".view");if(!v){show("inicio",false);return}
+  if(v.hidden)show(v.id,false);el.scrollIntoView()}
+addEventListener("popstate",fromHash);
+fromHash();
+</script>
+</body>
+</html>

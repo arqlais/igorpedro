@@ -1,7 +1,7 @@
 /* Guarda o site no aparelho para abrir sem internet.
    Página: rede primeiro (sempre a versão mais nova), cópia salva se estiver offline.
    Fontes e biblioteca de ícones: cópia salva primeiro. */
-const CACHE = "primeiropasso-v4";
+const CACHE = "primeiropasso-v5";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
@@ -14,6 +14,7 @@ self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
+  if (url.origin === location.origin && url.pathname.includes("/portal/")) return; /* página de escolha: fora do cache do app */
   const external = /(fonts\.googleapis\.com|fonts\.gstatic\.com|cdn\.jsdelivr\.net)$/.test(url.hostname);
   if (req.mode === "navigate" || url.origin === location.origin && !external) {
     e.respondWith(fetch(req).then(r => {
